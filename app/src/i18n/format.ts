@@ -35,6 +35,23 @@ export function formatShortDate(moment: Date, language: string | undefined): str
   }).format(moment);
 }
 
+/** Day and month: `15/11` / `15 Nov`. */
+export function formatDayMonth(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    day: 'numeric',
+    month: 'short',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
+/** Short weekday: `seg.` / `Mon`. */
+export function formatWeekday(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    weekday: 'short',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
 /** `amanhã`, `dentro de 5 dias` / `tomorrow`, `in 5 days`. */
 export function formatRelativeDays(days: number, language: string | undefined): string {
   return new Intl.RelativeTimeFormat(intlLocale(language), { numeric: 'auto' }).format(days, 'day');
