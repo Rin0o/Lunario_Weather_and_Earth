@@ -36,6 +36,28 @@
     "dayLength": "Duração do dia",
     "duration": "{{hours}} h {{minutes}} min"
   },
+  "holidays": {
+    "title": "Feriados",
+    "today": "Hoje é feriado: {{name}}",
+    "next": "Próximos feriados",
+    "optional": "facultativo",
+    "names": {
+      "new-year": "Ano Novo",
+      "carnival": "Carnaval",
+      "good-friday": "Sexta-feira Santa",
+      "easter": "Domingo de Páscoa",
+      "freedom-day": "Dia da Liberdade",
+      "labour-day": "Dia do Trabalhador",
+      "corpus-christi": "Corpo de Deus",
+      "portugal-day": "Dia de Portugal, de Camões e das Comunidades Portuguesas",
+      "assumption": "Assunção de Nossa Senhora",
+      "republic-day": "Implantação da República",
+      "all-saints": "Dia de Todos-os-Santos",
+      "restoration": "Restauração da Independência",
+      "immaculate-conception": "Imaculada Conceição",
+      "christmas": "Natal"
+    }
+  },
   "language": {
     "label": "Idioma",
     "names": {

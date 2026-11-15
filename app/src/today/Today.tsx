@@ -4,6 +4,7 @@ import type { Location } from '../astro/location.ts';
 import { moonDay, nextMoonQuarters, type MoonPhaseName } from '../astro/moon.ts';
 import { sunDay } from '../astro/sun.ts';
 import { formatLongDate, formatPercent, formatShortDate, formatTime } from '../i18n/format.ts';
+import { HolidaysCard } from './HolidaysCard.tsx';
 
 const PHASE_ICONS: Record<MoonPhaseName, string> = {
   new: '🌑',
@@ -88,6 +89,8 @@ export function Today({ now, location }: TodayProps) {
           </dd>
         </dl>
       </article>
+
+      <HolidaysCard now={now} />
 
       <p className="hint">{t('today.location', { name: location.name })}</p>
       <p className="hint">{t('today.comingSoon')}</p>
