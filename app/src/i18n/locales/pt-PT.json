@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "Lunário",
+    "tagline": "Um almanaque rural no bolso.",
+    "version": "Versão {{version}}"
+  },
+  "today": {
+    "title": "Hoje",
+    "comingSoon": "A lua, o tempo e o que semear esta quinzena aparecerão aqui em breve."
+  },
+  "language": {
+    "label": "Idioma",
+    "names": {
+      "pt-PT": "Português",
+      "en": "English"
+    }
+  }
+}

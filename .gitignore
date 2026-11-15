@@ -1,0 +1,56 @@
+# --- Dependencies and build output ---
+node_modules/
+dist/
+dev-dist/
+coverage/
+*.tsbuildinfo
+
+# --- Secrets ---------------------------------------------------------------
+# This repository is PUBLIC. Real secrets live only in GitHub Actions secrets and
+# Cloudflare (`wrangler secret put`). Commit only *.example templates with dummy values.
+
+# Environment files (Vite, Node)
+.env
+.env.*
+*.local
+!.env.example
+
+# Cloudflare Wrangler: local Worker secrets and local state (D1/KV data, auth cache)
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.wrangler/
+
+# npm auth tokens (use ~/.npmrc for credentials, never a project .npmrc)
+.npmrc
+
+# Keys, certificates and credential files
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+credentials*.json
+service-account*.json
+*-credentials.json
+secrets.*
+.secrets/
+!secrets.example.*
+
+# --- Logs ---
+*.log
+npm-debug.log*
+
+# --- Local tool settings (may contain tokens or personal paths) ---
+.claude/settings.local.json
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

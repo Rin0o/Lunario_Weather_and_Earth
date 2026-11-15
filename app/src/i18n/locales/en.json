@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "Lunário",
+    "tagline": "A rural almanac in your pocket.",
+    "version": "Version {{version}}"
+  },
+  "today": {
+    "title": "Today",
+    "comingSoon": "The moon, the weather and what to sow this fortnight will appear here soon."
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "pt-PT": "Português",
+      "en": "English"
+    }
+  }
+}
