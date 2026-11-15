@@ -11,6 +11,12 @@
 
 /manifest.webmanifest
   Cache-Control: no-cache
+  Content-Type: application/manifest+json
+
+# Calendar feeds: always revalidate so subscribed calendars see changes.
+/teste-calendario/zona-teste.ics
+  Cache-Control: no-cache
+  Content-Type: text/calendar; charset=utf-8
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
