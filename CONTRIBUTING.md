@@ -111,15 +111,27 @@ The version is shown in the app footer.
 
 ## CI/CD
 
-| Workflow      | Trigger                  | What it does                                                                                                           |
-| ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `ci.yml`      | PRs and pushes to `main` | Commit message lint (every PR commit), Gitleaks scan of the full history, format, lint, typecheck, tests, build, audit |
-| `deploy.yml`  | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL                                              |
-| `release.yml` | Pushes to `main`         | Maintains the release PR, tags and publishes releases                                                                  |
-| Dependabot    | Weekly                   | Grouped npm and GitHub Actions updates                                                                                 |
+| Workflow                   | Trigger                  | What it does                                                                                                           |
+| -------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`                   | PRs and pushes to `main` | Commit message lint (every PR commit), Gitleaks scan of the full history, format, lint, typecheck, tests, build, audit |
+| `deploy.yml`               | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL                                              |
+| `release.yml`              | Pushes to `main`         | Maintains the release PR, tags and publishes releases                                                                  |
+| Dependabot                 | Monthly                  | One grouped npm PR (minor/patch) and one grouped GitHub Actions PR                                                     |
+| `dependabot-automerge.yml` | Dependabot PRs           | Turns on auto-merge for minor/patch updates; they rebase-merge once the required checks pass                           |
 
 Deploys run only after CI passes, and only for branches in this repository. Pull requests
 from forks and Dependabot get CI but no preview, because they have no access to secrets.
+
+### Dependency updates
+
+- **Minor and patch** updates arrive once a month in a single PR and merge themselves when CI
+  is green. If CI fails, the PR stays open for you to look at.
+- **Majors** of runtime libraries (React, i18next, …) arrive as individual PRs and are never
+  auto-merged.
+- **Majors of build and test tooling** (TypeScript, ESLint, Vite, Vitest, Prettier, …) are
+  ignored by Dependabot and upgraded by hand on a `chore/` branch, once the ecosystem
+  supports them (for example, TypeScript 7 needs typescript-eslint support first).
+- **Security updates** are not on a schedule; they arrive as soon as an advisory is published.
 
 ## One-time setup (maintainer)
 
@@ -139,8 +151,8 @@ These cannot be committed as files.
 **GitHub**
 
 1. **Settings → General → Pull Requests**: allow **rebase merging** only (untick merge
-   commits and squash merging), and enable "Always suggest updating pull request branches"
-   and "Automatically delete head branches".
+   commits and squash merging), and enable "Always suggest updating pull request branches",
+   "Allow auto-merge" and "Automatically delete head branches".
 2. **Settings → Actions → General → Workflow permissions**: enable "Allow GitHub Actions
    to create and approve pull requests" (needed by release-please). Under "Fork pull
    request workflows", require approval for first-time contributors.
@@ -158,6 +170,11 @@ These cannot be committed as files.
    `RELEASE_PLEASE_TOKEN`. Without it, CI does not run automatically on release PRs, so
    required checks will block them until re-triggered (for example, by closing and
    reopening the PR).
+6. Add the **same token** a second time under **Settings → Secrets and variables →
+   Dependabot**, also named `RELEASE_PLEASE_TOKEN`. Workflows started by Dependabot can only
+   read Dependabot secrets, and auto-merge needs a personal token: merges made with the
+   built-in `GITHUB_TOKEN` do not trigger CI, Release or Deploy on `main`. Without it,
+   Dependabot PRs simply wait for you to merge them by hand.
 
 ## Third-party assets and data
 

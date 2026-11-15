@@ -1,26 +1,66 @@
 version: 2
+# Monthly, grouped updates to keep the noise down. Minor/patch PRs are auto-merged once CI
+# passes (see workflows/dependabot-automerge.yml). Security updates are separate and immediate.
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
+      interval: monthly
+    open-pull-requests-limit: 3
     commit-message:
       prefix: fix(deps)
       prefix-development: chore(deps)
     groups:
-      dev-tooling:
-        dependency-type: development
+      # All minor and patch updates, dev and runtime, in a single PR.
+      dependencies:
         update-types: [minor, patch]
-      runtime:
-        dependency-type: production
-        update-types: [minor, patch]
+    ignore:
+      # Majors of build/test tooling are done by hand, when the ecosystem is ready
+      # (e.g. TypeScript 7 needs typescript-eslint support first).
+      # Runtime majors (react, i18next, …) still arrive as individual PRs.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      - dependency-name: typescript-eslint
+        update-types: [version-update:semver-major]
+      - dependency-name: eslint*
+        update-types: [version-update:semver-major]
+      - dependency-name: '@eslint/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: globals
+        update-types: [version-update:semver-major]
+      - dependency-name: prettier
+        update-types: [version-update:semver-major]
+      - dependency-name: vite
+        update-types: [version-update:semver-major]
+      - dependency-name: '@vitejs/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: vite-plugin-pwa
+        update-types: [version-update:semver-major]
+      - dependency-name: '@vite-pwa/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: vitest
+        update-types: [version-update:semver-major]
+      - dependency-name: '@vitest/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: jsdom
+        update-types: [version-update:semver-major]
+      - dependency-name: '@testing-library/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: '@types/*'
+        update-types: [version-update:semver-major]
+      - dependency-name: husky
+        update-types: [version-update:semver-major]
+      - dependency-name: lint-staged
+        update-types: [version-update:semver-major]
+      - dependency-name: '@commitlint/*'
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
     commit-message:
       prefix: ci
+    groups:
+      actions:
+        patterns: ['*']
