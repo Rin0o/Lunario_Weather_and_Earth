@@ -32,7 +32,8 @@ describe('Today', () => {
 
   it('lists the next four principal phases', () => {
     render(<Today now={FULL_MOON_DAY} location={LISBON} />);
-    const items = within(screen.getByRole('list')).getAllByRole('listitem');
+    const moon = screen.getByRole('article', { name: 'Lua' });
+    const items = within(within(moon).getByRole('list')).getAllByRole('listitem');
     expect(items.map((li) => li.textContent)).toEqual([
       expect.stringContaining('Lua cheia'),
       expect.stringContaining('Quarto minguante'),

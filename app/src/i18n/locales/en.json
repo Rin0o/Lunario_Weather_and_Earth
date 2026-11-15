@@ -36,6 +36,28 @@
     "dayLength": "Day length",
     "duration": "{{hours}} h {{minutes}} min"
   },
+  "holidays": {
+    "title": "Holidays",
+    "today": "Today is a holiday: {{name}}",
+    "next": "Upcoming holidays",
+    "optional": "optional",
+    "names": {
+      "new-year": "New Year's Day",
+      "carnival": "Carnival",
+      "good-friday": "Good Friday",
+      "easter": "Easter Sunday",
+      "freedom-day": "Freedom Day",
+      "labour-day": "Labour Day",
+      "corpus-christi": "Corpus Christi",
+      "portugal-day": "Portugal Day",
+      "assumption": "Assumption of Mary",
+      "republic-day": "Republic Day",
+      "all-saints": "All Saints' Day",
+      "restoration": "Restoration of Independence",
+      "immaculate-conception": "Immaculate Conception",
+      "christmas": "Christmas Day"
+    }
+  },
   "language": {
     "label": "Language",
     "names": {

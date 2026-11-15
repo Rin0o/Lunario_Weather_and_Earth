@@ -35,6 +35,11 @@ export function formatShortDate(moment: Date, language: string | undefined): str
   }).format(moment);
 }
 
+/** `amanhã`, `dentro de 5 dias` / `tomorrow`, `in 5 days`. */
+export function formatRelativeDays(days: number, language: string | undefined): string {
+  return new Intl.RelativeTimeFormat(intlLocale(language), { numeric: 'auto' }).format(days, 'day');
+}
+
 /** Whole percent, e.g. `63 %` in Portuguese and `63%` in English. */
 export function formatPercent(fraction: number, language: string | undefined): string {
   return new Intl.NumberFormat(intlLocale(language), {
