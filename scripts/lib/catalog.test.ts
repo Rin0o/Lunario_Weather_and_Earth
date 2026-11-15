@@ -1,0 +1,160 @@
+// @vitest-environment node
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+import { buildCatalog, DATA_FILE_NAMES, DataError, type DataFiles } from './catalog.ts';
+import { readTable } from './csv.ts';
+import { formatFortnight, parseFortnight } from './fortnights.ts';
+
+const root = new URL('../../', import.meta.url);
+const realFiles = Object.fromEntries(
+  Object.entries(DATA_FILE_NAMES).map(([key, name]) => [
+    key,
+    readFileSync(new URL(`data/${name}`, root), 'utf8'),
+  ]),
+) as unknown as DataFiles;
+
+const { catalog, warnings } = buildCatalog(realFiles);
+const key = (w: { cropId: string; zoneId: string; action: string; start: number; end: number }) =>
+  `${w.cropId} ${w.zoneId} ${w.action} ${formatFortnight(w.start)}–${formatFortnight(w.end)}`;
+
+describe('the real /data', () => {
+  it('builds with the expected contents', () => {
+    expect(catalog.crops).toHaveLength(35);
+    expect(catalog.zones.map((z) => z.id)).toEqual(['LN', 'LC', 'IN', 'SU']);
+    expect(catalog.windows.filter((w) => w.origin === 'base')).toHaveLength(69);
+    expect(catalog.lunarRules).toHaveLength(8);
+  });
+
+  it('derives exactly the windows of the v0.1 spreadsheet for LN, IN and SU (D-08)', () => {
+    const sheet = readTable(
+      'janelas-folha-v0.1.csv',
+      readFileSync(new URL('scripts/__fixtures__/janelas-folha-v0.1.csv', root), 'utf8'),
+      ['cultura', 'zona', 'acao', 'inicio', 'fim'],
+    ).rows.map(({ values: v }) =>
+      key({
+        cropId: v.cultura ?? '',
+        zoneId: v.zona ?? '',
+        action: v.acao ?? '',
+        start: parseFortnight(v.inicio ?? ''),
+        end: parseFortnight(v.fim ?? ''),
+      }),
+    );
+    const derived = catalog.windows.filter((w) => w.origin === 'derived').map(key);
+    expect(derived.sort()).toEqual(sheet.sort());
+  });
+
+  it('calculates harvests for every non-perennial crop in every zone (D-19)', () => {
+    for (const crop of catalog.crops.filter((c) => !c.perennial)) {
+      for (const zone of catalog.zones) {
+        const harvests = catalog.windows.filter(
+          (w) => w.cropId === crop.id && w.zoneId === zone.id && w.action === 'CO',
+        );
+        expect(harvests.length, `${crop.id} ${zone.id}`).toBeGreaterThan(0);
+        expect(harvests.every((w) => w.origin === 'calculated')).toBe(true);
+      }
+    }
+    const lettuceLC = catalog.windows.filter(
+      (w) => w.cropId === 'alface' && w.zoneId === 'LC' && w.action === 'CO',
+    );
+    expect(lettuceLC.map(key)).toEqual(['alface LC CO Mar Q2–Dez Q2']);
+  });
+
+  it('keeps the perennial strawberry harvest from the data', () => {
+    const strawberry = catalog.windows.filter((w) => w.cropId === 'morango' && w.action === 'CO');
+    expect(strawberry.map(key).sort()).toEqual([
+      'morango IN CO Mai Q1–Jun Q1',
+      'morango LC CO Abr Q1–Jun Q2',
+      'morango LN CO Abr Q1–Jun Q2',
+      'morango SU CO Abr Q1–Jun Q2',
+    ]);
+  });
+
+  it('attaches zone notes to every window of that crop and zone', () => {
+    const melonIN = catalog.windows.filter((w) => w.cropId === 'melao' && w.zoneId === 'IN');
+    expect(melonIN.length).toBeGreaterThan(0);
+    expect(melonIN.every((w) => w.note?.pt.startsWith('Marginal no interior'))).toBe(true);
+    expect(catalog.windows.some((w) => w.cropId === 'melao' && w.zoneId === 'LC' && w.note)).toBe(
+      false,
+    );
+  });
+
+  it('reports the known agronomic issues of the v0.1 rules as warnings', () => {
+    expect(warnings).toEqual([
+      expect.stringMatching(/^couve_tronchuda in IN: transplanting \(Jul Q1\)/),
+      expect.stringMatching(/^brocolo in IN: transplanting \(Jun Q2\)/),
+      'cebola in SU: nursery sowing windows overlap',
+    ]);
+  });
+});
+
+describe('validation', () => {
+  const broken = (patch: Partial<DataFiles>) => () => buildCatalog({ ...realFiles, ...patch });
+  const problems = (patch: Partial<DataFiles>) => {
+    try {
+      buildCatalog({ ...realFiles, ...patch });
+    } catch (e) {
+      if (e instanceof DataError) return e.problems;
+      throw e;
+    }
+    return [];
+  };
+
+  it('requires English for every text (D-13)', () => {
+    const culturas = realFiles.culturas.replace(',Lettuce,', ',,');
+    expect(problems({ culturas })).toEqual([
+      expect.stringMatching(/^culturas\.csv:2: "nome_en" is empty/),
+    ]);
+  });
+
+  it('rejects unknown values and bad numbers, reporting them all at once', () => {
+    const culturas = realFiles.culturas
+      .replace(',folha,fresca,60,90,', ',caule,fresca,90,60,')
+      .replace('Couve-coração,Sweetheart cabbage', 'Couve-coração,Cabbage');
+    const janelas = realFiles.janelas
+      .replace('alface,TR,Mar Q1', 'alface,TR,Mar Q3')
+      .replace('nabo,SD,Fev Q1', 'nabos,SD,Fev Q1');
+    const found = problems({ culturas, janelas });
+    expect(found).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('"parte_comestivel" is "caule"'),
+        expect.stringContaining('cycle 90–60'),
+        expect.stringContaining('"inicio": invalid fortnight "Mar Q3"'),
+        expect.stringContaining('unknown crop "nabos"'),
+      ]),
+    );
+  });
+
+  it('rejects stored harvests for non-perennial crops (D-19)', () => {
+    const janelas = `${realFiles.janelas}alface,CO,Abr Q1,Dez Q2,,\n`;
+    expect(problems({ janelas })).toEqual([
+      expect.stringContaining('harvest (CO) is calculated for alface'),
+    ]);
+  });
+
+  it('requires every district in exactly one zone', () => {
+    const zonas = realFiles.zonas.replace('Portalegre;', '');
+    expect(problems({ zonas })).toEqual([
+      expect.stringContaining('district Portalegre is in 0 zones'),
+    ]);
+  });
+
+  it('rejects ambiguous derivation rules', () => {
+    const regrasDerivacao = `${realFiles.regrasDerivacao}LN,quente,primavera,SV,2,2,Dup,Dup\n`;
+    expect(problems({ regrasDerivacao })).toEqual(
+      expect.arrayContaining([expect.stringContaining('2 rules match LN/quente/primavera/SV')]),
+    );
+  });
+
+  it('does not accept rules for the base zone', () => {
+    const regrasDerivacao = `${realFiles.regrasDerivacao}LC,todas,todas,SD,1,1,X,X\n`;
+    expect(problems({ regrasDerivacao })).toEqual([
+      expect.stringContaining('the base zone has no rules'),
+    ]);
+  });
+
+  it('throws a DataError whose message lists the problems', () => {
+    expect(broken({ zonas: realFiles.zonas.replace('LN,', 'XX,') })).toThrow(
+      /Invalid data in \/data:\n {2}- zonas\.csv:2: "id" is "XX"/,
+    );
+  });
+});

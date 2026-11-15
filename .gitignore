@@ -4,6 +4,8 @@ dist/
 dev-dist/
 coverage/
 *.tsbuildinfo
+# Generated from /data by `npm run catalog`
+app/src/catalog/catalog.json
 
 # --- Secrets ---------------------------------------------------------------
 # This repository is PUBLIC. Real secrets live only in GitHub Actions secrets and

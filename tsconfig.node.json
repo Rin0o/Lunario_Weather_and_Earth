@@ -16,7 +16,10 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    // Scripts run with Node's built-in type stripping, which rejects enums, parameter
+    // properties and other syntax that needs transforming.
+    "erasableSyntaxOnly": true
   },
   "include": [
     "vite.config.ts",
@@ -24,6 +27,7 @@
     "eslint.config.js",
     "commitlint.config.js",
     "scripts",
+    "app/src/catalog/types.ts",
     "app/src/calendar/ics.ts",
     "app/teste-calendario/feed.ts"
   ]
