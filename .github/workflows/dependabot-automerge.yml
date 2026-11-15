@@ -1,0 +1,30 @@
+name: Dependabot auto-merge
+
+# Turns on GitHub auto-merge for Dependabot minor/patch PRs. The PR then rebase-merges by
+# itself only when every required check passes; majors always wait for a human.
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  automerge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Rin0o/Lunario_Weather_and_Earth'
+    runs-on: ubuntu-latest
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@v3
+      - name: Enable auto-merge
+        if: steps.meta.outputs.update-type != 'version-update:semver-major'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          # A personal token, not GITHUB_TOKEN: merges made with GITHUB_TOKEN do not trigger the
+          # CI, Release and Deploy workflows on main. Store it as a *Dependabot* secret, because
+          # workflows started by Dependabot cannot read Actions secrets (see CONTRIBUTING.md).
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::RELEASE_PLEASE_TOKEN is not set as a Dependabot secret; merge this PR by hand."
+            exit 0
+          fi
+          gh pr merge --auto --rebase "$PR_URL"
