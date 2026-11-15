@@ -5,7 +5,9 @@ The product scope, requirements (RF/RNF) and architecture decisions live in
 
 ## Getting started
 
-Requirements: **Node.js 24** (see `.nvmrc`) and npm.
+Requirements: **Node.js 24** (see `.nvmrc`) and npm. Recommended:
+[Gitleaks](https://github.com/gitleaks/gitleaks) for the local secret scan
+(`winget install Gitleaks.Gitleaks` or `brew install gitleaks`).
 
 ```sh
 npm ci            # install exact locked dependencies and set up git hooks
@@ -51,7 +53,9 @@ Use `feat!:` or a `BREAKING CHANGE:` footer for breaking changes.
 
 Husky installs these hooks on `npm ci`:
 
-- **pre-commit**: ESLint and Prettier on staged files (lint-staged)
+- **pre-commit**: ESLint and Prettier on staged files (lint-staged), then a Gitleaks scan of
+  the staged changes. If Gitleaks isn't installed, the scan is skipped with a warning; CI
+  still runs it.
 - **commit-msg**: commitlint
 - **pre-push**: refuses direct pushes from `main`
 
@@ -86,12 +90,12 @@ The version is shown in the app footer.
 
 ## CI/CD
 
-| Workflow      | Trigger                  | What it does                                                              |
-| ------------- | ------------------------ | ------------------------------------------------------------------------- |
-| `ci.yml`      | PRs and pushes to `main` | PR title check, format, lint, typecheck, tests, build, audit              |
-| `deploy.yml`  | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL |
-| `release.yml` | Pushes to `main`         | Maintains the release PR, tags and publishes releases                     |
-| Dependabot    | Weekly                   | Grouped npm and GitHub Actions updates                                    |
+| Workflow      | Trigger                  | What it does                                                                                    |
+| ------------- | ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `ci.yml`      | PRs and pushes to `main` | PR title check, Gitleaks scan of the full history, format, lint, typecheck, tests, build, audit |
+| `deploy.yml`  | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL                       |
+| `release.yml` | Pushes to `main`         | Maintains the release PR, tags and publishes releases                                           |
+| Dependabot    | Weekly                   | Grouped npm and GitHub Actions updates                                                          |
 
 Deploys run only after CI passes, and only for branches in this repository. Pull requests
 from forks and Dependabot get CI but no preview, because they have no access to secrets.
@@ -121,7 +125,8 @@ These cannot be committed as files.
 3. **Settings → Rules → Rulesets → New branch ruleset** targeting `main`:
    - Restrict deletions; block force pushes
    - Require a pull request before merging (0 approvals is fine for a solo maintainer)
-   - Require status checks to pass: `Verify` and `PR title`; require branches to be up to date
+   - Require status checks to pass: `Verify`, `Secret scan` and `PR title`; require branches
+     to be up to date
    - Require linear history
 4. **Settings → Code security**: enable Dependabot alerts, secret scanning and push
    protection (free for public repositories).

@@ -1,1 +1,9 @@
 npx --no-install lint-staged
+
+# Secret scan of the staged changes. CI scans the full history either way.
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --pre-commit --staged --redact --no-banner
+else
+  echo "gitleaks not found: skipping local secret scan (CI still runs it)."
+  echo "Install it with: winget install Gitleaks.Gitleaks  (or brew install gitleaks)"
+fi
