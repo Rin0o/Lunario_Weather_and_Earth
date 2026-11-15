@@ -6,8 +6,20 @@
   },
   "today": {
     "title": "Hoje",
-    "location": "Horas para {{name}}",
-    "comingSoon": "O que semear esta quinzena aparecerá aqui em breve."
+    "location": "Horas para {{name}}"
+  },
+  "sowing": {
+    "title": "Esta quinzena",
+    "period": "{{dates}} · {{zone}}",
+    "none": "Nada a semear, plantar ou colher nesta quinzena.",
+    "endsNow": "última quinzena",
+    "actions": {
+      "SV": "Semear em viveiro",
+      "SD": "Semear diretamente",
+      "TR": "Transplantar",
+      "PL": "Plantar",
+      "CO": "Colher"
+    }
   },
   "location": {
     "near": "Perto de {{name}}",

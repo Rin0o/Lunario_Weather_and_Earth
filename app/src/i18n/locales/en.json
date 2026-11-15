@@ -6,8 +6,20 @@
   },
   "today": {
     "title": "Today",
-    "location": "Times for {{name}}",
-    "comingSoon": "What to sow this fortnight will appear here soon."
+    "location": "Times for {{name}}"
+  },
+  "sowing": {
+    "title": "This fortnight",
+    "period": "{{dates}} · {{zone}}",
+    "none": "Nothing to sow, plant or harvest this fortnight.",
+    "endsNow": "last fortnight",
+    "actions": {
+      "SV": "Sow in trays",
+      "SD": "Sow directly",
+      "TR": "Transplant",
+      "PL": "Plant",
+      "CO": "Harvest"
+    }
   },
   "location": {
     "near": "Near {{name}}",
