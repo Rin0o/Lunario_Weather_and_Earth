@@ -24,9 +24,11 @@ interface TodayProps {
   locationControl?: ReactNode;
   /** Weather card, shown first because it changes most. */
   weather?: ReactNode;
+  /** "This fortnight" sowing card, right after the weather. */
+  sowing?: ReactNode;
 }
 
-export function Today({ now, location, locationControl, weather }: TodayProps) {
+export function Today({ now, location, locationControl, weather, sowing }: TodayProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
 
@@ -42,6 +44,7 @@ export function Today({ now, location, locationControl, weather }: TodayProps) {
       <p className="today-date">{formatLongDate(now, lang)}</p>
       {locationControl}
       {weather}
+      {sowing}
 
       <article className="card" aria-labelledby="moon-heading">
         <h3 id="moon-heading">{t('moon.title')}</h3>
@@ -99,7 +102,6 @@ export function Today({ now, location, locationControl, weather }: TodayProps) {
       <HolidaysCard now={now} />
 
       {!locationControl && <p className="hint">{t('today.location', { name: location.name })}</p>}
-      <p className="hint">{t('today.comingSoon')}</p>
     </section>
   );
 }

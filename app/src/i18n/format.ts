@@ -35,6 +35,15 @@ export function formatShortDate(moment: Date, language: string | undefined): str
   }).format(moment);
 }
 
+/** `1–15 de novembro` / `1–15 November`. */
+export function formatDateRange(from: Date, to: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    day: 'numeric',
+    month: 'long',
+    timeZone: TIME_ZONE,
+  }).formatRange(from, to);
+}
+
 /** Day and month: `15/11` / `15 Nov`. */
 export function formatDayMonth(moment: Date, language: string | undefined): string {
   return new Intl.DateTimeFormat(intlLocale(language), {

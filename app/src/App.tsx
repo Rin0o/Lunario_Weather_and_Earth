@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
+import { DISTRICTS } from './location/locations.ts';
+import { SowingCard } from './today/SowingCard.tsx';
 import { useUserLocation } from './location/userLocation.ts';
 import { Today } from './today/Today.tsx';
 import { useNow } from './today/useNow.ts';
@@ -26,6 +28,7 @@ export function App() {
           location={location}
           locationControl={<LocationPicker location={location} onChange={setLocation} />}
           weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
+          sowing={<SowingCard now={now} district={DISTRICTS[location.district] ?? ''} />}
         />
       </main>
       <footer className="app-footer">
