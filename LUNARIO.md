@@ -222,6 +222,8 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | D-20 | Lembretes da horta: **transplante e início da colheita**, alerta **5 dias antes às 13:00**, configurável | Só colheita; início e fim da colheita | Cobre os momentos em que é preciso agir. A hora e a antecedência ficam nas preferências. |
 | D-21 | Geada nos meus plantios: **aviso ao abrir a app** e **Web Push opcional** através do Worker | Só alertas por zona; só ao abrir | O aviso ao abrir não precisa de servidor. O push chega mesmo com a app fechada, à custa de guardar no Worker (D1) a subscrição, a zona e as culturas sensíveis, sem conta nem nome (RNF-03). |
 | D-22 | Astronomia com **`astronomy-engine`** | `suncalc`; algoritmos escritos de raiz | Precisão de segundos, licença MIT, sem dependências. Verificado contra o USNO (fases, nascer/pôr do sol e da lua, ±1,5 min). Os dias usam a hora de Portugal continental (`Europe/Lisbon`); até haver RF-04, as horas são para Coimbra. |
+| D-23 | Localização: **botão GPS + lista manual** dos 24 locais IPMA do continente, guardada no dispositivo | Só lista; GPS automático ao abrir | Não pede permissões sem o utilizador querer. O GPS usa as coordenadas exatas para o sol e a lua e o local IPMA mais próximo para a previsão e o distrito. Por agora guardado em `localStorage`; passa para IndexedDB com a horta (RF-10). |
+| D-24 | Previsão: **hoje + 4 dias** do IPMA, com a **última previsão guardada** e marcada "sem rede" quando não há ligação | Só hoje; nada sem rede | Mostra tudo o que a previsão diária do IPMA dá e funciona no campo. Atualiza ao mudar de local e no máximo de hora a hora. |
 
 ## 10. Assets e identidade visual
 
@@ -247,7 +249,7 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | Q-03 | Validar o calendário base contra fontes oficiais (DRAP, AGROBIO) | O dataset v0.1 foi compilado a partir de conhecimento geral de horticultura. |
 | Q-04 | Janelas de culturas marginais no Interior (melão, melancia, beringela) | São de uma quinzena. Introduzir à mão ou marcar "só com proteção". |
 | Q-05 | Canal de alertas: **ntfy** ou **Telegram**? | Depende do que o grupo prefere instalar. |
-| Q-06 | Mapeamento concelho → zona | A v1 usa o local IPMA mais próximo (35 pontos, com coordenadas) e o seu distrito. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
+| Q-06 | Mapeamento concelho → zona | A app já guarda o local IPMA mais próximo (24 pontos no continente) e o seu distrito (D-23). Falta a tabela distrito → zona, que vem com o catálogo e o calendário agrícola. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
 | Q-07 | Limiares e pontos da geada | Proposta: superfície ≤ 0 °C → geada; ar a 2 m ≤ 3 °C → geada possível. Escolher 2 a 3 pontos representativos por zona, incluindo zonas baixas. |
 | Q-08 | Notificações da horta: o que fazer quando um plantio muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
 | Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
