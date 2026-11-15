@@ -61,6 +61,12 @@ export function loadUserLocation(): UserLocation {
   }
 }
 
+/**
+ * Saves the location on the device. With GPS this includes the exact coordinates, in clear
+ * text. This is an accepted risk (D-23, CodeQL js/clear-text-storage-of-sensitive-data
+ * dismissed): the data never leaves the device (RNF-03), the CSP blocks third-party scripts,
+ * and encrypting it would not help because the key would live in the same origin.
+ */
 export function saveUserLocation(location: UserLocation): void {
   if (location.source === 'default') return;
   const stored: Stored = {
