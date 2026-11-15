@@ -1,0 +1,7 @@
+# Refuse pushes that target main; changes reach main through pull requests.
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "Direct pushes to main are not allowed. Open a pull request from a feature branch."
+    exit 1
+  fi
+done
