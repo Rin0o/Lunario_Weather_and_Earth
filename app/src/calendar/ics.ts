@@ -2,9 +2,10 @@
  * Minimal iCalendar (RFC 5545) writer for all-day reminder events.
  * Used by the garden reminders (RF-13) and the regional calendars (RF-12).
  */
+import { addDays, type IsoDate } from './dates.ts';
 
-/** A calendar date in ISO form, `YYYY-MM-DD`. No time zone: all-day events are floating. */
-export type IsoDate = `${number}-${number}-${number}`;
+// Re-exported for existing callers; all-day events use floating dates.
+export { addDays, toIsoDate, type IsoDate } from './dates.ts';
 
 export interface Alarm {
   /** Whole days before the event day. */
@@ -35,24 +36,6 @@ const CRLF = '\r\n';
 const MAX_LINE_OCTETS = 75;
 
 const pad = (n: number, width = 2) => String(n).padStart(width, '0');
-
-function parseIsoDate(date: IsoDate): Date {
-  const [y, m, d] = date.split('-').map(Number);
-  if (!y || !m || !d) throw new Error(`Invalid date: ${date}`);
-  return new Date(Date.UTC(y, m - 1, d));
-}
-
-/** Adds whole days to an ISO date, independent of the local time zone and DST. */
-export function addDays(date: IsoDate, days: number): IsoDate {
-  const d = parseIsoDate(date);
-  d.setUTCDate(d.getUTCDate() + days);
-  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}` as IsoDate;
-}
-
-/** The local calendar date of a moment, as an ISO date. */
-export function toIsoDate(moment: Date): IsoDate {
-  return `${moment.getFullYear()}-${pad(moment.getMonth() + 1)}-${pad(moment.getDate())}` as IsoDate;
-}
 
 /** `2026-11-21` → `20261121` (iCalendar DATE). */
 export function formatIcsDate(date: IsoDate): string {
