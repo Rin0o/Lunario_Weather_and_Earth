@@ -6,7 +6,35 @@
   },
   "today": {
     "title": "Hoje",
-    "comingSoon": "A lua, o tempo e o que semear esta quinzena aparecerão aqui em breve."
+    "location": "Horas para {{name}}",
+    "comingSoon": "O tempo e o que semear esta quinzena aparecerão aqui em breve."
+  },
+  "moon": {
+    "title": "Lua",
+    "phases": {
+      "new": "Lua nova",
+      "waxing-crescent": "Lua crescente",
+      "first-quarter": "Quarto crescente",
+      "waxing-gibbous": "Crescente gibosa",
+      "full": "Lua cheia",
+      "waning-gibbous": "Minguante gibosa",
+      "last-quarter": "Quarto minguante",
+      "waning-crescent": "Lua minguante"
+    },
+    "phaseAt": "às {{time}}",
+    "illumination": "Iluminação",
+    "rise": "Nasce",
+    "set": "Põe-se",
+    "none": "não nasce hoje",
+    "noneSet": "não se põe hoje",
+    "next": "Próximas fases"
+  },
+  "sun": {
+    "title": "Sol",
+    "rise": "Nascer do sol",
+    "set": "Pôr do sol",
+    "dayLength": "Duração do dia",
+    "duration": "{{hours}} h {{minutes}} min"
   },
   "language": {
     "label": "Idioma",

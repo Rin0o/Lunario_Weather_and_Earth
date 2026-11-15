@@ -1,0 +1,44 @@
+import { roundToMinute, TIME_ZONE } from '../astro/time.ts';
+
+/** Intl locale for a UI language. English uses en-GB for the 24-hour clock and day-month order. */
+export function intlLocale(language: string | undefined): string {
+  return language === 'en' ? 'en-GB' : 'pt-PT';
+}
+
+/** `06:12`, in Portugal's time zone, rounded to the nearest minute. */
+export function formatTime(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+    timeZone: TIME_ZONE,
+  }).format(roundToMinute(moment));
+}
+
+/** `sábado, 15 de novembro` / `Saturday 15 November`. */
+export function formatLongDate(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
+/** Short date for lists: `sáb., 22/11` style in Portuguese, `Sat 22 Nov` in English. */
+export function formatShortDate(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
+/** Whole percent, e.g. `63 %` in Portuguese and `63%` in English. */
+export function formatPercent(fraction: number, language: string | undefined): string {
+  return new Intl.NumberFormat(intlLocale(language), {
+    style: 'percent',
+    maximumFractionDigits: 0,
+  }).format(fraction);
+}
