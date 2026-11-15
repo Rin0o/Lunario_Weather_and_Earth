@@ -23,6 +23,8 @@
     "pwa-assets.config.ts",
     "eslint.config.js",
     "commitlint.config.js",
-    "scripts"
+    "scripts",
+    "app/src/calendar/ics.ts",
+    "app/teste-calendario/feed.ts"
   ]
 }

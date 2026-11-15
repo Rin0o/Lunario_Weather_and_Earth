@@ -10,7 +10,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.strict,
   {
-    files: ['app/src/**/*.{ts,tsx}'],
+    files: ['app/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     extends: [reactHooks.configs.flat['recommended-latest'], reactRefresh.configs.vite],
   },
