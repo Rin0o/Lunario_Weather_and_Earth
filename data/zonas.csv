@@ -1,0 +1,5 @@
+id,nome_pt,nome_en,distritos,clima_pt,clima_en,risco_geada_pt,risco_geada_en
+LN,Litoral Norte,Northern coast,Viana do Castelo;Braga;Porto;Aveiro,"Atlântico, húmido; primaveras mais frescas","Atlantic and humid, with cooler springs",Médio,Medium
+LC,Litoral Centro,Central coast,Coimbra;Leiria;Santarém;Lisboa;Setúbal,Ameno; zona base do calendário,Mild; the calendar's base zone,Baixo a médio,Low to medium
+IN,Interior,Inland,Bragança;Vila Real;Viseu;Guarda;Castelo Branco,"Invernos frios e longos, verões quentes","Long cold winters, hot summers",Alto,High
+SU,Sul,South,Portalegre;Évora;Beja;Faro,Verões muito quentes e secos; invernos amenos no litoral algarvio,Very hot dry summers; mild winters on the Algarve coast,Baixo (litoral) a médio (interior alentejano),Low (coast) to medium (inland Alentejo)

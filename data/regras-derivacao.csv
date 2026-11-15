@@ -1,0 +1,21 @@
+zona,classes,epoca,acoes,ajuste_inicio,ajuste_fim,racional_pt,racional_en
+LN,quente,primavera,SV;SD;TR;PL,1,0,Primaveras mais frescas: atrasa o arranque,Cooler springs: start later
+LN,fresca;neutra,primavera,SV;SD;TR;PL,0,0,Igual ao base,Same as the base zone
+LN,todas,outono,SV;SD;TR;PL,0,-1,Frio e chuva chegam mais cedo,Cold and rain arrive earlier
+LN,quente,todas,CO,1,-1,Estação quente mais curta,Shorter warm season
+LN,fresca;neutra,todas,CO,0,0,Igual ao base,Same as the base zone
+IN,quente,primavera,SV,2,0,Viveiro protegido: só atrasa o arranque,Protected nursery: only the start is later
+IN,quente,primavera,SD;TR;PL,3,1,Só depois das últimas geadas (meados de maio),Only after the last frosts (mid-May)
+IN,fresca;neutra,primavera,SV;SD;TR;PL,2,1,Solo frio até mais tarde,Soil stays cold for longer
+IN,todas,outono,SV;SD;TR;PL,-1,-2,Geadas precoces: antecipar e encurtar,Early frosts: start earlier and stop sooner
+IN,quente,todas,CO,1,-1,Estação quente mais curta,Shorter warm season
+IN,fresca;neutra,primavera,CO,2,-1,Arranque tardio; inverno corta o fim,Late start; winter cuts the end short
+IN,fresca;neutra,outono,CO,-1,-1,Geadas precoces,Early frosts
+SU,quente,primavera,SV;SD;TR;PL,-1,0,Aquece mais cedo,Warms up earlier
+SU,fresca,primavera,SV;SD;TR;PL,-1,-2,Calor precoce faz subir à flor,Early heat makes crops bolt
+SU,neutra,primavera,SV;SD;TR;PL,-1,-1,Aquece mais cedo,Warms up earlier
+SU,quente,outono,SV;SD;TR;PL,0,1,Outono quente prolonga,A warm autumn extends the season
+SU,fresca,outono,SV;SD;TR;PL,1,1,Esperar que o calor quebre,Wait for the heat to break
+SU,neutra,outono,SV;SD;TR;PL,0,1,Outono quente prolonga,A warm autumn extends the season
+SU,quente,todas,CO,-1,1,Estação quente mais longa,Longer warm season
+SU,fresca;neutra,todas,CO,0,0,Igual ao base,Same as the base zone
