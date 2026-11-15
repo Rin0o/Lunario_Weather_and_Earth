@@ -92,6 +92,9 @@ Husky installs these hooks on `npm ci`:
 UI text is never hard-coded. Add every key to both `app/src/i18n/locales/pt-PT.json` (default)
 and `en.json`. A test fails if the two files diverge.
 
+To change the sowing calendar, edit the CSV files in `data/` and run `npm run catalog`; the
+format, codes and build steps are in [data/README.md](data/README.md).
+
 Catalogue content in `data/` is bilingual too (D-13 in LUNARIO.md): every text field is
 `{ pt, en }`, and the build fails if a translation is missing. Sayings keep the Portuguese
 original and give the English _meaning_ (`sentido_en`) rather than a literal translation.
