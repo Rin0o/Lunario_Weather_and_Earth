@@ -115,6 +115,7 @@ Worker agendado sem base de dados.
 | Componente | Tecnologia | Responsabilidade |
 |---|---|---|
 | PWA | React, TypeScript, Vite, `vite-plugin-pwa` (Workbox) | Interface, cálculos locais, cache offline |
+| Astronomia | `astronomy-engine` (MIT) | Fases da lua, nascer/pôr do sol e da lua, calculados no dispositivo (D-22) |
 | Armazenamento local | IndexedDB | Horta do utilizador e preferências (zona) |
 | Catálogo | JSON gerado de `/data` | Culturas, janelas, zonas, regras lunares, santos, ditados |
 | Calendários | `.ics` por zona, gerados no build | Lembretes quinzenais por subscrição |
@@ -220,6 +221,7 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | D-19 | Colheita **calculada** (sementeira/plantação + ciclo), sem janelas `CO` guardadas | Guardar janelas de colheita por zona | As colheitas derivadas no Interior saíam incoerentes com as sementeiras (ex.: pepino). O cálculo é coerente por construção e dá datas próprias a cada plantio. Resolve Q-01. |
 | D-20 | Lembretes da horta: **transplante e início da colheita**, alerta **5 dias antes às 13:00**, configurável | Só colheita; início e fim da colheita | Cobre os momentos em que é preciso agir. A hora e a antecedência ficam nas preferências. |
 | D-21 | Geada nos meus plantios: **aviso ao abrir a app** e **Web Push opcional** através do Worker | Só alertas por zona; só ao abrir | O aviso ao abrir não precisa de servidor. O push chega mesmo com a app fechada, à custa de guardar no Worker (D1) a subscrição, a zona e as culturas sensíveis, sem conta nem nome (RNF-03). |
+| D-22 | Astronomia com **`astronomy-engine`** | `suncalc`; algoritmos escritos de raiz | Precisão de segundos, licença MIT, sem dependências. Verificado contra o USNO (fases, nascer/pôr do sol e da lua, ±1,5 min). Os dias usam a hora de Portugal continental (`Europe/Lisbon`); até haver RF-04, as horas são para Coimbra. |
 
 ## 10. Assets e identidade visual
 
