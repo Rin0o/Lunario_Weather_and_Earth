@@ -8,7 +8,7 @@
 
 ## Checklist
 
-- [ ] PR title follows Conventional Commits (`feat: …`, `fix: …`, `chore: …`)
+- [ ] Every commit is a Conventional Commit and stands on its own (fixups folded in; this PR is rebase-merged)
 - [ ] Tests cover the change; `npm run check` passes locally
 - [ ] New UI text added to **both** `pt-PT.json` and `en.json`; new catalogue text has `pt` and `en`
 - [ ] Works offline (or the online-only part degrades gracefully)
