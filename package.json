@@ -8,16 +8,23 @@
     "node": ">=24"
   },
   "scripts": {
+    "catalog": "node scripts/build-catalog.ts",
+    "predev": "npm run catalog",
     "dev": "vite",
+    "prebuild": "npm run catalog",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "pretypecheck": "npm run catalog",
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "pretest": "npm run catalog",
     "test": "vitest run",
+    "pretest:watch": "npm run catalog",
     "test:watch": "vitest",
+    "pretest:coverage": "npm run catalog",
     "test:coverage": "vitest run --coverage",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage",
     "prepare": "husky"

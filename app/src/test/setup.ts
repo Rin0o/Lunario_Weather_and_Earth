@@ -12,6 +12,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  localStorage.clear();
+  // Script tests run in the Node environment, which has no localStorage.
+  globalThis.localStorage?.clear();
   vi.unstubAllGlobals();
 });
