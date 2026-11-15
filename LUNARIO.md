@@ -52,12 +52,14 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 | RF-07 | Feriados nacionais, incluindo os móveis, calculados localmente | 1 |
 | RF-08 | Santos do dia e ditados populares | 1 |
 | RF-09 | Modo **Lua** opcional, com as regras lunares tradicionais e separado das janelas agronómicas | 2 |
-| RF-10 | **A minha horta**: registar plantios (cultura, ação, data) e ver a previsão de colheita | 2 |
+| RF-10 | **A minha horta**: registar plantios (cultura, ação, data) e ver as datas previstas de transplante e de colheita, calculadas a partir da data e do ciclo da cultura (ver D-19) | 2 |
 | RF-11 | Exportar e importar a horta em JSON (cópia de segurança) | 2 |
 | RF-12 | Subscrição de um calendário `.ics` por zona com os lembretes quinzenais | 2 |
-| RF-13 | Botão "Adicionar ao calendário" num plantio, que gera um `.ics` com alerta de colheita | 2 |
+| RF-13 | Botão "Adicionar ao calendário" num plantio, que cria os eventos **transplante** (para sementeira em viveiro) e **início da colheita**, com alerta **5 dias antes às 13:00** por omissão, configurável (ver D-20) | 2 |
 | RF-14 | Alertas de geada por zona, a partir da previsão do Open-Meteo (temperatura do ar a 2 m e da superfície) (ver D-15) | 3 |
 | RF-15 | Pedir armazenamento persistente (`navigator.storage.persist()`) e lembrar periodicamente a cópia de segurança da horta | 2 |
+| RF-16 | Ao abrir a app, avisar se há risco de geada nos próximos dias para os plantios sensíveis do utilizador | 3 |
+| RF-17 | Notificações push (opcionais) de risco de geada para as culturas que o utilizador tem na horta (ver D-21) | 3 |
 
 ## 4. Requisitos não funcionais
 
@@ -65,7 +67,7 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 |---|---|
 | RNF-01 | **Custo zero** de infraestrutura (planos gratuitos da Cloudflare e do GitHub). |
 | RNF-02 | **Offline-first**: todas as funcionalidades, exceto a meteorologia e os alertas, funcionam sem rede. |
-| RNF-03 | Sem dados pessoais em servidores. A horta fica só no dispositivo. |
+| RNF-03 | Sem dados pessoais em servidores. A horta fica no dispositivo. Exceção opcional (RF-17): o servidor guarda só a subscrição push, a zona e a lista de culturas sensíveis, sem nome nem conta, e apaga tudo quando o utilizador desativa as notificações. |
 | RNF-04 | Uma só fonte de verdade para o catálogo (`/data`), da qual se gera tudo o resto. |
 | RNF-05 | A agricultura lunar é apresentada como tradição e nunca como recomendação agronómica. |
 | RNF-06 | Nenhum texto nem marca do *Borda d'Água* é reproduzido. Os factos agronómicos são compilados e redigidos de raiz. |
@@ -128,8 +130,10 @@ Worker agendado sem base de dados.
 | Tipo | Mecanismo | Observações |
 |---|---|---|
 | Regional (quinzenal) | Subscrição de `zona-XX.ics` no calendário do telemóvel | O Google Calendar só atualiza subscrições de tempos a tempos, o que é aceitável para conteúdo quinzenal. |
-| Pessoal (colheita) | Evento `.ics` gerado pela PWA com `VALARM` | Fica no calendário do utilizador, sem servidor. |
-| Alerta de geada | Cloudflare Worker (cron) → ntfy/Telegram | Os Cron Triggers são gratuitos e, ao contrário dos agendamentos do GitHub Actions, não são desativados por inatividade. |
+| Pessoal (transplante e colheita) | Evento `.ics` gerado pela PWA com `VALARM` (5 dias antes, 13:00, configurável) | Fica no calendário do utilizador, sem servidor. **A validar no Google Calendar para Android (Q-09).** |
+| Alerta de geada (zona) | Cloudflare Worker (cron) → ntfy/Telegram | Os Cron Triggers são gratuitos e, ao contrário dos agendamentos do GitHub Actions, não são desativados por inatividade. |
+| Geada nos meus plantios (ao abrir) | A PWA consulta o Open-Meteo e cruza com os plantios sensíveis | Sem servidor; só funciona quando a app é aberta. |
+| Geada nos meus plantios (push) | Cloudflare Worker (cron) → Web Push | Opcional. O Worker guarda a subscrição, a zona e as culturas sensíveis (D-21). |
 
 ## 6. Modelo de dados (catálogo)
 
@@ -138,7 +142,9 @@ Texto         { pt: string, en: string }          -- texto bilingue (ver D-13)
 
 Zona          (id, nome: Texto, distritos[], clima, risco_geada)
 Cultura       (id, nome: Texto, nome_cientifico, familia, parte_comestivel,
-               classe_climatica, ciclo_dias_min, ciclo_dias_max, compasso, notas: Texto)
+               classe_climatica, ciclo_dias_min, ciclo_dias_max,
+               dias_ate_transplante_min?, dias_ate_transplante_max?,   -- só culturas SV
+               sensivel_geada, compasso, notas: Texto)
 Janela        (cultura_id, zona_id, acao, inicio_quinzena, fim_quinzena, origem,
                observacoes: Texto?)
 RegraDerivacao(zona_id, classe_climatica, epoca, acao, ajuste_inicio, ajuste_fim,
@@ -157,11 +163,15 @@ Ditado        (mes?, texto_pt, sentido_en)        -- o ditado fica em português
 - **Ações**: `SV` sementeira em viveiro, `SD` sementeira direta, `TR` transplante, `PL` plantação, `CO` colheita.
 - **Zonas (v1)**: Litoral Norte, Litoral Centro (base), Interior, Sul.
 - **Janelas**: só o Litoral Centro é introduzido à mão. As restantes zonas derivam dele pelas `RegraDerivacao`.
+- **Colheita** (D-19): não se guardam janelas `CO`. A colheita calcula-se a partir da janela de
+  sementeira ou plantação mais `ciclo_dias_min`/`ciclo_dias_max`, no calendário regional e
+  em cada plantio. O transplante de uma sementeira em viveiro usa `dias_ate_transplante_*`.
 
 ### Dados locais (dispositivo)
 ```
 Plantio       (id, cultura_id, acao, data, estado, notas, updated_at)
-Preferencias  (zona_id, concelho_id, modo_lua)
+Preferencias  (zona_id, concelho_id, modo_lua,
+               lembrete_dias_antes = 5, lembrete_hora = "13:00", push_geada = false)
 ```
 
 ## 7. Estrutura do repositório
@@ -171,7 +181,7 @@ Preferencias  (zona_id, concelho_id, modo_lua)
 /data       catálogo-fonte (CSV/JSON): culturas, janelas, zonas, regras, santos, ditados
 /scripts    build: catalog.json, derivação de zonas, zona-XX.ics
 /public     ícones, ilustrações, fontes, _headers (Cloudflare Pages)
-/worker     Cloudflare Worker: alertas de geada (fase 3)
+/worker     Cloudflare Worker: alertas de geada e Web Push (fase 3)
 /.github    workflows: ci, deploy, release; Dependabot; modelos de issue e PR
 CREDITS.md  registo de assets, fontes de dados e licenças
 ```
@@ -182,8 +192,8 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 |---|---|---|
 | **1** | PWA offline: ecrã Hoje, lua/sol, tempo IPMA, calendário agrícola, fichas de cultura, feriados, santos | Nenhum |
 | **2** | A minha horta, modo Lua, calendários `.ics` regionais e pessoais, cópia de segurança (RF-15) | Nenhum |
-| **3** | Alertas de geada (Cloudflare Worker + Open-Meteo + ntfy/Telegram) | Worker agendado, sem base de dados |
-| Futuro | Cópia da horta por código e Web Push na PWA, se for preciso | Cloudflare Worker + D1 (ver D-16) |
+| **3** | Alertas de geada por zona (ntfy/Telegram), aviso ao abrir (RF-16) e push para os meus plantios (RF-17) | Worker agendado + D1 mínima (subscrições push) |
+| Futuro | Cópia da horta por código, se for preciso | Cloudflare Worker + D1 (ver D-16) |
 
 ## 9. Registo de decisões
 
@@ -207,6 +217,9 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | D-16 | Cópia da horta **sem backend** (armazenamento persistente + lembretes de exportação). Se for preciso, backend futuro em **Cloudflare Worker + D1** com um código de horta, sem contas | .NET + Neon + Firebase Auth; Supabase; Firebase | Tudo na mesma plataforma gratuita e sem contas. O Supabase pausa ao fim de 7 dias sem uso; a stack .NET tem mais peças. |
 | D-17 | **IPMA pedido diretamente pelo browser** | Proxy num Worker | CORS verificado em 2026-11-15: previsão, locais e avisos respondem com `Access-Control-Allow-Origin: *`. |
 | D-18 | **GitHub Flow**, Conventional Commits e SemVer com **release-please** | Git Flow; versões à mão | Simples para um só mantenedor. O changelog e as versões são gerados a partir do histórico. |
+| D-19 | Colheita **calculada** (sementeira/plantação + ciclo), sem janelas `CO` guardadas | Guardar janelas de colheita por zona | As colheitas derivadas no Interior saíam incoerentes com as sementeiras (ex.: pepino). O cálculo é coerente por construção e dá datas próprias a cada plantio. Resolve Q-01. |
+| D-20 | Lembretes da horta: **transplante e início da colheita**, alerta **5 dias antes às 13:00**, configurável | Só colheita; início e fim da colheita | Cobre os momentos em que é preciso agir. A hora e a antecedência ficam nas preferências. |
+| D-21 | Geada nos meus plantios: **aviso ao abrir a app** e **Web Push opcional** através do Worker | Só alertas por zona; só ao abrir | O aviso ao abrir não precisa de servidor. O push chega mesmo com a app fechada, à custa de guardar no Worker (D1) a subscrição, a zona e as culturas sensíveis, sem conta nem nome (RNF-03). |
 
 ## 10. Assets e identidade visual
 
@@ -227,14 +240,15 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 
 | # | Questão | Notas |
 |---|---|---|
-| Q-01 | Guardar janelas de **colheita** ou calculá-las a partir de `sementeira + ciclo`? | As colheitas derivadas no Interior saem incoerentes com as sementeiras (por exemplo, o pepino). A recomendação é calcular. |
+| ~~Q-01~~ | ~~Guardar janelas de colheita ou calculá-las?~~ | **Resolvida por D-19** (calcular). |
 | Q-02 | Dividir a zona **Sul** em Alentejo e Algarve? | Os invernos são muito diferentes. |
 | Q-03 | Validar o calendário base contra fontes oficiais (DRAP, AGROBIO) | O dataset v0.1 foi compilado a partir de conhecimento geral de horticultura. |
 | Q-04 | Janelas de culturas marginais no Interior (melão, melancia, beringela) | São de uma quinzena. Introduzir à mão ou marcar "só com proteção". |
 | Q-05 | Canal de alertas: **ntfy** ou **Telegram**? | Depende do que o grupo prefere instalar. |
 | Q-06 | Mapeamento concelho → zona | A v1 usa o local IPMA mais próximo (35 pontos, com coordenadas) e o seu distrito. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
 | Q-07 | Limiares e pontos da geada | Proposta: superfície ≤ 0 °C → geada; ar a 2 m ≤ 3 °C → geada possível. Escolher 2 a 3 pontos representativos por zona, incluindo zonas baixas. |
-| Q-08 | Notificações da horta | Ver a secção 5.3. Falta decidir a antecedência dos alarmes, que eventos gerar, o que fazer quando um plantio muda e se há alertas de geada para os plantios do utilizador. |
+| Q-08 | Notificações da horta: o que fazer quando um plantio muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
+| Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. |
 
 ## 12. Riscos
 
@@ -244,5 +258,6 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | Alterações na API do IPMA | Médio | Isolar o acesso num módulo; cache da última previsão. |
 | Open-Meteo mudar os termos ou os limites | Baixo | Isolar o acesso num módulo; recurso ao `tMin` do IPMA. |
 | Previsão falhar a geada em vales e baixas | Médio | Limiares conservadores; apresentar como "risco de geada" e não como certeza. |
+| Google Calendar (Android) não importar `.ics` | Alto | Testar cedo (Q-09); alternativa: link "adicionar evento" do Google Calendar ou lembretes por Web Push. |
 | Perda dos dados da horta no telemóvel | Médio | Armazenamento persistente, lembretes de exportação (RF-15) e, se for preciso, cópia por código (D-16). |
 | Limites dos planos gratuitos mudarem | Baixo | Arquitetura estática quase sem dependências. |
