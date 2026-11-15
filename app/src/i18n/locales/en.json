@@ -6,7 +6,35 @@
   },
   "today": {
     "title": "Today",
-    "comingSoon": "The moon, the weather and what to sow this fortnight will appear here soon."
+    "location": "Times for {{name}}",
+    "comingSoon": "The weather and what to sow this fortnight will appear here soon."
+  },
+  "moon": {
+    "title": "Moon",
+    "phases": {
+      "new": "New moon",
+      "waxing-crescent": "Waxing crescent",
+      "first-quarter": "First quarter",
+      "waxing-gibbous": "Waxing gibbous",
+      "full": "Full moon",
+      "waning-gibbous": "Waning gibbous",
+      "last-quarter": "Last quarter",
+      "waning-crescent": "Waning crescent"
+    },
+    "phaseAt": "at {{time}}",
+    "illumination": "Illumination",
+    "rise": "Rises",
+    "set": "Sets",
+    "none": "does not rise today",
+    "noneSet": "does not set today",
+    "next": "Next phases"
+  },
+  "sun": {
+    "title": "Sun",
+    "rise": "Sunrise",
+    "set": "Sunset",
+    "dayLength": "Day length",
+    "duration": "{{hours}} h {{minutes}} min"
   },
   "language": {
     "label": "Language",

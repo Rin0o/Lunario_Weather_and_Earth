@@ -1,8 +1,12 @@
 import { useTranslation } from 'react-i18next';
+import { DEFAULT_LOCATION } from './astro/location.ts';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
+import { Today } from './today/Today.tsx';
+import { useNow } from './today/useNow.ts';
 
 export function App() {
   const { t } = useTranslation();
+  const now = useNow();
 
   return (
     <>
@@ -14,10 +18,7 @@ export function App() {
         <LanguageSwitcher />
       </header>
       <main>
-        <section aria-labelledby="today-heading">
-          <h2 id="today-heading">{t('today.title')}</h2>
-          <p>{t('today.comingSoon')}</p>
-        </section>
+        <Today now={now} location={DEFAULT_LOCATION} />
       </main>
       <footer className="app-footer">
         <small>{t('app.version', { version: __APP_VERSION__ })}</small>
