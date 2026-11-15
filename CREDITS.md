@@ -20,7 +20,8 @@ from either source.
 | [astronomy-engine](https://github.com/cosinekitty/astronomy) (Don Cross) | Moon phases, sunrise/sunset, moonrise/moonset | MIT     |
 
 Reference values in the astronomy tests come from the
-[US Naval Observatory](https://aa.usno.navy.mil/data) (public domain).
+[US Naval Observatory](https://aa.usno.navy.mil/data) (public domain). Reference holiday
+lists in the holiday tests were checked against [Nager.Date](https://date.nager.at).
 
 ## Assets
 
