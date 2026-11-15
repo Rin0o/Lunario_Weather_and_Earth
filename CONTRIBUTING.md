@@ -19,14 +19,14 @@ npm run preview   # serve the production build (test the PWA/offline mode here)
 
 ## Repository layout
 
-| Path       | Contents                                                                                                                                |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/`     | The PWA (React + TypeScript + Vite). `app/src/i18n` holds UI text                                                                       |
-| `public/`  | Static assets copied as-is; `icon.svg` is the source of all app icons. `_headers` sets Cloudflare Pages response headers (CSP, caching) |
-| `data/`    | Source catalogue (crops, windows, zones…), the single source of truth. Every text field has `pt` and `en`                               |
-| `scripts/` | Build-time scripts (catalog.json, zone derivation, `.ics` files)                                                                        |
-| `worker/`  | Cloudflare Worker for frost alerts (phase 3)                                                                                            |
-| `.github/` | CI, deploy, release and Dependabot configuration                                                                                        |
+| Path       | Contents                                                                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/`     | The PWA (React + TypeScript + Vite). `app/src/i18n` holds UI text; `app/teste-calendario/` is the temporary Q-09 phone test page (Portuguese only, not part of the offline app) |
+| `public/`  | Static assets copied as-is; `icon.svg` is the source of all app icons. `_headers` sets Cloudflare Pages response headers (CSP, caching)                                         |
+| `data/`    | Source catalogue (crops, windows, zones…), the single source of truth. Every text field has `pt` and `en`                                                                       |
+| `scripts/` | Build-time scripts (catalog.json, zone derivation, `.ics` files)                                                                                                                |
+| `worker/`  | Cloudflare Worker for frost alerts (phase 3)                                                                                                                                    |
+| `.github/` | CI, deploy, release and Dependabot configuration                                                                                                                                |
 
 This is a **public** repository: never commit tokens, keys or personal data. Secrets live
 only in GitHub Actions secrets and Cloudflare.

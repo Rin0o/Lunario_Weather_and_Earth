@@ -248,7 +248,7 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | Q-06 | Mapeamento concelho → zona | A v1 usa o local IPMA mais próximo (35 pontos, com coordenadas) e o seu distrito. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
 | Q-07 | Limiares e pontos da geada | Proposta: superfície ≤ 0 °C → geada; ar a 2 m ≤ 3 °C → geada possível. Escolher 2 a 3 pontos representativos por zona, incluindo zonas baixas. |
 | Q-08 | Notificações da horta: o que fazer quando um plantio muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
-| Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. |
+| Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
 
 ## 12. Riscos
 
