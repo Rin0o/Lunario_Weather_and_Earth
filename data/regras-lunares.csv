@@ -1,0 +1,9 @@
+parte,acao,fase_pt,fase_en,ambito_pt,ambito_en,justificacao_pt,justificacao_en
+raiz,SD;SV;PL,Quarto minguante,Last quarter,"Raízes, tubérculos e bolbos","Roots, tubers and bulbs",A seiva desce: favorece o que cresce debaixo da terra,The sap goes down: favours what grows underground
+folha,SD;SV,Quarto crescente,First quarter,,,A seiva sobe: favorece a parte aérea,The sap rises: favours the parts above ground
+fruto,SD;SV,Quarto crescente até lua cheia,First quarter to full moon,,,A seiva sobe: favorece flores e frutos,The sap rises: favours flowers and fruit
+flor,SD;SV,Quarto crescente,First quarter,,,A seiva sobe: favorece a parte aérea,The sap rises: favours the parts above ground
+todas,TR,Quarto minguante,Last quarter,,,Favorece o enraizamento,Helps rooting
+todas,CO,Quarto minguante,Last quarter,"Para conservar: batata, cebola, alho, abóbora","For storing: potatoes, onions, garlic, squash",Menos água nos tecidos: conserva melhor,Less water in the tissues: keeps better
+todas,CO,Crescente ou cheia,Waxing or full moon,Para consumo imediato,For eating straight away,Mais suculento,Juicier
+todas,evitar,Dia exato de lua nova e de lua cheia,The exact day of the new and full moon,,,Mudança de fase considerada desfavorável,A change of phase is considered unfavourable
