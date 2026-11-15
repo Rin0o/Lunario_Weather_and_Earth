@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest an idea or a requirement from LUNARIO.md
+labels: [enhancement]
+body:
+  - type: input
+    id: requirement
+    attributes:
+      label: Requirement ID
+      description: If it maps to LUNARIO.md (e.g. RF-05), put it here.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does it solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] …

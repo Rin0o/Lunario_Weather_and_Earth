@@ -1,0 +1,10 @@
+# Gitleaks secret-scanning config. Used by the pre-commit hook and the CI "Secret scan" job.
+# https://github.com/gitleaks/gitleaks#configuration
+title = "Lunário"
+
+[extend]
+# Start from the built-in rules (Cloudflare, GitHub, Telegram, npm, private keys, …).
+useDefault = true
+
+# If a false positive appears, prefer an inline `gitleaks:allow` comment on that line, or
+# add its fingerprint to .gitleaksignore, rather than allowlisting whole paths here.

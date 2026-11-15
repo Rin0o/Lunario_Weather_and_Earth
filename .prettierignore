@@ -1,0 +1,9 @@
+dist
+dev-dist
+coverage
+node_modules
+package-lock.json
+CHANGELOG.md
+.release-please-manifest.json
+# Hand-maintained spec; keep the author's table layout.
+LUNARIO.md
