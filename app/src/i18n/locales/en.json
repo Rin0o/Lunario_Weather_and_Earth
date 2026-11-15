@@ -7,7 +7,82 @@
   "today": {
     "title": "Today",
     "location": "Times for {{name}}",
-    "comingSoon": "The weather and what to sow this fortnight will appear here soon."
+    "comingSoon": "What to sow this fortnight will appear here soon."
+  },
+  "location": {
+    "near": "Near {{name}}",
+    "change": "Change",
+    "useGps": "Use my location",
+    "locating": "Locating…",
+    "chooseFromList": "Or choose from the list",
+    "choose": "Choose…",
+    "far": "You seem to be outside mainland Portugal. Showing the forecast for {{name}}.",
+    "errors": {
+      "denied": "No access to your location. Choose from the list.",
+      "unavailable": "Couldn't get your location. Try again or choose from the list.",
+      "unsupported": "This browser can't provide your location. Choose from the list."
+    }
+  },
+  "weather": {
+    "title": "Weather",
+    "loading": "Loading the forecast…",
+    "unavailable": "Forecast unavailable. Try again when you have a connection.",
+    "offline": "Offline, saved forecast",
+    "source": "Source: IPMA · updated at {{time}}",
+    "sourceDated": "Source: IPMA · updated {{date}} at {{time}}",
+    "sourceOnly": "Source: IPMA",
+    "nextDays": "Next days",
+    "rain": "Chance of rain",
+    "wind": "Wind",
+    "windClasses": {
+      "1": "light",
+      "2": "moderate",
+      "3": "strong",
+      "4": "very strong"
+    },
+    "directions": {
+      "N": "North",
+      "NE": "Northeast",
+      "E": "East",
+      "SE": "Southeast",
+      "S": "South",
+      "SW": "Southwest",
+      "W": "West",
+      "NW": "Northwest"
+    },
+    "types": {
+      "0": "No information",
+      "1": "Clear sky",
+      "2": "Mostly clear",
+      "3": "Partly cloudy",
+      "4": "Cloudy or overcast",
+      "5": "High cloud",
+      "6": "Showers or rain",
+      "7": "Light showers or rain",
+      "8": "Heavy showers or rain",
+      "9": "Rain or showers",
+      "10": "Light rain or drizzle",
+      "11": "Heavy rain or showers",
+      "12": "Intermittent rain",
+      "13": "Intermittent light rain",
+      "14": "Intermittent heavy rain",
+      "15": "Drizzle",
+      "16": "Mist",
+      "17": "Fog or low cloud",
+      "18": "Snow",
+      "19": "Thunderstorms",
+      "20": "Showers, possible thunderstorms",
+      "21": "Hail",
+      "22": "Frost",
+      "23": "Rain, possible thunderstorms",
+      "24": "Convective clouds",
+      "25": "Spells of heavy cloud",
+      "26": "Fog",
+      "27": "Cloudy",
+      "28": "Snow showers",
+      "29": "Rain and snow",
+      "30": "Rain and snow"
+    }
   },
   "moon": {
     "title": "Moon",

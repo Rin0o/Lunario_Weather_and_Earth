@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Location } from '../astro/location.ts';
 import { moonDay, nextMoonQuarters, type MoonPhaseName } from '../astro/moon.ts';
@@ -20,9 +20,13 @@ const PHASE_ICONS: Record<MoonPhaseName, string> = {
 interface TodayProps {
   now: Date;
   location: Location;
+  /** Control to change the location, shown under the date. */
+  locationControl?: ReactNode;
+  /** Weather card, shown first because it changes most. */
+  weather?: ReactNode;
 }
 
-export function Today({ now, location }: TodayProps) {
+export function Today({ now, location, locationControl, weather }: TodayProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
 
@@ -36,6 +40,8 @@ export function Today({ now, location }: TodayProps) {
     <section aria-labelledby="today-heading" className="today">
       <h2 id="today-heading">{t('today.title')}</h2>
       <p className="today-date">{formatLongDate(now, lang)}</p>
+      {locationControl}
+      {weather}
 
       <article className="card" aria-labelledby="moon-heading">
         <h3 id="moon-heading">{t('moon.title')}</h3>
@@ -92,7 +98,7 @@ export function Today({ now, location }: TodayProps) {
 
       <HolidaysCard now={now} />
 
-      <p className="hint">{t('today.location', { name: location.name })}</p>
+      {!locationControl && <p className="hint">{t('today.location', { name: location.name })}</p>}
       <p className="hint">{t('today.comingSoon')}</p>
     </section>
   );
