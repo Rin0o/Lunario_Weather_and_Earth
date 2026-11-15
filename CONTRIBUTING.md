@@ -41,13 +41,34 @@ and reaches `main` through a pull request.
 2. Commit in small steps using [Conventional Commits](https://www.conventionalcommits.org/)
    (enforced by a `commit-msg` hook):
    `feat(today): show sunrise and sunset`, `fix(i18n): missing English label`.
-3. Open a PR. Its **title** must also be a Conventional Commit, because PRs are
-   **squash-merged** and the title becomes the commit on `main`.
-4. CI must be green: PR title, format, lint, typecheck, tests with ≥ 80 % coverage, build,
-   production dependency audit.
-5. Squash-merge and delete the branch.
+3. Open a PR. Before merging, **tidy the branch** so that every commit stands on its own
+   (see below).
+4. CI must be green: commit messages, secret scan, format, lint, typecheck, tests with
+   ≥ 80 % coverage, build, production dependency audit.
+5. **Rebase-merge** and delete the branch.
 
 Use `feat!:` or a `BREAKING CHANGE:` footer for breaking changes.
+
+### Why rebase merging, and what it asks of you
+
+PRs are **rebase-merged**: every commit on the branch lands on `main` unchanged, so `main`
+keeps the step-by-step history, and each commit becomes a line in the changelog. This means
+each commit must be meaningful on its own:
+
+- One logical change per commit, with a Conventional Commit message. CI lints **every**
+  commit in the PR, not just the last one.
+- No "fix typo" or "address review" commits. Fold them into the commit they fix:
+  ```sh
+  git commit --fixup <sha>                  # record the fix against the commit it belongs to
+  git rebase -i --autosquash origin/main    # fold fixups in before merging
+  git push --force-with-lease               # safe on your own feature branch
+  ```
+  CI rejects branches that still contain `fixup!`, `squash!` or merge commits.
+- Keep the branch up to date by **rebasing** on `main` (`git pull --rebase origin main`),
+  not by merging `main` into it.
+- Only `feat` and `fix` commits (and breaking changes) bump the version. Use `refactor`,
+  `test`, `docs`, `chore` or `ci` for everything else, so the changelog stays about
+  user-visible changes.
 
 ### Local guard rails
 
@@ -57,7 +78,7 @@ Husky installs these hooks on `npm ci`:
   the staged changes. If Gitleaks isn't installed, the scan is skipped with a warning; CI
   still runs it.
 - **commit-msg**: commitlint
-- **pre-push**: refuses direct pushes from `main`
+- **pre-push**: refuses pushes to `main`
 
 ## Tests
 
@@ -90,12 +111,12 @@ The version is shown in the app footer.
 
 ## CI/CD
 
-| Workflow      | Trigger                  | What it does                                                                                    |
-| ------------- | ------------------------ | ----------------------------------------------------------------------------------------------- |
-| `ci.yml`      | PRs and pushes to `main` | PR title check, Gitleaks scan of the full history, format, lint, typecheck, tests, build, audit |
-| `deploy.yml`  | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL                       |
-| `release.yml` | Pushes to `main`         | Maintains the release PR, tags and publishes releases                                           |
-| Dependabot    | Weekly                   | Grouped npm and GitHub Actions updates                                                          |
+| Workflow      | Trigger                  | What it does                                                                                                           |
+| ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`      | PRs and pushes to `main` | Commit message lint (every PR commit), Gitleaks scan of the full history, format, lint, typecheck, tests, build, audit |
+| `deploy.yml`  | CI succeeded             | Deploys to Cloudflare Pages: `main` → production, PR branch → preview URL                                              |
+| `release.yml` | Pushes to `main`         | Maintains the release PR, tags and publishes releases                                                                  |
+| Dependabot    | Weekly                   | Grouped npm and GitHub Actions updates                                                                                 |
 
 Deploys run only after CI passes, and only for branches in this repository. Pull requests
 from forks and Dependabot get CI but no preview, because they have no access to secrets.
@@ -117,21 +138,23 @@ These cannot be committed as files.
 
 **GitHub**
 
-1. **Settings → General → Pull Requests**: allow **squash merging** only, set the default
-   commit message to "Pull request title", and enable "Automatically delete head branches".
+1. **Settings → General → Pull Requests**: allow **rebase merging** only (untick merge
+   commits and squash merging), and enable "Always suggest updating pull request branches"
+   and "Automatically delete head branches".
 2. **Settings → Actions → General → Workflow permissions**: enable "Allow GitHub Actions
    to create and approve pull requests" (needed by release-please). Under "Fork pull
    request workflows", require approval for first-time contributors.
 3. **Settings → Rules → Rulesets → New branch ruleset** targeting `main`:
    - Restrict deletions; block force pushes
-   - Require a pull request before merging (0 approvals is fine for a solo maintainer)
-   - Require status checks to pass: `Verify`, `Secret scan` and `PR title`; require branches
-     to be up to date
+   - Require a pull request before merging (0 approvals is fine for a solo maintainer);
+     allowed merge methods: **Rebase** only
+   - Require status checks to pass: `Verify`, `Secret scan` and `Commit messages`; require
+     branches to be up to date
    - Require linear history
 4. **Settings → Code security**: enable Dependabot alerts, secret scanning and push
    protection (free for public repositories).
-5. Optional: create a fine-grained personal access token (contents and pull requests:
-   read/write on this repository only) and save it as the Actions secret
+5. Optional: create a fine-grained personal access token (contents, pull requests and
+   issues: read/write on this repository only) and save it as the Actions secret
    `RELEASE_PLEASE_TOKEN`. Without it, CI does not run automatically on release PRs, so
    required checks will block them until re-triggered (for example, by closing and
    reopening the PR).
