@@ -13,22 +13,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pr-title:
-    name: PR title
+  commits:
+    name: Commit messages
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    # PRs are rebase-merged, so every commit lands on main as-is and feeds the changelog.
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      # PRs are squash-merged, so the title becomes the commit on main and must be a Conventional Commit.
-      - name: Lint PR title
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: printf '%s\n' "$PR_TITLE" | npx --no-install commitlint
+      - name: Lint every commit message in the PR
+        run: npx --no-install commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+      - name: Reject fixup, squash and merge commits
+        # commitlint ignores "fixup!"/"squash!"/"Merge …" subjects by default, so check them here.
+        run: |
+          bad=$(git log --format='%h %s' --no-merges "$BASE_SHA..$HEAD_SHA" | grep -E '^[0-9a-f]+ (fixup|squash|amend)! ' || true)
+          merges=$(git log --format='%h %s' --merges "$BASE_SHA..$HEAD_SHA")
+          if [ -n "$bad$merges" ]; then
+            echo "Tidy the branch before merging (git rebase -i --autosquash origin/main):"
+            printf '%s\n' "$bad" "$merges" | sed '/^$/d'
+            exit 1
+          fi
 
   secrets:
     name: Secret scan
