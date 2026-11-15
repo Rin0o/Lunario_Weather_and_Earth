@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/Rin0o/Lunario_Weather_and_Earth/compare/v0.1.0...v0.2.0) (2026-11-15)
+
+
+### Features
+
+* **astro:** compute moon phases and sun and moon rise/set times on the device (RF-02) ([23077a3](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/23077a3c0fba7545bc14c142998a124d8672c410))
+* **today:** show the moon and sun on the Today screen ([41cc616](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/41cc6165f4d4b2e90c07b1359b1315605c84d394))
+
 ## 0.1.0 (2026-11-15)
 
 
