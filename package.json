@@ -28,9 +28,11 @@
     "pretest:coverage": "npm run catalog",
     "test:coverage": "vitest run --coverage",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "vapid-keys": "node scripts/vapid-keys.ts"
   },
   "dependencies": {
+    "@block65/webcrypto-web-push": "2.0.0",
     "astronomy-engine": "2.1.19",
     "i18next": "^27.1.1",
     "idb": "8.0.4",
@@ -39,6 +41,7 @@
     "react-i18next": "^18.0.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "5.20261031.1",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
