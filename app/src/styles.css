@@ -282,6 +282,180 @@ h4 {
   content: '· ';
 }
 
+/* --- Navigation --- */
+.app-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin: -0.25rem 0 1rem;
+}
+
+.app-nav a {
+  padding: 0.4rem 0.9rem;
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.app-nav a[aria-current='page'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+  font-weight: 600;
+}
+
+a {
+  color: var(--accent);
+}
+
+.crop-list a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --- Crops --- */
+.crops-index {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.crops-index a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.25rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.crops-index .hint {
+  font-style: italic;
+  text-align: right;
+}
+
+.back {
+  margin: 0 0 0.5rem;
+}
+
+.scientific-name {
+  margin: 0.25rem 0 1rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.crop-notes {
+  margin: 0.75rem 0 0;
+}
+
+.zone-note {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Calendar strip: one row per action, 24 fortnights. Colours are tokens so dark mode works. */
+:root {
+  --action-SV: #8a6d3b;
+  --action-SD: #5f7a3a;
+  --action-TR: #3b6f7a;
+  --action-PL: #7a4f3b;
+  --action-CO: #b0563a;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.2rem 0.4rem;
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.75rem;
+}
+
+.strip-months,
+.strip-cells {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 1px;
+}
+
+.strip-months span {
+  grid-column: span 2;
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+.strip-row {
+  display: contents;
+}
+
+.strip-label {
+  font-weight: 600;
+  align-self: center;
+}
+
+.strip-cell {
+  height: 0.9rem;
+  background: var(--rule);
+  opacity: 0.45;
+}
+
+.strip-cell.on {
+  opacity: 1;
+}
+
+.strip-cell.on.action-SV,
+.legend.action-SV {
+  background: var(--action-SV);
+}
+.strip-cell.on.action-SD,
+.legend.action-SD {
+  background: var(--action-SD);
+}
+.strip-cell.on.action-TR,
+.legend.action-TR {
+  background: var(--action-TR);
+}
+.strip-cell.on.action-PL,
+.legend.action-PL {
+  background: var(--action-PL);
+}
+.strip-cell.on.action-CO,
+.legend.action-CO {
+  background: var(--action-CO);
+}
+
+.strip-cell.now {
+  outline: 2px solid var(--ink);
+  outline-offset: -1px;
+}
+
+.calendar-list {
+  margin: 0;
+}
+
+.calendar-list dt {
+  font-weight: 600;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.calendar-list dd {
+  margin: 0 0 0 1.2rem;
+}
+
+.legend {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+}
+
 .holiday-today {
   margin: 0 0 0.5rem;
   font-weight: 600;

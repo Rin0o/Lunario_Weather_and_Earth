@@ -8,11 +8,49 @@
     "title": "Hoje",
     "location": "Horas para {{name}}"
   },
+  "nav": {
+    "label": "Secções",
+    "today": "Hoje",
+    "crops": "Culturas"
+  },
+  "crops": {
+    "title": "Culturas",
+    "all": "Todas as culturas",
+    "notFound": "Esta cultura não existe no calendário.",
+    "family": "Família",
+    "ediblePart": "Parte comestível",
+    "parts": {
+      "folha": "Folhas",
+      "flor": "Flores",
+      "raiz": "Raiz, tubérculo ou bolbo",
+      "fruto": "Fruto ou semente"
+    },
+    "climateClass": "Época",
+    "classes": {
+      "fresca": "Estação fresca",
+      "neutra": "Pouco exigente",
+      "quente": "Estação quente"
+    },
+    "cycle": "Ciclo",
+    "cycleDays": "{{min}}–{{max}} dias",
+    "perennial": "Perene (produz 2–3 anos)",
+    "spacing": "Compasso",
+    "spacingValue": "{{value}} cm (linhas × plantas)",
+    "calendar": "Calendário · {{zone}}",
+    "calculated": "calculada pelo ciclo"
+  },
   "sowing": {
     "title": "Esta quinzena",
     "period": "{{dates}} · {{zone}}",
     "none": "Nada a semear, plantar ou colher nesta quinzena.",
     "endsNow": "última quinzena",
+    "short": {
+      "SV": "Viveiro",
+      "SD": "Semear",
+      "TR": "Transpl.",
+      "PL": "Plantar",
+      "CO": "Colher"
+    },
     "actions": {
       "SV": "Semear em viveiro",
       "SD": "Semear diretamente",

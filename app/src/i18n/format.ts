@@ -44,6 +44,22 @@ export function formatDateRange(from: Date, to: Date, language: string | undefin
   }).formatRange(from, to);
 }
 
+/** `16 de janeiro` / `16 January`. */
+export function formatDayMonthLong(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    day: 'numeric',
+    month: 'long',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
+/** Month initial for calendar headers: `J`, `F`, `M`… */
+export function formatMonthInitial(month: number, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), { month: 'narrow', timeZone: 'UTC' }).format(
+    new Date(Date.UTC(2026, month - 1, 15)),
+  );
+}
+
 /** Day and month: `15/11` / `15 Nov`. */
 export function formatDayMonth(moment: Date, language: string | undefined): string {
   return new Intl.DateTimeFormat(intlLocale(language), {

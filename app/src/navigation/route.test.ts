@@ -1,0 +1,40 @@
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { href, parseRoute, useRoute } from './route.ts';
+
+describe('parseRoute', () => {
+  it.each([
+    ['', { name: 'today' }],
+    ['#/', { name: 'today' }],
+    ['#/culturas', { name: 'crops' }],
+    ['#/culturas/', { name: 'crops' }],
+    ['#/cultura/alface', { name: 'crop', id: 'alface' }],
+    ['#/cultura/couve_flor', { name: 'crop', id: 'couve_flor' }],
+    ['#/cultura/../../x', { name: 'today' }],
+    ['#/whatever', { name: 'today' }],
+  ])('%s → %o', (hash, route) => {
+    expect(parseRoute(hash)).toEqual(route);
+  });
+
+  it('builds links that parse back', () => {
+    expect(parseRoute(href.crop('tomate'))).toEqual({ name: 'crop', id: 'tomate' });
+    expect(parseRoute(href.crops)).toEqual({ name: 'crops' });
+    expect(parseRoute(href.today)).toEqual({ name: 'today' });
+  });
+});
+
+describe('useRoute', () => {
+  afterEach(() => {
+    window.location.hash = '';
+  });
+
+  it('follows hash changes', () => {
+    const { result } = renderHook(() => useRoute());
+    expect(result.current).toEqual({ name: 'today' });
+    act(() => {
+      window.location.hash = '#/cultura/fava';
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    });
+    expect(result.current).toEqual({ name: 'crop', id: 'fava' });
+  });
+});

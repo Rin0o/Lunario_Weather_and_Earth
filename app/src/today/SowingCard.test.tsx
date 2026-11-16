@@ -35,10 +35,13 @@ describe('SowingCard', () => {
   it('marks crops with a zone note and explains the mark', () => {
     render(<SowingCard now={new Date('2026-06-05T10:00:00Z')} district="Guarda" />);
     expect(screen.getByText('1–15 de junho · Interior')).toBeInTheDocument();
-    const melon = within(screen.getByRole('region', { name: 'Semear diretamente' })).getByText(
-      /^Melão/,
+    const melonLink = within(screen.getByRole('region', { name: 'Semear diretamente' })).getByRole(
+      'link',
+      { name: 'Melão' },
     );
-    expect(within(melon).getByLabelText(/^Marginal no interior/)).toHaveTextContent('*');
+    expect(melonLink).toHaveAttribute('href', '#/cultura/melao');
+    const chip = melonLink.closest('li') as HTMLElement;
+    expect(within(chip).getByLabelText(/^Marginal no interior/)).toHaveTextContent('*');
     expect(
       screen.getByText('* Marginal no interior: só com estufa/túnel ou variedade precoce'),
     ).toBeInTheDocument();
