@@ -160,13 +160,19 @@ sent to anyone.
 1. Create the database: `npx wrangler d1 create lunario-alerts`. Put the `database_id` it
    prints in `worker/wrangler.jsonc` (it is an identifier, not a secret).
 2. Generate the push keys: `npm run vapid-keys`. Put the **public** key in
-   `worker/wrangler.jsonc` (`VAPID_PUBLIC_KEY`) and in the app config. Store the **private**
+   `worker/wrangler.jsonc` (`VAPID_PUBLIC_KEY`) and in `app/src/frost/alerts.ts`. Store the **private**
    key only in Cloudflare: `cd worker && npx wrangler secret put VAPID_PRIVATE_KEY` and paste
    it when asked.
 3. Add the Workers and D1 permissions to the API token (see above).
 4. Merge to `main`: the deploy workflow applies the D1 migrations and deploys the Worker.
    Until step 1 is done it skips the Worker with a notice. The Worker's address is
-   `https://lunario-alerts.<your-subdomain>.workers.dev` (shown in the deploy log).
+   `https://lunario-alerts.<your-subdomain>.workers.dev` (shown in the deploy log). The app
+   calls it from `ALERTS_URL` in `app/src/frost/alerts.ts`, and `public/_headers` allows it
+   in the CSP `connect-src`; change both if the address changes.
+
+The app turns alerts on from "A minha horta". This only works on the production site and
+its previews: the Worker refuses other origins, and the dev server has no service worker.
+Notifications are shown by `public/push-sw.js`, imported into the generated service worker.
 
 To try the Worker locally: `cd worker && npx wrangler dev --test-scheduled`, then open
 `http://localhost:8787/__scheduled` to run the nightly check once.
