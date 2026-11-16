@@ -25,7 +25,7 @@ npm run preview   # serve the production build (test the PWA/offline mode here)
 | `public/`  | Static assets copied as-is; `icon.svg` is the source of all app icons. `_headers` sets Cloudflare Pages response headers (CSP, caching)                                         |
 | `data/`    | Source catalogue (crops, windows, zones…), the single source of truth. Every text field has `pt` and `en`                                                                       |
 | `scripts/` | Build-time scripts (catalog.json, zone derivation, `.ics` files)                                                                                                                |
-| `worker/`  | Cloudflare Worker for frost alerts (phase 3)                                                                                                                                    |
+| `worker/`  | Cloudflare Worker for frost alerts (D-33): subscriptions API, D1 migrations, nightly cron                                                                                       |
 | `.github/` | CI, deploy, release and Dependabot configuration                                                                                                                                |
 
 This is a **public** repository: never commit tokens, keys or personal data. Secrets live
@@ -146,10 +146,30 @@ These cannot be committed as files.
    assets**, create a project named `lunario` with production branch `main`. Or run
    `npx wrangler pages project create lunario --production-branch main`.
 2. Create an API token (**My Profile → API Tokens → Create token**) with only the
-   **Account → Cloudflare Pages → Edit** permission. Phase 3 will also need
-   **Workers Scripts → Edit**.
+   **Account → Cloudflare Pages → Edit** permission. The frost alerts Worker also needs
+   **Account → Workers Scripts → Edit** and **Account → D1 → Edit**.
 3. In GitHub, **Settings → Secrets and variables → Actions**, add `CLOUDFLARE_API_TOKEN`
    and `CLOUDFLARE_ACCOUNT_ID`. The account ID is shown in the Cloudflare dashboard sidebar.
+
+**Frost alerts Worker (D-33)**
+
+Run these on your own machine, logged in with `npx wrangler login`. Nothing here is a
+secret except the VAPID private key, which must never be committed, pasted in an issue or
+sent to anyone.
+
+1. Create the database: `npx wrangler d1 create lunario-alerts`. Put the `database_id` it
+   prints in `worker/wrangler.jsonc` (it is an identifier, not a secret).
+2. Generate the push keys: `npm run vapid-keys`. Put the **public** key in
+   `worker/wrangler.jsonc` (`VAPID_PUBLIC_KEY`) and in the app config. Store the **private**
+   key only in Cloudflare: `cd worker && npx wrangler secret put VAPID_PRIVATE_KEY` and paste
+   it when asked.
+3. Add the Workers and D1 permissions to the API token (see above).
+4. Merge to `main`: the deploy workflow applies the D1 migrations and deploys the Worker.
+   Until step 1 is done it skips the Worker with a notice. The Worker's address is
+   `https://lunario-alerts.<your-subdomain>.workers.dev` (shown in the deploy log).
+
+To try the Worker locally: `cd worker && npx wrangler dev --test-scheduled`, then open
+`http://localhost:8787/__scheduled` to run the nightly check once.
 
 **GitHub**
 
