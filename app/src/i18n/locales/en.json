@@ -51,6 +51,26 @@
     "remove": "Delete",
     "confirmRemove": "Delete the {{crop}} entry from {{date}}?"
   },
+  "backup": {
+    "title": "Backup",
+    "intro": "Your garden only exists on this phone. Keep a copy in Drive, by email or somewhere else safe.",
+    "last": "Last backup: {{date}}.",
+    "never": "You haven't made a backup yet.",
+    "export": "Export backup",
+    "import": "Import backup",
+    "shared": "Backup shared.",
+    "downloaded": "Backup saved to Downloads.",
+    "cancelled": "Backup cancelled.",
+    "failed": "Couldn't finish. Please try again.",
+    "imported": "Imported: {{added}} new, {{updated}} updated, {{unchanged}} unchanged.",
+    "invalidEntries_one": "1 damaged entry was skipped.",
+    "invalidEntries_other": "{{count}} damaged entries were skipped.",
+    "invalidFile": "This file is not a Lunário backup.",
+    "reminder": "It's been a month since your last garden backup.",
+    "reminderNever": "You haven't backed up your garden yet.",
+    "backupNow": "Back up now",
+    "later": "Later"
+  },
   "crops": {
     "title": "Crops",
     "all": "All crops",

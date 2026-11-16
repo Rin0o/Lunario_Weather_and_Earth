@@ -51,6 +51,26 @@
     "remove": "Apagar",
     "confirmRemove": "Apagar o registo de {{crop}} de {{date}}?"
   },
+  "backup": {
+    "title": "Cópia de segurança",
+    "intro": "A horta só existe neste telemóvel. Guarde uma cópia no Drive, por email ou noutro sítio seguro.",
+    "last": "Última cópia: {{date}}.",
+    "never": "Ainda não fez nenhuma cópia.",
+    "export": "Exportar cópia",
+    "import": "Importar cópia",
+    "shared": "Cópia partilhada.",
+    "downloaded": "Cópia guardada nas transferências.",
+    "cancelled": "Cópia cancelada.",
+    "failed": "Não foi possível concluir. Tente de novo.",
+    "imported": "Importado: {{added}} novos, {{updated}} atualizados, {{unchanged}} iguais.",
+    "invalidEntries_one": "1 registo danificado foi ignorado.",
+    "invalidEntries_other": "{{count}} registos danificados foram ignorados.",
+    "invalidFile": "Este ficheiro não é uma cópia do Lunário.",
+    "reminder": "Já passou um mês desde a última cópia da horta.",
+    "reminderNever": "Ainda não fez nenhuma cópia da horta.",
+    "backupNow": "Fazer cópia agora",
+    "later": "Mais tarde"
+  },
   "crops": {
     "title": "Culturas",
     "all": "Todas as culturas",
