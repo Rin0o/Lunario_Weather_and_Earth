@@ -1,0 +1,25 @@
+// Cloudflare Worker for the frost alerts (D-33). Deployed by .github/workflows/deploy.yml.
+// The VAPID private key is a secret: `npx wrangler secret put VAPID_PRIVATE_KEY`.
+{
+  "name": "lunario-alerts",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  // Every day at 18:00 UTC (18:00 in winter, 19:00 in summer in Portugal).
+  "triggers": { "crons": ["0 18 * * *"] },
+  "vars": {
+    "ALLOWED_ORIGINS": "https://lunario-4w2.pages.dev,https://*.lunario-4w2.pages.dev",
+    "ADMIN_CONTACT": "https://lunario-4w2.pages.dev",
+    // From `npm run vapid-keys`; the app subscribes with the same key.
+    "VAPID_PUBLIC_KEY": "",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lunario-alerts",
+      // Filled in once the database exists: `npx wrangler d1 create lunario-alerts`.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+}
