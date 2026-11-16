@@ -1,7 +1,14 @@
 // @vitest-environment node
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { buildCatalog, DATA_FILE_NAMES, DataError, type DataFiles } from './catalog.ts';
+import {
+  buildCatalog,
+  DATA_FILE_NAMES,
+  DataError,
+  deriveWindows,
+  findWarnings,
+  type DataFiles,
+} from './catalog.ts';
 import { readTable } from './csv.ts';
 import { formatFortnight, parseFortnight } from './fortnights.ts';
 
@@ -39,7 +46,9 @@ describe('the real /data', () => {
         end: parseFortnight(v.fim ?? ''),
       }),
     );
-    const derived = catalog.windows.filter((w) => w.origin === 'derived').map(key);
+    // The rules alone, before the manual windows of janelas-zona.csv replace some (Q-10).
+    const base = catalog.windows.filter((w) => w.origin === 'base');
+    const derived = deriveWindows(base, catalog.crops, catalog.rules).map(key);
     expect(derived.sort()).toEqual(sheet.sort());
   });
 
@@ -78,11 +87,45 @@ describe('the real /data', () => {
     );
   });
 
-  it('reports the known agronomic issues of the v0.1 rules as warnings', () => {
-    expect(warnings).toEqual([
-      expect.stringMatching(/^couve_tronchuda in IN: transplanting \(Jul Q1\)/),
+  it('fixes the v0.1 rule issues with manual windows, leaving no warnings (Q-10)', () => {
+    expect(warnings).toEqual([]);
+    const windows = (cropId: string, zoneId: string) =>
+      catalog.windows
+        .filter((w) => w.cropId === cropId && w.zoneId === zoneId && w.action !== 'CO')
+        .map(key)
+        .sort();
+    expect(windows('couve_tronchuda', 'IN')).toEqual([
+      'couve_tronchuda IN SV Jun Q1–Ago Q1',
+      'couve_tronchuda IN TR Jul Q2–Set Q2',
+    ]);
+    expect(windows('brocolo', 'IN')).toEqual([
+      'brocolo IN SV Mai Q2–Jul Q2',
+      'brocolo IN TR Jul Q1–Set Q1',
+    ]);
+    expect(windows('cebola', 'SU')).toEqual([
+      'cebola SU SV Out Q1–Jan Q2',
+      expect.stringMatching(/^cebola SU TR /),
+    ]);
+  });
+
+  it('warns when transplanting starts with nursery sowing or nursery windows overlap', () => {
+    const w = (cropId: string, action: 'SV' | 'TR', start: number, end: number) => ({
+      cropId,
+      zoneId: 'IN' as const,
+      action,
+      start,
+      end,
+      origin: 'manual' as const,
+    });
+    const issues = [
+      w('brocolo', 'SV', 12, 17),
+      w('brocolo', 'TR', 12, 17),
+      w('cebola', 'SV', 19, 24),
+      w('cebola', 'SV', 24, 2),
+    ];
+    expect(findWarnings(issues, catalog.crops)).toEqual([
       expect.stringMatching(/^brocolo in IN: transplanting \(Jun Q2\)/),
-      'cebola in SU: nursery sowing windows overlap',
+      'cebola in IN: nursery sowing windows overlap',
     ]);
   });
 });
@@ -98,6 +141,17 @@ describe('validation', () => {
     }
     return [];
   };
+
+  it('validates the manual zone windows (Q-10)', () => {
+    const janelasZona = `${realFiles.janelasZona}alface,LC,SV,Jan Q1,Fev Q1,a,b\nnada,IN,CO,Jan Q1,Fev Q1,,\n`;
+    expect(problems({ janelasZona })).toEqual([
+      expect.stringContaining('"zona" is "LC"'),
+      expect.stringContaining('unknown crop "nada"'),
+      expect.stringContaining('"acao" is "CO"'),
+      expect.stringContaining('"motivo_pt" is empty'),
+      expect.stringContaining('"motivo_en" is empty'),
+    ]);
+  });
 
   it('requires English for every text (D-13)', () => {
     const culturas = realFiles.culturas.replace(',Lettuce,', ',,');

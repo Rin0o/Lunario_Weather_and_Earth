@@ -21,7 +21,8 @@ try {
   const count = (origin: string) => catalog.windows.filter((w) => w.origin === origin).length;
   console.log(
     `catalog.json: ${catalog.crops.length} crops, ${catalog.zones.length} zones, ` +
-      `${count('base')} base + ${count('derived')} derived + ${count('calculated')} harvest windows, ` +
+      `${count('base')} base + ${count('derived')} derived + ${count('manual')} manual + ` +
+      `${count('calculated')} harvest windows, ` +
       `${catalog.saints.length} saints, ${catalog.sayings.length} sayings`,
   );
   for (const w of warnings) console.warn(`  warning: ${w}`);
