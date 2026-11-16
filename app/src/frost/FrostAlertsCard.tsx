@@ -9,7 +9,6 @@ import {
   disableFrostAlerts,
   enableFrostAlerts,
   frostAlertsState,
-  sendTestAlert,
   type AlertsState,
   type PushPlatform,
 } from './alerts.ts';
@@ -35,7 +34,6 @@ export function FrostAlertsCard({
   const [state, setState] = useState<AlertsState | 'loading'>('loading');
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [test, setTest] = useState<'' | 'sent' | 'failed'>('');
 
   useEffect(() => {
     let cancelled = false;
@@ -51,7 +49,6 @@ export function FrostAlertsCard({
   const toggle = async (on: boolean) => {
     setBusy(true);
     setFailed(false);
-    setTest('');
     try {
       if (on) {
         setState(await enableFrostAlerts({ location, language, source, platform, fetchImpl }));
@@ -62,19 +59,6 @@ export function FrostAlertsCard({
     } catch {
       setState('off');
       setFailed(true);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const sendTest = async () => {
-    setBusy(true);
-    setTest('');
-    try {
-      await sendTestAlert({ location, language, source, platform, fetchImpl });
-      setTest('sent');
-    } catch {
-      setTest('failed');
     } finally {
       setBusy(false);
     }
@@ -106,18 +90,6 @@ export function FrostAlertsCard({
               ? t(`frostAlerts.${state}`)
               : ''}
       </p>
-      {state === 'on' && (
-        <div className="planting-actions">
-          <button type="button" disabled={busy} onClick={() => void sendTest()}>
-            {t('frostAlerts.test')}
-          </button>
-        </div>
-      )}
-      {test && (
-        <p role="status" className="hint">
-          {t(test === 'sent' ? 'frostAlerts.testSent' : 'frostAlerts.testFailed')}
-        </p>
-      )}
     </article>
   );
 }

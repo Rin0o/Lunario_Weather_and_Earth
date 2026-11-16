@@ -166,27 +166,6 @@ export async function enableFrostAlerts(context: AlertsContext): Promise<AlertsS
   }
 }
 
-/**
- * Asks the Worker to send a test notification to this phone, after making sure it has the
- * current subscription. Throws when alerts are not on or the send fails.
- */
-export async function sendTestAlert(context: AlertsContext): Promise<void> {
-  const { platform = browserPush, fetchImpl = fetch } = context;
-  if ((await syncFrostAlerts(context)) !== 'on') throw new Error('Alerts are not on');
-  const subscription = await (await platform.pushManager()).getSubscription();
-  if (!subscription) throw new Error('No push subscription');
-  const response = await fetchImpl(`${ALERTS_URL}/subscriptions/test`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ endpoint: subscription.endpoint }),
-  });
-  if (!response.ok) {
-    // Unknown or expired on the server: send everything again on the next sync.
-    if (response.status === 404 || response.status === 410) await setMeta('frostAlertsSent', '');
-    throw new Error(`Alerts server answered ${response.status}`);
-  }
-}
-
 /** Turns alerts off: the Worker deletes the subscription and the browser drops it. */
 export async function disableFrostAlerts({
   platform = browserPush,

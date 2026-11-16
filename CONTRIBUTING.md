@@ -173,8 +173,13 @@ sent to anyone.
 The app turns alerts on from "A minha horta". This only works on the production site and
 its previews: the Worker refuses other origins, and the dev server has no service worker.
 Notifications are shown by `public/push-sw.js`, imported into the generated service worker.
-Once alerts are on, "Enviar alerta de teste" asks the Worker (`POST /subscriptions/test`)
-to notify that phone at once, to check the whole chain without waiting for a frosty night.
+To check the whole chain without waiting for a frosty night, send a test notification to a
+stored subscription: read its endpoint with
+`npx wrangler d1 execute lunario-alerts --remote --command "SELECT endpoint FROM subscriptions"`
+(from `worker/`) and `POST {"endpoint": "…"}` to `/subscriptions/test` with an app
+`Origin` header. Refused pushes are logged with the push service's status and reason;
+watch them with `npx wrangler tail lunario-alerts`. Endpoints are personal data: never
+paste them in issues or logs.
 
 To try the Worker locally: `cd worker && npx wrangler dev --test-scheduled`, then open
 `http://localhost:8787/__scheduled` to run the nightly check once.

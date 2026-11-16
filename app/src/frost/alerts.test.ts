@@ -11,7 +11,6 @@ import {
   disableFrostAlerts,
   enableFrostAlerts,
   frostAlertsState,
-  sendTestAlert,
   syncFrostAlerts,
 } from './alerts.ts';
 import { KEYS, fakePlatform } from '../test/fakePush.ts';
@@ -208,28 +207,6 @@ describe('frost alerts', () => {
     expect(sentBody(fetchImpl)).toMatchObject({
       subscription: { endpoint: 'https://push.example/send/1' },
     });
-  });
-
-  it('asks the Worker for a test notification, after syncing', async () => {
-    const { platform } = fakePlatform('granted');
-    const context = { location: GUARDA, language: 'pt-PT' as const, source: catalog, platform };
-    await expect(sendTestAlert(context)).rejects.toThrow('not on');
-
-    await enableFrostAlerts({ ...context, fetchImpl: okFetch() as unknown as typeof fetch });
-    const fetchImpl = okFetch();
-    await sendTestAlert({ ...context, fetchImpl: fetchImpl as unknown as typeof fetch });
-    expect(fetchImpl).toHaveBeenCalledTimes(1); // nothing changed, so no resync
-    expect(fetchImpl.mock.calls[0]?.[0]).toBe(`${ALERTS_URL}/subscriptions/test`);
-    expect(sentBody(fetchImpl)).toEqual({ endpoint: 'https://push.example/send/1' });
-
-    // Unknown to the server: fails, and the next sync sends the subscription again.
-    const gone = vi.fn(() => Promise.resolve(new Response(null, { status: 410 })));
-    await expect(sendTestAlert({ ...context, fetchImpl: gone })).rejects.toThrow('410');
-    expect(await getMeta('frostAlertsSent')).toBe('');
-    const down = vi.fn(() => Promise.resolve(new Response(null, { status: 502 })));
-    await expect(
-      sendTestAlert({ ...context, fetchImpl: down as unknown as typeof fetch }),
-    ).rejects.toThrow('502');
   });
 
   it('turns off: deletes on the server and drops the subscription, even offline', async () => {
