@@ -8,11 +8,49 @@
     "title": "Today",
     "location": "Times for {{name}}"
   },
+  "nav": {
+    "label": "Sections",
+    "today": "Today",
+    "crops": "Crops"
+  },
+  "crops": {
+    "title": "Crops",
+    "all": "All crops",
+    "notFound": "This crop is not in the calendar.",
+    "family": "Family",
+    "ediblePart": "Edible part",
+    "parts": {
+      "folha": "Leaves",
+      "flor": "Flowers",
+      "raiz": "Root, tuber or bulb",
+      "fruto": "Fruit or seed"
+    },
+    "climateClass": "Season",
+    "classes": {
+      "fresca": "Cool season",
+      "neutra": "Undemanding",
+      "quente": "Warm season"
+    },
+    "cycle": "Cycle",
+    "cycleDays": "{{min}}–{{max}} days",
+    "perennial": "Perennial (crops for 2–3 years)",
+    "spacing": "Spacing",
+    "spacingValue": "{{value}} cm (rows × plants)",
+    "calendar": "Calendar · {{zone}}",
+    "calculated": "calculated from the cycle"
+  },
   "sowing": {
     "title": "This fortnight",
     "period": "{{dates}} · {{zone}}",
     "none": "Nothing to sow, plant or harvest this fortnight.",
     "endsNow": "last fortnight",
+    "short": {
+      "SV": "Trays",
+      "SD": "Sow",
+      "TR": "Transpl.",
+      "PL": "Plant",
+      "CO": "Harvest"
+    },
     "actions": {
       "SV": "Sow in trays",
       "SD": "Sow directly",

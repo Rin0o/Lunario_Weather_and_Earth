@@ -11,6 +11,7 @@ import {
 import { isoDateToNoonUtc } from '../calendar/dates.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { formatDateRange, intlLocale } from '../i18n/format.ts';
+import { href } from '../navigation/route.ts';
 
 interface SowingCardProps {
   now: Date;
@@ -61,7 +62,7 @@ export function SowingCard({ now, district, source = catalog }: SowingCardProps)
               .sort((a, b) => collator.compare(pick(a.crop.name), pick(b.crop.name)))
               .map(({ crop, note, endsNow }) => (
                 <li key={crop.id}>
-                  {pick(crop.name)}
+                  <a href={href.crop(crop.id)}>{pick(crop.name)}</a>
                   {note && (
                     <sup className="crop-mark" aria-label={pick(note)}>
                       *

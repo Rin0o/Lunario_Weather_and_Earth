@@ -1,12 +1,22 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { App } from './App.tsx';
 import { initI18n } from './i18n/index.ts';
+
+const goTo = (hash: string) =>
+  act(() => {
+    window.location.hash = hash;
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  });
 
 describe('App', () => {
   beforeEach(async () => {
     await initI18n('pt-PT');
+  });
+
+  afterEach(() => {
+    window.location.hash = '';
   });
 
   it('renders the shell in Portuguese by default', () => {
@@ -23,5 +33,26 @@ describe('App', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Today' })).toBeInTheDocument();
     expect(document.documentElement.lang).toBe('en');
     expect(localStorage.getItem('lunario.language')).toBe('en');
+  });
+
+  it('navigates between Today, the crop list and a crop sheet', async () => {
+    render(<App />);
+    const nav = screen.getByRole('navigation', { name: 'Secções' });
+    expect(screen.getByRole('link', { name: 'Hoje' })).toHaveAttribute('aria-current', 'page');
+    expect(nav).toContainElement(screen.getByRole('link', { name: 'Culturas' }));
+
+    goTo('#/culturas');
+    expect(screen.getByRole('heading', { level: 2, name: 'Culturas' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Culturas' })).toHaveAttribute('aria-current', 'page');
+
+    goTo('#/cultura/tomate');
+    expect(screen.getByRole('heading', { level: 2, name: 'Tomate' })).toBeInTheDocument();
+    // Default location is Coimbra, so the calendar is Litoral Centro's.
+    expect(
+      screen.getByRole('heading', { name: 'Calendário · Litoral Centro' }),
+    ).toBeInTheDocument();
+
+    goTo('#/');
+    expect(screen.getByRole('heading', { level: 2, name: 'Hoje' })).toBeInTheDocument();
   });
 });
