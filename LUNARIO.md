@@ -258,6 +258,7 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | Q-08 | Notificações da horta: o que fazer quando um plantio muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
 | Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
 | Q-10 | Regras de derivação que geram janelas incoerentes | O build avisa: no **Interior**, a couve-tronchuda e o brócolo têm transplante e sementeira em viveiro a começar na mesma quinzena (a regra de outono aplica-se ao transplante, a de primavera à sementeira); no **Sul**, as duas janelas de viveiro da cebola sobrepõem-se. Rever as regras ou introduzir estas janelas à mão. |
+| Q-12 | Validar `dias_ate_transplante` | Valores de 2026-11 são estimativas (ex.: alface 28–42, tomate 42–56, cebola 60–90 dias) para as 18 culturas com viveiro. Rever contra fontes (DRAP, AGROBIO) com Q-03. |
 | Q-11 | Santos do dia e ditados (RF-08) | O dataset v0.1 não os tem. Falta escolher a fonte (domínio público) e compilar. |
 
 ## 12. Riscos
