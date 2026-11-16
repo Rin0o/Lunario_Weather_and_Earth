@@ -5,6 +5,8 @@
   --accent: #2f3b2a;
   --rule: #d8ccb0;
   --card: #fbf6ea;
+  --frost: #1f5f8b;
+  --frost-bg: #e6f0f7;
 
   color-scheme: light dark;
   font-family:
@@ -24,6 +26,8 @@
     --accent: #b9c9a6;
     --rule: #3a3c33;
     --card: #262922;
+    --frost: #9cc8e8;
+    --frost-bg: #1c2a33;
   }
 }
 
@@ -671,6 +675,24 @@ a.button.primary {
   margin-top: 0.25rem;
   padding-left: calc(0.75rem + 3px);
   font-size: 0.9rem;
+}
+
+.frost-card {
+  border-left: 4px solid var(--frost);
+  background: var(--frost-bg);
+}
+
+.frost-card h3 {
+  color: var(--frost);
+}
+
+.frost-days {
+  margin: 0 0 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.frost-crops {
+  font-weight: 600;
 }
 
 .holiday-today {

@@ -25,13 +25,15 @@ interface TodayProps {
   location: Location;
   /** Control to change the location, shown under the date. */
   locationControl?: ReactNode;
+  /** Frost warning, shown above everything when there is a risk (RF-16). */
+  frost?: ReactNode;
   /** Weather card, shown first because it changes most. */
   weather?: ReactNode;
   /** "This fortnight" sowing card, right after the weather. */
   sowing?: ReactNode;
 }
 
-export function Today({ now, location, locationControl, weather, sowing }: TodayProps) {
+export function Today({ now, location, locationControl, frost, weather, sowing }: TodayProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
 
@@ -47,6 +49,7 @@ export function Today({ now, location, locationControl, weather, sowing }: Today
       <h2 id="today-heading">{t('today.title')}</h2>
       <p className="today-date">{formatLongDate(now, lang)}</p>
       {locationControl}
+      {frost}
       {weather}
       {sowing}
       <AlmanacCard now={now} />
