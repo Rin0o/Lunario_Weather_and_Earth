@@ -234,7 +234,10 @@
     "on": "On for {{place}}. The alert arrives around 6 pm (7 pm in summer), only when there is a risk.",
     "unsupported": "This browser cannot receive notifications. On iPhone, add Lunário to your Home Screen (Share → Add to Home Screen) and turn alerts on from there.",
     "blocked": "Notifications are blocked for Lunário. Allow them in your browser or phone settings and try again.",
-    "failed": "Could not change the alerts. Check your internet connection and try again."
+    "failed": "Could not change the alerts. Check your internet connection and try again.",
+    "test": "Send a test alert",
+    "testSent": "Sent. The notification should arrive within a few seconds.",
+    "testFailed": "Could not send the test. Turn alerts off and on again, or try later."
   },
   "moon": {
     "title": "Moon",

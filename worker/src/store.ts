@@ -77,20 +77,28 @@ export class D1Store implements Store {
     await this.db.prepare('DELETE FROM subscriptions WHERE endpoint = ?').bind(endpoint).run();
   }
 
-  async list(): Promise<Subscription[]> {
-    const { results } = await this.db
-      .prepare(
-        'SELECT endpoint, p256dh, auth, latitude, longitude, crops, language FROM subscriptions',
-      )
-      .all<Row>();
-    return results.map((r) => ({
-      endpoint: r.endpoint,
-      p256dh: r.p256dh,
-      auth: r.auth,
-      latitude: r.latitude,
-      longitude: r.longitude,
-      crops: parseCrops(r.crops),
-      language: (r.language === 'en' ? 'en' : 'pt-PT') as Language,
-    }));
+  async get(endpoint: string): Promise<Subscription | null> {
+    const row = await this.db.prepare(`${SELECT} WHERE endpoint = ?`).bind(endpoint).first<Row>();
+    return row ? fromRow(row) : null;
   }
+
+  async list(): Promise<Subscription[]> {
+    const { results } = await this.db.prepare(SELECT).all<Row>();
+    return results.map(fromRow);
+  }
+}
+
+const SELECT =
+  'SELECT endpoint, p256dh, auth, latitude, longitude, crops, language FROM subscriptions';
+
+function fromRow(r: Row): Subscription {
+  return {
+    endpoint: r.endpoint,
+    p256dh: r.p256dh,
+    auth: r.auth,
+    latitude: r.latitude,
+    longitude: r.longitude,
+    crops: parseCrops(r.crops),
+    language: (r.language === 'en' ? 'en' : 'pt-PT') as Language,
+  };
 }

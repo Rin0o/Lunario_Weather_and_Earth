@@ -36,6 +36,29 @@ describe('FrostAlertsCard', () => {
     expect(screen.getByRole('status')).toHaveTextContent('');
   });
 
+  it('sends a test alert once alerts are on', async () => {
+    const { platform } = fakePlatform();
+    const fetchImpl = vi.fn((url: RequestInfo | URL) =>
+      Promise.resolve(
+        new Response(null, { status: String(url).endsWith('/test') && fails ? 502 : 204 }),
+      ),
+    );
+    let fails = false;
+    render(<FrostAlertsCard location={GUARDA} platform={platform} fetchImpl={fetchImpl} />);
+    expect(screen.queryByRole('button', { name: 'Enviar alerta de teste' })).toBeNull();
+
+    const toggle = await screen.findByRole('checkbox');
+    await waitFor(() => expect(toggle).toBeEnabled());
+    await userEvent.click(toggle);
+    const button = await screen.findByRole('button', { name: 'Enviar alerta de teste' });
+    await userEvent.click(button);
+    expect(await screen.findByText(/A notificação deve chegar/)).toBeVisible();
+
+    fails = true;
+    await userEvent.click(button);
+    expect(await screen.findByText(/Não foi possível enviar o teste/)).toBeVisible();
+  });
+
   it('explains when the phone cannot receive alerts', async () => {
     const platform = { ...fakePlatform().platform, supported: () => false };
     render(<FrostAlertsCard location={GUARDA} platform={platform} />);

@@ -234,7 +234,10 @@
     "on": "Ligados para {{place}}. O aviso chega por volta das 18h (19h no verão), só quando houver risco.",
     "unsupported": "Este browser não recebe notificações. No iPhone, adicione o Lunário ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e ligue os alertas a partir daí.",
     "blocked": "As notificações estão bloqueadas para o Lunário. Permita-as nas definições do browser ou do telemóvel e volte a tentar.",
-    "failed": "Não foi possível mudar os alertas. Verifique a ligação à Internet e tente de novo."
+    "failed": "Não foi possível mudar os alertas. Verifique a ligação à Internet e tente de novo.",
+    "test": "Enviar alerta de teste",
+    "testSent": "Enviado. A notificação deve chegar dentro de alguns segundos.",
+    "testFailed": "Não foi possível enviar o teste. Desligue e volte a ligar os alertas, ou tente mais tarde."
   },
   "moon": {
     "title": "Lua",
