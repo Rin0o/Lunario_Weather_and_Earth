@@ -89,6 +89,38 @@ export function parseFrostForecast(json: unknown): FrostDay[] {
   );
 }
 
+export interface FrostSpan {
+  minAir: number;
+  minSurface: number | null;
+  risk: FrostRisk;
+}
+
+/**
+ * Lowest temperatures between two local times (`2026-11-17T18:00` inclusive to
+ * `2026-11-18T10:00` exclusive) of an Open-Meteo hourly series: the frost alerts look at the
+ * coming night (D-33). Null when the series has no air temperature in that span.
+ */
+export function frostBetween(json: unknown, from: string, to: string): FrostSpan | null {
+  if (typeof json !== 'object' || json === null) return null;
+  const hourly = (json as { hourly?: Record<string, unknown> }).hourly;
+  const times = hourly?.time;
+  const air = numbers(hourly?.temperature_2m);
+  const surface = numbers(hourly?.soil_temperature_0cm);
+  if (!Array.isArray(times) || !air) return null;
+
+  let minAir: number | null = null;
+  let minSurface: number | null = null;
+  times.forEach((time, i) => {
+    if (typeof time !== 'string' || time < from || time >= to) return;
+    const a = air[i] ?? null;
+    const s = surface?.[i] ?? null;
+    if (a !== null) minAir = minAir === null ? a : Math.min(minAir, a);
+    if (s !== null) minSurface = minSurface === null ? s : Math.min(minSurface, s);
+  });
+  if (minAir === null) return null;
+  return { minAir, minSurface, risk: frostRisk(minAir, minSurface) };
+}
+
 /** Names of the frost-sensitive crops growing in the garden, sorted, without repeats. */
 export function sensitiveCropsInGarden(
   plantings: readonly Planting[],
