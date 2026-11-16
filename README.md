@@ -35,3 +35,14 @@ npm run dev
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, tests, releases and CI/CD, and
 [LUNARIO.md](LUNARIO.md) for requirements and architecture decisions.
+
+## Licence
+
+The code and documentation are released under the [MIT License](LICENSE).
+
+Two data files are the exception: [`data/santos.csv`](data/santos.csv) and
+[`data/ditados.csv`](data/ditados.csv) are adapted from Wikipedia and Wikiquote and stay
+under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). If you reuse them,
+credit the sources and share your changes under the same licence. Weather data belongs to
+IPMA and Open-Meteo under their own terms. [CREDITS.md](CREDITS.md) lists every third-party
+source and its licence.
