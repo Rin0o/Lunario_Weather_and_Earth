@@ -44,6 +44,16 @@ export function formatDateRange(from: Date, to: Date, language: string | undefin
   }).formatRange(from, to);
 }
 
+/** `3 de novembro de 2026` / `3 November 2026`. */
+export function formatFullDate(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
+
 /** `16 de janeiro` / `16 January`. */
 export function formatDayMonthLong(moment: Date, language: string | undefined): string {
   return new Intl.DateTimeFormat(intlLocale(language), {

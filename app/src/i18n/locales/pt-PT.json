@@ -11,7 +11,45 @@
   "nav": {
     "label": "Secções",
     "today": "Hoje",
+    "garden": "Horta",
     "crops": "Culturas"
+  },
+  "garden": {
+    "title": "A minha horta",
+    "intro": "Os registos ficam só neste telemóvel.",
+    "add": "Registar plantio",
+    "crop": "Cultura",
+    "chooseCrop": "Escolher…",
+    "action": "O que fez",
+    "date": "Data",
+    "notes": "Notas (opcional)",
+    "notesPlaceholder": "ex.: canteiro 2, variedade coração-de-boi",
+    "save": "Guardar",
+    "saved": "Registado.",
+    "outOfSeason": "Fora da época recomendada para {{action}} em {{zone}}.",
+    "empty": "Ainda não registou nenhum plantio.",
+    "loading": "A carregar…",
+    "storageError": "Não foi possível guardar neste telemóvel. Verifique se o navegador permite guardar dados.",
+    "did": {
+      "SV": "Semeado em viveiro",
+      "SD": "Semeado",
+      "TR": "Transplantado",
+      "PL": "Plantado"
+    },
+    "harvest": "Colheita prevista: {{from}} – {{to}}.",
+    "harvestPerennial": "Cultura perene: colhe-se na época própria.",
+    "transplantHint": "Contado a partir do transplante; pode ser mais cedo.",
+    "stages": {
+      "growing": "A crescer",
+      "ready": "Pronto a colher",
+      "late": "Passou a época prevista",
+      "harvested": "Colhido",
+      "perennial": "Perene"
+    },
+    "markHarvested": "Marcar como colhido",
+    "markActive": "Voltar a ativo",
+    "remove": "Apagar",
+    "confirmRemove": "Apagar o registo de {{crop}} de {{date}}?"
   },
   "crops": {
     "title": "Culturas",

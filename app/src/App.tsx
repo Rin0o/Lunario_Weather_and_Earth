@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
+import { GardenPage } from './garden/GardenPage.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
@@ -35,7 +36,8 @@ export function App() {
       </header>
       <nav className="app-nav" aria-label={t('nav.label')}>
         {navLink(href.today, t('nav.today'), route.name === 'today')}
-        {navLink(href.crops, t('nav.crops'), route.name !== 'today')}
+        {navLink(href.garden, t('nav.garden'), route.name === 'garden')}
+        {navLink(href.crops, t('nav.crops'), route.name === 'crops' || route.name === 'crop')}
       </nav>
       <main>
         {route.name === 'today' && (
@@ -47,6 +49,7 @@ export function App() {
             sowing={<SowingCard now={now} district={district} />}
           />
         )}
+        {route.name === 'garden' && <GardenPage now={now} district={district} />}
         {route.name === 'crops' && <CropsList />}
         {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
       </main>

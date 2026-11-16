@@ -11,7 +11,45 @@
   "nav": {
     "label": "Sections",
     "today": "Today",
+    "garden": "Garden",
     "crops": "Crops"
+  },
+  "garden": {
+    "title": "My garden",
+    "intro": "Your entries stay on this phone only.",
+    "add": "Log a planting",
+    "crop": "Crop",
+    "chooseCrop": "Choose…",
+    "action": "What you did",
+    "date": "Date",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "e.g. bed 2, oxheart variety",
+    "save": "Save",
+    "saved": "Saved.",
+    "outOfSeason": "Outside the recommended season to {{action}} in {{zone}}.",
+    "empty": "You haven't logged any plantings yet.",
+    "loading": "Loading…",
+    "storageError": "Couldn't save on this phone. Check that the browser allows storing data.",
+    "did": {
+      "SV": "Sown in trays",
+      "SD": "Sown",
+      "TR": "Transplanted",
+      "PL": "Planted"
+    },
+    "harvest": "Expected harvest: {{from}} – {{to}}.",
+    "harvestPerennial": "Perennial: harvest in its season.",
+    "transplantHint": "Counted from transplanting; it may come sooner.",
+    "stages": {
+      "growing": "Growing",
+      "ready": "Ready to harvest",
+      "late": "Past the expected harvest",
+      "harvested": "Harvested",
+      "perennial": "Perennial"
+    },
+    "markHarvested": "Mark as harvested",
+    "markActive": "Mark as active",
+    "remove": "Delete",
+    "confirmRemove": "Delete the {{crop}} entry from {{date}}?"
   },
   "crops": {
     "title": "Crops",

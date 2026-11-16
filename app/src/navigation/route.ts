@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
  * Screens, addressed by the URL hash (`#/culturas`, `#/cultura/alface`). Hash routes need no
  * server configuration, work offline from the service worker, and keep the back button working.
  */
-export type Route = { name: 'today' } | { name: 'crops' } | { name: 'crop'; id: string };
+export type Route =
+  { name: 'today' } | { name: 'garden' } | { name: 'crops' } | { name: 'crop'; id: string };
 
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
+  if (path === 'horta') return { name: 'garden' };
   if (path === 'culturas') return { name: 'crops' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
   if (crop?.[1]) return { name: 'crop', id: crop[1] };
@@ -16,6 +18,7 @@ export function parseRoute(hash: string): Route {
 
 export const href = {
   today: '#/',
+  garden: '#/horta',
   crops: '#/culturas',
   crop: (id: string) => `#/cultura/${id}`,
 };
