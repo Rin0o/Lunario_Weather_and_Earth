@@ -13,8 +13,8 @@ and licence (see RNF-07 in [LUNARIO.md](LUNARIO.md)).
 | [Wikiquote: Provérbios portugueses](https://pt.wikiquote.org/wiki/Prov%C3%A9rbios_portugueses)   | Sayings of the day (`data/ditados.csv`)  | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); a selection, spelling updated, English meanings added          |
 
 The app must show this attribution (footer or about screen) as soon as it displays data
-from either source. The weather card shows "Fonte: IPMA" / "Source: IPMA"; Open-Meteo will be
-credited the same way when frost alerts use it. The almanac card credits Wikipedia and
+from either source. The weather card shows "Fonte: IPMA" / "Source: IPMA", and the frost warning shows
+"Fonte: Open-Meteo (CC BY 4.0)". The almanac card credits Wikipedia and
 Wikiquote with links and the licence; the two data files stay under CC BY-SA 4.0.
 
 ## Libraries with a visible role
