@@ -99,6 +99,53 @@ describe('subscriptions API', () => {
   });
 });
 
+describe('test notification', () => {
+  const endpoint = BODY.subscription.endpoint;
+  const sender = (status: number | Error) => ({
+    send: vi.fn(() => (status instanceof Error ? Promise.reject(status) : Promise.resolve(status))),
+  });
+  const test = (e: Env, s: ReturnType<typeof sender>, body: unknown = { endpoint }) =>
+    handleRequest(request('POST', body, ORIGIN, '/subscriptions/test'), e, new Date(), s);
+
+  it('sends a test in the subscriber language, to saved subscriptions only', async () => {
+    const e = env();
+    const ok = sender(201);
+    expect((await test(e, ok)).status).toBe(404);
+    expect(ok.send).not.toHaveBeenCalled();
+
+    await handleRequest(request('POST', { ...BODY, language: 'en' }), e);
+    const res = await test(e, ok);
+    expect(res.status).toBe(204);
+    expect(res.headers.get('Access-Control-Allow-Origin')).toBe(ORIGIN);
+    expect(ok.send).toHaveBeenCalledWith(
+      expect.objectContaining({ endpoint }),
+      expect.objectContaining({ title: '🧪 Frost alerts test', tag: 'frost-test' }),
+    );
+  });
+
+  it('refuses other origins, methods and bodies', async () => {
+    const e = env();
+    const ok = sender(201);
+    const other = request('POST', { endpoint }, 'https://evil.example', '/subscriptions/test');
+    expect((await handleRequest(other, e, new Date(), ok)).status).toBe(403);
+    const get = request('PUT', { endpoint }, ORIGIN, '/subscriptions/test');
+    expect((await handleRequest(get, e, new Date(), ok)).status).toBe(405);
+    expect((await test(e, ok, {})).status).toBe(400);
+    expect(ok.send).not.toHaveBeenCalled();
+  });
+
+  it('deletes an expired subscription and reports push failures', async () => {
+    const e = env();
+    const store = new D1Store(e.DB);
+    await handleRequest(request('POST', BODY), e);
+    expect((await test(e, sender(500))).status).toBe(502);
+    expect((await test(e, sender(new Error('network')))).status).toBe(502);
+    expect(await store.count()).toBe(1);
+    expect((await test(e, sender(410))).status).toBe(410);
+    expect(await store.count()).toBe(0);
+  });
+});
+
 describe('push sending', () => {
   it('posts a message the browser can decrypt (RFC 8291), signed with VAPID (RFC 8292)', async () => {
     const vapid = await generateVapidKeys();

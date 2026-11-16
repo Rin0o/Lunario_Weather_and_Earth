@@ -2,10 +2,11 @@
  * Lunário frost alerts Worker (RF-14, RF-17, D-33).
  *   POST   /subscriptions  turn alerts on, or update location and crops
  *   DELETE /subscriptions  turn alerts off (deletes the row)
+ *   POST   /subscriptions/test  send a test notification to that subscription
  *   cron                   check tonight's frost for every subscriber and notify
  */
 import { buildPushPayload } from '@block65/webcrypto-web-push';
-import { runAlerts, type AlertMessage, type Sender } from './alerts.ts';
+import { runAlerts, testAlert, type AlertMessage, type Sender } from './alerts.ts';
 import { D1Store, MAX_SUBSCRIPTIONS } from './store.ts';
 import { parseEndpoint, parseSubscription, type Subscription } from './subscription.ts';
 
@@ -63,10 +64,16 @@ async function readBody(request: Request): Promise<unknown> {
   return JSON.parse(text) as unknown;
 }
 
-export async function handleRequest(request: Request, env: Env, now = new Date()) {
+export async function handleRequest(
+  request: Request,
+  env: Env,
+  now = new Date(),
+  sender: Sender = pushSender(env),
+) {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
-  if (url.pathname !== '/subscriptions') return json(404, { error: 'not found' });
+  const isTest = url.pathname === '/subscriptions/test';
+  if (url.pathname !== '/subscriptions' && !isTest) return json(404, { error: 'not found' });
   if (!originAllowed(origin, env.ALLOWED_ORIGINS))
     return json(403, { error: 'origin not allowed' });
   const cors = corsHeaders(origin as string);
@@ -80,6 +87,23 @@ export async function handleRequest(request: Request, env: Env, now = new Date()
     return json(400, { error: 'body must be JSON, up to 4 KB' }, cors);
   }
   const store = new D1Store(env.DB);
+
+  // A test notification, only to a subscription already saved, at the address the app gives:
+  // endpoints are unguessable, so nobody can send it to someone else's phone.
+  if (isTest) {
+    if (request.method !== 'POST') return json(405, { error: 'method not allowed' }, cors);
+    const endpoint = parseEndpoint(body);
+    if (!endpoint) return json(400, { error: 'endpoint is missing' }, cors);
+    const sub = await store.get(endpoint);
+    if (!sub) return json(404, { error: 'subscription not found' }, cors);
+    const status = await sender.send(sub, testAlert(sub.language)).catch(() => 0);
+    if (status === 404 || status === 410) {
+      await store.remove(endpoint);
+      return json(410, { error: 'subscription expired' }, cors);
+    }
+    if (status < 200 || status >= 300) return json(502, { error: 'push service refused' }, cors);
+    return new Response(null, { status: 204, headers: cors });
+  }
 
   if (request.method === 'POST') {
     const sub = parseSubscription(body);

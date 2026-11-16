@@ -95,6 +95,22 @@ export function alertFor(
   };
 }
 
+const TEST_TEXTS: Record<Language, { title: string; body: string }> = {
+  'pt-PT': {
+    title: '🧪 Teste dos alertas de geada',
+    body: 'Os alertas estão a funcionar. Numa noite com risco de geada, o aviso chega assim, ao fim da tarde.',
+  },
+  en: {
+    title: '🧪 Frost alerts test',
+    body: 'Alerts are working. On a night with frost risk, the warning arrives like this, in the early evening.',
+  },
+};
+
+/** The notification sent when the user asks for a test from the app. */
+export function testAlert(language: Language): AlertMessage {
+  return { ...TEST_TEXTS[language], tag: 'frost-test' };
+}
+
 /** Open-Meteo answers one object for one location and an array for several. */
 export function forecastsFrom(json: unknown, count: number): unknown[] {
   const list = Array.isArray(json) ? json : [json];
