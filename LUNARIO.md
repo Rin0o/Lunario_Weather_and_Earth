@@ -264,7 +264,7 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
 | ~~Q-10~~ | ~~Regras de derivação que geram janelas incoerentes~~ | **Resolvida (2026-11-16):** janelas escritas à mão em `data/janelas-zona.csv`, que substituem as derivadas dessa cultura, zona e ação. Interior: couve-tronchuda viveiro jun Q1→ago Q1 e transplante jul Q2→set Q2; brócolo viveiro mai Q2→jul Q2 e transplante jul Q1→set Q1. Sul: cebola com um só viveiro, out Q1→jan Q2. O build já não dá avisos. |
 | ~~Q-12~~ | ~~Validar `dias_ate_transplante`~~ | **Resolvida (2026-11-16):** os valores das 18 culturas com viveiro foram revistos e confirmados. |
-| Q-11 | Santos do dia e ditados (RF-08) | Feito com D-31: 236 santos em 212 dias e 153 ditados. Santos populares e ditados revistos e confirmados em 2026-11-16. Falta: preencher os 154 dias sem santo (Martirológio Romano?) e decidir se entram festas móveis (Páscoa, Ascensão, Corpo de Deus) com os seus ditados. |
+| Q-11 | Santos do dia e ditados (RF-08) | Feito com D-31: 236 santos em 212 dias e 153 ditados. Santos populares e ditados revistos e confirmados em 2026-11-16. Os 154 dias sem santo **ficam sem santo** (decidido em 2026-11-16): não se preenchem com o Martirológio Romano. Falta só decidir se entram festas móveis (Páscoa, Ascensão, Corpo de Deus) com os seus ditados. |
 
 ## 12. Riscos
 
