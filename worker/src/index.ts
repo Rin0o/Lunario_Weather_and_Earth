@@ -5,7 +5,7 @@
  *   POST   /subscriptions/test  send a test notification to that subscription
  *   cron                   check tonight's frost for every subscriber and notify
  */
-import { buildPushPayload } from '@block65/webcrypto-web-push';
+import { encryptNotification, vapidHeaders } from '@block65/webcrypto-web-push';
 import { runAlerts, testAlert, type AlertMessage, type Sender } from './alerts.ts';
 import { D1Store, MAX_SUBSCRIPTIONS } from './store.ts';
 import { parseEndpoint, parseSubscription, type Subscription } from './subscription.ts';
@@ -130,29 +130,51 @@ export async function handleRequest(
   return json(405, { error: 'method not allowed' }, cors);
 }
 
+const PAD_BLOCK = 256;
+
+/** JSON with trailing spaces up to a multiple of `block` bytes (JSON.parse ignores them). */
+export function padJson(value: unknown, block: number): string {
+  const text = JSON.stringify(value);
+  const bytes = new TextEncoder().encode(text).length;
+  return text + ' '.repeat(Math.ceil(bytes / block) * block - bytes);
+}
+
 /** Sends through the subscriber's push service, encrypted and signed with VAPID. */
 export function pushSender(env: Env, fetchImpl: typeof fetch = fetch): Sender {
   return {
     async send(sub: Subscription, message: AlertMessage) {
       // RFC 8291 (aes128gcm) and RFC 8292 (VAPID), which every push service accepts, Apple's too.
-      const payload = await buildPushPayload(
-        {
-          data: { ...message, url: '/' },
-          // Useless after the night: expire in 12 hours; a newer alert replaces an older one.
-          options: { ttl: 12 * 60 * 60, urgency: 'high', topic: 'frost' },
-        },
-        {
-          endpoint: sub.endpoint,
-          expirationTime: null,
-          keys: { p256dh: sub.p256dh, auth: sub.auth },
-        },
-        {
-          subject: env.ADMIN_CONTACT,
-          publicKey: env.VAPID_PUBLIC_KEY,
-          privateKey: env.VAPID_PRIVATE_KEY,
-        },
+      const subscription = {
+        endpoint: sub.endpoint,
+        expirationTime: null,
+        keys: { p256dh: sub.p256dh, auth: sub.auth },
+      };
+      const { headers } = await vapidHeaders(subscription, {
+        subject: env.ADMIN_CONTACT,
+        publicKey: env.VAPID_PUBLIC_KEY,
+        privateKey: env.VAPID_PRIVATE_KEY,
+      });
+      // Not the library's padding to 4 KB: Firefox for Android relays messages base64-encoded
+      // with a 4 KB limit and refuses them (413). Padding to a multiple of 256 bytes still
+      // hides the exact length.
+      const body = await encryptNotification(
+        subscription,
+        new TextEncoder().encode(padJson({ ...message, url: '/' }, PAD_BLOCK)),
+        { pad: false },
       );
-      const response = await fetchImpl(sub.endpoint, payload);
+      const response = await fetchImpl(sub.endpoint, {
+        method: 'POST',
+        headers: {
+          ...headers,
+          // Useless after the night: expire in 12 hours; a newer alert replaces an older one.
+          TTL: String(12 * 60 * 60),
+          Urgency: 'high',
+          Topic: 'frost',
+          'Content-Encoding': 'aes128gcm',
+          'Content-Type': 'application/octet-stream',
+        },
+        body,
+      });
       if (!response.ok) {
         // The push service's short reason (e.g. Mozilla's errno, Apple's "BadJwtToken"),
         // never the endpoint.
