@@ -6,6 +6,7 @@ describe('parseRoute', () => {
   it.each([
     ['', { name: 'today' }],
     ['#/', { name: 'today' }],
+    ['#/horta', { name: 'garden' }],
     ['#/culturas', { name: 'crops' }],
     ['#/culturas/', { name: 'crops' }],
     ['#/cultura/alface', { name: 'crop', id: 'alface' }],
@@ -19,6 +20,7 @@ describe('parseRoute', () => {
   it('builds links that parse back', () => {
     expect(parseRoute(href.crop('tomate'))).toEqual({ name: 'crop', id: 'tomate' });
     expect(parseRoute(href.crops)).toEqual({ name: 'crops' });
+    expect(parseRoute(href.garden)).toEqual({ name: 'garden' });
     expect(parseRoute(href.today)).toEqual({ name: 'today' });
   });
 });

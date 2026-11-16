@@ -316,6 +316,96 @@ a {
   text-decoration: none;
 }
 
+/* --- Garden --- */
+.planting-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.planting-form label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.planting-form select,
+.planting-form input,
+.planting-actions button,
+.planting-form button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: var(--paper);
+}
+
+.planting-form button[type='submit'] {
+  background: var(--accent);
+  color: var(--paper);
+  border: 0;
+  font-weight: 600;
+}
+
+.planting-form button:disabled {
+  opacity: 0.5;
+}
+
+.plantings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.planting p {
+  margin: 0.25rem 0;
+}
+
+.planting-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.stage {
+  font-size: 0.85rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.stage-ready .stage {
+  background: var(--action-SD);
+  border-color: var(--action-SD);
+  color: #fff;
+}
+
+.stage-late .stage {
+  border-color: var(--action-CO);
+  color: var(--action-CO);
+}
+
+.stage-harvested {
+  opacity: 0.7;
+}
+
+.planting-notes {
+  font-style: italic;
+}
+
+.planting-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.planting-actions .danger {
+  color: var(--action-CO);
+}
+
 /* --- Crops --- */
 .crops-index {
   list-style: none;
