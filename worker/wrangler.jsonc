@@ -11,14 +11,14 @@
     "ALLOWED_ORIGINS": "https://lunario-4w2.pages.dev,https://*.lunario-4w2.pages.dev",
     "ADMIN_CONTACT": "https://lunario-4w2.pages.dev",
     // From `npm run vapid-keys`; the app subscribes with the same key.
-    "VAPID_PUBLIC_KEY": "",
+    "VAPID_PUBLIC_KEY": "BD4kJdSx-E1iAQ4TCGGGXmhnGM2U3CDbpsGVV1hucZrPCyj_pae2dEnnHhGjHXUWV-g7YRv_T5zvUlhWBHrcwu0",
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "lunario-alerts",
-      // Filled in once the database exists: `npx wrangler d1 create lunario-alerts`.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      // From `npx wrangler d1 create lunario-alerts`.
+      "database_id": "7c80c06c-3520-4c0c-ad9d-2002b3b8965a",
       "migrations_dir": "migrations",
     },
   ],
