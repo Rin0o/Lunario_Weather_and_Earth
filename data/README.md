@@ -19,6 +19,16 @@ if either is missing (D-13).
 | `regras-derivacao.csv` | derivation rule                                   | How each zone's windows differ from Litoral Centro, in fortnights.                                                                                                                                                                                                                                        |
 | `avisos-zona.csv`      | crop and zone note                                | Shown next to the crop in that zone, e.g. "only under cover" inland.                                                                                                                                                                                                                                      |
 | `regras-lunares.csv`   | traditional lunar rule                            | For the optional Moon mode (RF-09). Folklore, not agronomic advice (RNF-05). `periodos`: `nova`, `crescente`, `cheia`, `minguante`, each lasting from its principal phase to the next; for `evitar`, the phases whose exact day to avoid. `conselho_*` is the text shown.                                 |
+| `santos.csv`           | saint or feast on a fixed date                    | For the saint of the day (RF-08). `origem`: `geral` (General Roman Calendar), `portugal` (Portugal's own calendar), `popular` (popular devotion, e.g. Santo Isidro Lavrador). A day may have several; days with none show no saint. Movable feasts (Easter, Corpus Christi…) are not listed.              |
+| `ditados.csv`          | traditional saying                                | For the saying of the day (RF-08). Kept in Portuguese; `sentido_en` gives its meaning, not a translation (D-13). With `dia`, it is shown on that date only; without, it takes turns on the other days of the month. Each month needs at least 5 without `dia`.                                            |
+
+## Licence of the saints and sayings
+
+`santos.csv` and `ditados.csv` are a selection adapted from Wikipedia ("Calendário Romano Geral")
+and Wikiquote ("Provérbios portugueses"), with additions for Portugal. They are licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), unlike the rest of the
+repository: keep the attribution in [CREDITS.md](../CREDITS.md) and in the app. Spelling follows
+the current agreement (AO90), so month names are in lower case.
 
 ## Codes
 
