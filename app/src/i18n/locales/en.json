@@ -16,7 +16,7 @@
   },
   "garden": {
     "title": "My garden",
-    "intro": "Your entries stay on this phone only.",
+    "intro": "Your entries stay on this phone only. Only frost alerts, if you turn them on, send the minimum explained below.",
     "add": "Log a planting",
     "crop": "Crop",
     "chooseCrop": "Choose…",
@@ -225,6 +225,16 @@
     "protect": "Protect in your garden: {{crops}}.",
     "caveat": "This is a risk, not a certainty: valleys and hollows get colder than the forecast says.",
     "source": "Forecast for {{place}} · Source: Open-Meteo (CC BY 4.0)"
+  },
+  "frostAlerts": {
+    "title": "Frost alerts on your phone",
+    "intro": "Get a notification in the early evening when frost is likely that night, even with the app closed.",
+    "privacy": "While they are on, Lunário sends the alerts server your location rounded to about 1 km, the names of the frost-sensitive crops in your garden and your language. Nothing else. Turning them off deletes this data.",
+    "toggle": "Warn me about frost",
+    "on": "On for {{place}}. The alert arrives around 6 pm (7 pm in summer), only when there is a risk.",
+    "unsupported": "This browser cannot receive notifications. On iPhone, add Lunário to your Home Screen (Share → Add to Home Screen) and turn alerts on from there.",
+    "blocked": "Notifications are blocked for Lunário. Allow them in your browser or phone settings and try again.",
+    "failed": "Could not change the alerts. Check your internet connection and try again."
   },
   "moon": {
     "title": "Moon",
