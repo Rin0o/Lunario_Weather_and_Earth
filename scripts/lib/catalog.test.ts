@@ -150,6 +150,29 @@ describe('validation', () => {
     ]);
   });
 
+  it('validates saints: dates, origin and duplicates (RF-08)', () => {
+    const santos = `${realFiles.santos}2,30,São Ninguém,Saint Nobody,geral\n13,1,São X,Saint X,geral\n6,14,São Lenda,Saint Legend,lenda\n1,17,Santo Antão,Saint Anthony the Abbot,geral\n`;
+    expect(problems({ santos })).toEqual([
+      expect.stringContaining('"dia" is 30, but month 2 has 29 days'),
+      expect.stringContaining('"mes" is 13, expected 1–12'),
+      expect.stringContaining('"origem" is "lenda"'),
+      expect.stringContaining('"Santo Antão" is listed twice on the same day'),
+    ]);
+  });
+
+  it('validates sayings: meaning, duplicates and enough per month (RF-08)', () => {
+    const ditados = `${realFiles.ditados}5,,Um ditado sem sentido.,\n1,,A água de janeiro vale dinheiro.,Again\n`;
+    expect(problems({ ditados })).toEqual([
+      expect.stringContaining('"sentido_en" is empty'),
+      expect.stringContaining('is listed twice'),
+    ]);
+    const onlyJanuaryDay = 'mes,dia,ditado,sentido_en\n1,22,Um.,One.\n';
+    expect(problems({ ditados: onlyJanuaryDay })).toHaveLength(12);
+    expect(problems({ ditados: onlyJanuaryDay })[0]).toContain(
+      'month 1 has 0 sayings without a day; at least 5 are needed',
+    );
+  });
+
   it('rejects stored harvests for non-perennial crops (D-19)', () => {
     const janelas = `${realFiles.janelas}alface,CO,Abr Q1,Dez Q2,,\n`;
     expect(problems({ janelas })).toEqual([
