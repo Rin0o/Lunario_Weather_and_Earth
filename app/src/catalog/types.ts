@@ -73,11 +73,21 @@ export interface DerivationRule {
   reason: Text;
 }
 
+/**
+ * Traditional lunar periods, as almanacs count them: each lasts from its principal phase to
+ * the next (lua nova → quarto crescente → lua cheia → quarto minguante → lua nova).
+ */
+export const LUNAR_PERIODS = ['nova', 'crescente', 'cheia', 'minguante'] as const;
+export type LunarPeriod = (typeof LUNAR_PERIODS)[number];
+
+/** A traditional lunar rule (RF-09). Folklore, never agronomic advice (RNF-05). */
 export interface LunarRule {
   part: EdiblePart | 'todas';
   actions: (Action | 'evitar')[];
+  /** Periods the rule favours; for `evitar`, the phases whose exact day to avoid. */
+  periods: LunarPeriod[];
   phase: Text;
-  scope: Text | null;
+  advice: Text;
   reason: Text;
 }
 

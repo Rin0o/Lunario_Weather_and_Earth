@@ -139,6 +139,17 @@ describe('validation', () => {
     ]);
   });
 
+  it('validates lunar periods (RF-09)', () => {
+    const unknown = realFiles.regrasLunares.replace(',SD;SV,crescente,', ',SD;SV,crescent,');
+    expect(problems({ regrasLunares: unknown })).toEqual([
+      expect.stringContaining('"periodos" contains "crescent"'),
+    ]);
+    const avoid = realFiles.regrasLunares.replace('evitar,nova;cheia', 'evitar,crescente');
+    expect(problems({ regrasLunares: avoid })).toEqual([
+      expect.stringContaining('only nova and cheia apply'),
+    ]);
+  });
+
   it('rejects stored harvests for non-perennial crops (D-19)', () => {
     const janelas = `${realFiles.janelas}alface,CO,Abr Q1,Dez Q2,,\n`;
     expect(problems({ janelas })).toEqual([

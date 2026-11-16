@@ -2,6 +2,7 @@ import {
   ACTIONS,
   CLIMATE_CLASSES,
   EDIBLE_PARTS,
+  LUNAR_PERIODS,
   ZONE_IDS,
   type Action,
   type CalendarWindow,
@@ -360,21 +361,30 @@ function parseLunarRules(text: string, problems: string[]): LunarRule[] {
   const table = readTable(file, text, [
     'parte',
     'acao',
+    'periodos',
     'fase_pt',
     'fase_en',
-    'ambito_pt',
-    'ambito_en',
+    'conselho_pt',
+    'conselho_en',
     'justificacao_pt',
     'justificacao_en',
   ]);
   const c = new Checker(file);
-  const rules = table.rows.map((row): LunarRule => ({
-    part: c.oneOf(row, 'parte', [...EDIBLE_PARTS, 'todas'] as const),
-    actions: c.list(row, 'acao', [...ACTIONS, 'evitar'] as const),
-    phase: c.bilingual(row, 'fase') as Text,
-    scope: c.bilingual(row, 'ambito', true),
-    reason: c.bilingual(row, 'justificacao') as Text,
-  }));
+  const rules = table.rows.map((row): LunarRule => {
+    const actions = c.list(row, 'acao', [...ACTIONS, 'evitar'] as const);
+    const periods = c.list(row, 'periodos', LUNAR_PERIODS);
+    if (actions.includes('evitar') && periods.some((p) => p !== 'nova' && p !== 'cheia')) {
+      c.fail(row, '"evitar" refers to the exact day of a phase: only nova and cheia apply');
+    }
+    return {
+      part: c.oneOf(row, 'parte', [...EDIBLE_PARTS, 'todas'] as const),
+      actions,
+      periods,
+      phase: c.bilingual(row, 'fase') as Text,
+      advice: c.bilingual(row, 'conselho') as Text,
+      reason: c.bilingual(row, 'justificacao') as Text,
+    };
+  });
   problems.push(...c.problems);
   return rules;
 }
