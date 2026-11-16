@@ -53,3 +53,44 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: '4.162.0'
           command: pages deploy dist --project-name=lunario --branch=${{ steps.meta.outputs.branch }} --commit-hash=${{ github.event.workflow_run.head_sha }}
+
+  # Frost alerts Worker (D-33): production only, after the same green CI run.
+  worker:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production-worker
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Check that the D1 database is configured
+        id: ready
+        run: |
+          if grep -q '"database_id": "00000000-0000-0000-0000-000000000000"' worker/wrangler.jsonc; then
+            echo "::notice::Worker not deployed: create the D1 database and set its id in worker/wrangler.jsonc (CONTRIBUTING.md)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.ready.outputs.ready == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: steps.ready.outputs.ready == 'true'
+        run: npm ci
+      - if: steps.ready.outputs.ready == 'true'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.162.0'
+          workingDirectory: worker
+          command: |
+            d1 migrations apply lunario-alerts --remote
+            deploy
