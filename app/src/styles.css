@@ -425,6 +425,23 @@ a {
   align-items: center;
 }
 
+a.button.primary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.feed-url {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
 .calendar-events {
   margin: 0;
   padding-left: 1.2rem;

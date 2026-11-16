@@ -132,6 +132,17 @@
       "CO": "Harvest"
     }
   },
+  "feed": {
+    "name": "Lunário · {{zone}}",
+    "event": "🌱 In the garden: {{dates}}",
+    "footer": "Indicative dates from the Lunário sowing calendar. More at {{url}}",
+    "subscribe": "Get it in your calendar",
+    "intro": "A reminder at the start of each fortnight with what to sow, plant and harvest in {{zone}}. The calendar updates itself.",
+    "google": "Subscribe in Google Calendar",
+    "other": "Other calendar (iPhone, Outlook…)",
+    "address": "Or copy this address into your calendar:",
+    "delay": "Google may take up to a day to show changes."
+  },
   "location": {
     "near": "Near {{name}}",
     "change": "Change",

@@ -132,6 +132,17 @@
       "CO": "Colher"
     }
   },
+  "feed": {
+    "name": "Lunário · {{zone}}",
+    "event": "🌱 Na horta: {{dates}}",
+    "footer": "Datas indicativas do calendário agrícola do Lunário. Mais em {{url}}",
+    "subscribe": "Receber no calendário",
+    "intro": "Um lembrete no início de cada quinzena com o que semear, plantar e colher em {{zone}}. O calendário atualiza-se sozinho.",
+    "google": "Subscrever no Google Calendar",
+    "other": "Outro calendário (iPhone, Outlook…)",
+    "address": "Ou copie este endereço para o seu calendário:",
+    "delay": "O Google pode demorar até um dia a mostrar alterações."
+  },
   "location": {
     "near": "Perto de {{name}}",
     "change": "Alterar",

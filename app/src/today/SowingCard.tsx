@@ -12,6 +12,7 @@ import { isoDateToNoonUtc } from '../calendar/dates.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { formatDateRange, intlLocale } from '../i18n/format.ts';
 import { href } from '../navigation/route.ts';
+import { SubscribePanel } from './SubscribePanel.tsx';
 
 interface SowingCardProps {
   now: Date;
@@ -80,6 +81,8 @@ export function SowingCard({ now, district, source = catalog }: SowingCardProps)
           * {note}
         </p>
       ))}
+
+      <SubscribePanel zone={zone} />
     </article>
   );
 }
