@@ -199,6 +199,7 @@ function parseCrops(text: string, problems: string[]): Crop[] {
     'notas_en',
     'dias_ate_transplante_min',
     'dias_ate_transplante_max',
+    'sensivel_geada',
   ]);
   const c = new Checker(file);
   const crops = table.rows.map((row): Crop => {
@@ -240,6 +241,7 @@ function parseCrops(text: string, problems: string[]): Crop[] {
       cycleDays,
       transplantDays,
       perennial,
+      frostSensitive: c.oneOf(row, 'sensivel_geada', ['sim', 'nao'] as const) === 'sim',
       spacingCm: c.text(row, 'compasso_cm'),
       notes: c.bilingual(row, 'notas') as Text,
     };
