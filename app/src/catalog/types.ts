@@ -43,6 +43,8 @@ export interface Crop {
   climateClass: ClimateClass;
   /** Days from sowing or planting to harvest; null for perennials. */
   cycleDays: { min: number; max: number } | null;
+  /** Days from nursery sowing to transplanting (D-20); null for crops not sown in trays. */
+  transplantDays: { min: number; max: number } | null;
   perennial: boolean;
   /** Row × plant spacing in cm, e.g. `30×30`. */
   spacingCm: string;

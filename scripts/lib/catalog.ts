@@ -189,9 +189,27 @@ function parseCrops(text: string, problems: string[]): Crop[] {
     'compasso_cm',
     'notas_pt',
     'notas_en',
+    'dias_ate_transplante_min',
+    'dias_ate_transplante_max',
   ]);
   const c = new Checker(file);
   const crops = table.rows.map((row): Crop => {
+    const hasTransplant = Boolean(
+      row.values.dias_ate_transplante_min || row.values.dias_ate_transplante_max,
+    );
+    let transplantDays: Crop['transplantDays'] = null;
+    if (hasTransplant) {
+      transplantDays = {
+        min: c.int(row, 'dias_ate_transplante_min'),
+        max: c.int(row, 'dias_ate_transplante_max'),
+      };
+      if (transplantDays.min <= 0 || transplantDays.min > transplantDays.max) {
+        c.fail(
+          row,
+          `days to transplant ${transplantDays.min}–${transplantDays.max} must be positive with min ≤ max`,
+        );
+      }
+    }
     const id = c.text(row, 'id');
     if (!/^[a-z][a-z_]*$/.test(id)) c.fail(row, `id "${id}" must be lower case letters and _`);
     const perennial = c.oneOf(row, 'perene', ['sim', 'nao'] as const) === 'sim';
@@ -212,6 +230,7 @@ function parseCrops(text: string, problems: string[]): Crop[] {
       ediblePart: c.oneOf(row, 'parte_comestivel', EDIBLE_PARTS),
       climateClass: c.oneOf(row, 'classe_climatica', CLIMATE_CLASSES),
       cycleDays,
+      transplantDays,
       perennial,
       spacingCm: c.text(row, 'compasso_cm'),
       notes: c.bilingual(row, 'notas') as Text,
@@ -261,6 +280,14 @@ function parseBaseWindows(text: string, crops: Crop[], problems: string[]): Cale
     }
     if (crop.perennial && !own.some((w) => w.action === 'CO')) {
       c.fail(null, `perennial ${crop.id} needs a harvest (CO) window`);
+    }
+    // Transplant reminders (D-20) need the nursery time of every crop sown in trays.
+    const sownInTrays = own.some((w) => w.action === 'SV');
+    if (sownInTrays && !crop.transplantDays) {
+      c.fail(null, `${crop.id} is sown in trays (SV) but has no dias_ate_transplante`);
+    }
+    if (!sownInTrays && crop.transplantDays) {
+      c.fail(null, `${crop.id} has dias_ate_transplante but is never sown in trays (SV)`);
     }
   }
   problems.push(...c.problems);
