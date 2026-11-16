@@ -46,6 +46,8 @@ export interface Crop {
   /** Days from nursery sowing to transplanting (D-20); null for crops not sown in trays. */
   transplantDays: { min: number; max: number } | null;
   perennial: boolean;
+  /** Damaged by frost (RF-16): warn when frost is forecast while it is in the ground. */
+  frostSensitive: boolean;
   /** Row × plant spacing in cm, e.g. `30×30`. */
   spacingCm: string;
   notes: Text;

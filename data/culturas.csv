@@ -1,36 +1,36 @@
-id,nome_pt,nome_en,nome_cientifico,familia,parte_comestivel,classe_climatica,ciclo_dias_min,ciclo_dias_max,perene,compasso_cm,notas_pt,notas_en,dias_ate_transplante_min,dias_ate_transplante_max
-alface,Alface,Lettuce,Lactuca sativa,Asteraceae,folha,fresca,60,90,nao,30×30,No verão sobe à flor com facilidade; preferir variedades de verão e meia-sombra.,Bolts easily in summer; choose summer varieties and some shade.,28,42
-couve_coracao,Couve-coração,Sweetheart cabbage,Brassica oleracea var. capitata,Brassicaceae,folha,fresca,90,150,nao,50×50,Duas épocas: primavera e outono/inverno.,Two seasons: spring and autumn/winter.,35,50
-couve_galega,Couve-galega,Portuguese kale,Brassica oleracea var. acephala,Brassicaceae,folha,fresca,90,120,nao,60×60,Colhem-se as folhas de baixo para cima durante meses (caldo verde).,"Pick the leaves from the bottom up for months (for caldo verde soup).",35,50
-couve_tronchuda,Couve-tronchuda,Portuguese cabbage (tronchuda),Brassica oleracea var. costata,Brassicaceae,folha,fresca,120,150,nao,60×60,Couve de consoada; beneficia do frio.,The Christmas Eve cabbage; it improves with cold.,35,50
-brocolo,Brócolo,Broccoli,Brassica oleracea var. italica,Brassicaceae,flor,fresca,90,120,nao,60×50,Após a cabeça principal dá rebentos laterais.,Produces side shoots after the main head.,35,50
-couve_flor,Couve-flor,Cauliflower,Brassica oleracea var. botrytis,Brassicaceae,flor,fresca,100,150,nao,60×60,Dobrar folhas sobre a inflorescência para a manter branca.,Fold leaves over the curd to keep it white.,35,50
-nabo,Nabo / nabiça / grelos,Turnip / turnip greens / turnip tops,Brassica rapa,Brassicaceae,raiz,fresca,50,90,nao,30×10,"Da mesma sementeira saem nabiças, grelos e nabo.","One sowing gives turnip greens, turnip tops and the root.",,
-rabanete,Rabanete,Radish,Raphanus sativus,Brassicaceae,raiz,fresca,25,40,nao,15×5,Sementeiras escalonadas de 15 em 15 dias.,Sow in succession every 15 days.,,
-rucula,Rúcula,Rocket,Eruca vesicaria,Brassicaceae,folha,fresca,30,45,nao,20×5,Pica e sobe à flor com calor.,Turns peppery and bolts in the heat.,,
-cenoura,Cenoura,Carrot,Daucus carota,Apiaceae,raiz,neutra,90,120,nao,25×5,Solo solto e sem estrume fresco. Boa consociação com cebola.,Loose soil without fresh manure. Grows well alongside onions.,,
-beterraba,Beterraba,Beetroot,Beta vulgaris,Amaranthaceae,raiz,neutra,70,100,nao,30×10,Cada 'semente' dá várias plantas; desbastar.,Each 'seed' gives several plants; thin them out.,,
-acelga,Acelga,Chard,Beta vulgaris var. cicla,Amaranthaceae,folha,neutra,60,90,nao,40×30,Colheita folha a folha durante meses.,Pick leaf by leaf for months.,,
-espinafre,Espinafre,Spinach,Spinacia oleracea,Amaranthaceae,folha,fresca,40,60,nao,25×10,Sobe à flor com dias longos e calor.,Bolts with long days and heat.,,
-batata,Batata,Potato,Solanum tuberosum,Solanaceae,raiz,neutra,90,120,nao,70×35,Plantar batata-semente certificada. Amontoar.,Plant certified seed potatoes. Earth them up.,,
-batata_doce,Batata-doce,Sweet potato,Ipomoea batatas,Convolvulaceae,raiz,quente,120,150,nao,90×35,"Planta-se a rama (estacas), não a semente.","Grown from slips (cuttings), not seed.",,
-cebola,Cebola,Onion,Allium cepa,Amaryllidaceae,raiz,fresca,150,210,nao,25×10,Escolher variedade adequada ao fotoperíodo (dia curto/longo).,Choose a variety suited to day length (short-day or long-day).,60,90
-alho,Alho,Garlic,Allium sativum,Amaryllidaceae,raiz,fresca,210,240,nao,25×12,Planta-se o dente; precisa de frio para formar a cabeça.,Plant the cloves; it needs cold to form a bulb.,,
-alho_frances,Alho-francês,Leek,Allium porrum,Amaryllidaceae,folha,fresca,120,180,nao,40×15,Transplantar fundo e amontoar para branquear.,Transplant deep and earth up to blanch.,60,90
-ervilha,Ervilha,Pea,Pisum sativum,Fabaceae,fruto,fresca,80,120,nao,50×5,Precisa de tutor nas variedades de trepar. Fixa azoto.,Climbing varieties need support. Fixes nitrogen.,,
-fava,Fava,Broad bean,Vicia faba,Fabaceae,fruto,fresca,120,150,nao,60×20,"Ditado: 'pelo S. Martinho, semeia fava e linho'.","Saying: 'by St Martin's Day, sow broad beans and flax'.",,
-feijao_verde,Feijão-verde,Green bean,Phaseolus vulgaris,Fabaceae,fruto,quente,60,90,nao,50×10,Só semear com solo quente (>12 °C).,Sow only in warm soil (above 12 °C).,,
-tomate,Tomate,Tomato,Solanum lycopersicum,Solanaceae,fruto,quente,120,150,nao,100×50,Tutorar e desladroar. Rodar com outras famílias (míldio).,Stake and remove side shoots. Rotate with other families (blight).,42,56
-pimento,Pimento,Sweet pepper,Capsicum annuum,Solanaceae,fruto,quente,120,150,nao,60×40,Germinação lenta; precisa de calor.,Slow to germinate; needs heat.,56,70
-malagueta,Malagueta,Chilli pepper,Capsicum annuum / frutescens,Solanaceae,fruto,quente,120,160,nao,60×40,Mesmo calendário do pimento.,Same calendar as sweet pepper.,56,70
-beringela,Beringela,Aubergine,Solanum melongena,Solanaceae,fruto,quente,120,150,nao,70×50,A mais exigente em calor das solanáceas.,The most heat-hungry of the nightshades.,56,70
-pepino,Pepino,Cucumber,Cucumis sativus,Cucurbitaceae,fruto,quente,60,80,nao,100×40,Rega regular para evitar amargor.,Water regularly to avoid bitterness.,21,30
-courgette,Courgette,Courgette,Cucurbita pepo,Cucurbitaceae,fruto,quente,50,70,nao,100×80,Colher pequena e com frequência.,Pick small and often.,21,30
-abobora,Abóbora,Pumpkin and squash,Cucurbita maxima / moschata,Cucurbitaceae,fruto,quente,120,150,nao,200×150,Ocupa muito espaço. Colher com o pedúnculo seco para conservar.,Takes a lot of space. Harvest with a dry stalk so it keeps.,21,30
-melao,Melão,Melon,Cucumis melo,Cucurbitaceae,fruto,quente,90,120,nao,150×80,Reduzir a rega no amadurecimento.,Water less while the fruit ripens.,25,35
-melancia,Melancia,Watermelon,Citrullus lanatus,Cucurbitaceae,fruto,quente,90,120,nao,200×100,Muito exigente em calor.,Needs a lot of heat.,25,35
-milho_doce,Milho-doce,Sweetcorn,Zea mays var. saccharata,Poaceae,fruto,quente,80,100,nao,70×25,Semear em bloco (várias linhas) para boa polinização.,Sow in a block (several rows) for good pollination.,,
-salsa,Salsa,Parsley,Petroselinum crispum,Apiaceae,folha,neutra,70,90,nao,25×10,Germinação lenta (3–4 semanas); demolhar a semente.,Slow to germinate (3–4 weeks); soak the seed first.,,
-coentros,Coentros,Coriander,Coriandrum sativum,Apiaceae,folha,fresca,40,60,nao,25×5,Sobe à flor com calor; sementeiras escalonadas.,Bolts in the heat; sow in succession.,,
-manjericao,Manjericão,Basil,Ocimum basilicum,Lamiaceae,folha,quente,60,90,nao,30×25,Muito sensível ao frio. Cortar as flores.,Very sensitive to cold. Pinch out the flowers.,35,49
-morango,Morango,Strawberry,Fragaria × ananassa,Rosaceae,fruto,neutra,,,sim,40×30,Planta-se o pé/estolho. Cobrir o solo com palha. Produz 2–3 anos.,Plant crowns or runners. Mulch with straw. Crops for 2–3 years.,,
+id,nome_pt,nome_en,nome_cientifico,familia,parte_comestivel,classe_climatica,ciclo_dias_min,ciclo_dias_max,perene,compasso_cm,notas_pt,notas_en,dias_ate_transplante_min,dias_ate_transplante_max,sensivel_geada
+alface,Alface,Lettuce,Lactuca sativa,Asteraceae,folha,fresca,60,90,nao,30×30,No verão sobe à flor com facilidade; preferir variedades de verão e meia-sombra.,Bolts easily in summer; choose summer varieties and some shade.,28,42,nao
+couve_coracao,Couve-coração,Sweetheart cabbage,Brassica oleracea var. capitata,Brassicaceae,folha,fresca,90,150,nao,50×50,Duas épocas: primavera e outono/inverno.,Two seasons: spring and autumn/winter.,35,50,nao
+couve_galega,Couve-galega,Portuguese kale,Brassica oleracea var. acephala,Brassicaceae,folha,fresca,90,120,nao,60×60,Colhem-se as folhas de baixo para cima durante meses (caldo verde).,"Pick the leaves from the bottom up for months (for caldo verde soup).",35,50,nao
+couve_tronchuda,Couve-tronchuda,Portuguese cabbage (tronchuda),Brassica oleracea var. costata,Brassicaceae,folha,fresca,120,150,nao,60×60,Couve de consoada; beneficia do frio.,The Christmas Eve cabbage; it improves with cold.,35,50,nao
+brocolo,Brócolo,Broccoli,Brassica oleracea var. italica,Brassicaceae,flor,fresca,90,120,nao,60×50,Após a cabeça principal dá rebentos laterais.,Produces side shoots after the main head.,35,50,nao
+couve_flor,Couve-flor,Cauliflower,Brassica oleracea var. botrytis,Brassicaceae,flor,fresca,100,150,nao,60×60,Dobrar folhas sobre a inflorescência para a manter branca.,Fold leaves over the curd to keep it white.,35,50,nao
+nabo,Nabo / nabiça / grelos,Turnip / turnip greens / turnip tops,Brassica rapa,Brassicaceae,raiz,fresca,50,90,nao,30×10,"Da mesma sementeira saem nabiças, grelos e nabo.","One sowing gives turnip greens, turnip tops and the root.",,,nao
+rabanete,Rabanete,Radish,Raphanus sativus,Brassicaceae,raiz,fresca,25,40,nao,15×5,Sementeiras escalonadas de 15 em 15 dias.,Sow in succession every 15 days.,,,nao
+rucula,Rúcula,Rocket,Eruca vesicaria,Brassicaceae,folha,fresca,30,45,nao,20×5,Pica e sobe à flor com calor.,Turns peppery and bolts in the heat.,,,nao
+cenoura,Cenoura,Carrot,Daucus carota,Apiaceae,raiz,neutra,90,120,nao,25×5,Solo solto e sem estrume fresco. Boa consociação com cebola.,Loose soil without fresh manure. Grows well alongside onions.,,,nao
+beterraba,Beterraba,Beetroot,Beta vulgaris,Amaranthaceae,raiz,neutra,70,100,nao,30×10,Cada 'semente' dá várias plantas; desbastar.,Each 'seed' gives several plants; thin them out.,,,nao
+acelga,Acelga,Chard,Beta vulgaris var. cicla,Amaranthaceae,folha,neutra,60,90,nao,40×30,Colheita folha a folha durante meses.,Pick leaf by leaf for months.,,,nao
+espinafre,Espinafre,Spinach,Spinacia oleracea,Amaranthaceae,folha,fresca,40,60,nao,25×10,Sobe à flor com dias longos e calor.,Bolts with long days and heat.,,,nao
+batata,Batata,Potato,Solanum tuberosum,Solanaceae,raiz,neutra,90,120,nao,70×35,Plantar batata-semente certificada. Amontoar.,Plant certified seed potatoes. Earth them up.,,,sim
+batata_doce,Batata-doce,Sweet potato,Ipomoea batatas,Convolvulaceae,raiz,quente,120,150,nao,90×35,"Planta-se a rama (estacas), não a semente.","Grown from slips (cuttings), not seed.",,,sim
+cebola,Cebola,Onion,Allium cepa,Amaryllidaceae,raiz,fresca,150,210,nao,25×10,Escolher variedade adequada ao fotoperíodo (dia curto/longo).,Choose a variety suited to day length (short-day or long-day).,60,90,nao
+alho,Alho,Garlic,Allium sativum,Amaryllidaceae,raiz,fresca,210,240,nao,25×12,Planta-se o dente; precisa de frio para formar a cabeça.,Plant the cloves; it needs cold to form a bulb.,,,nao
+alho_frances,Alho-francês,Leek,Allium porrum,Amaryllidaceae,folha,fresca,120,180,nao,40×15,Transplantar fundo e amontoar para branquear.,Transplant deep and earth up to blanch.,60,90,nao
+ervilha,Ervilha,Pea,Pisum sativum,Fabaceae,fruto,fresca,80,120,nao,50×5,Precisa de tutor nas variedades de trepar. Fixa azoto.,Climbing varieties need support. Fixes nitrogen.,,,nao
+fava,Fava,Broad bean,Vicia faba,Fabaceae,fruto,fresca,120,150,nao,60×20,"Ditado: 'pelo S. Martinho, semeia fava e linho'.","Saying: 'by St Martin's Day, sow broad beans and flax'.",,,nao
+feijao_verde,Feijão-verde,Green bean,Phaseolus vulgaris,Fabaceae,fruto,quente,60,90,nao,50×10,Só semear com solo quente (>12 °C).,Sow only in warm soil (above 12 °C).,,,sim
+tomate,Tomate,Tomato,Solanum lycopersicum,Solanaceae,fruto,quente,120,150,nao,100×50,Tutorar e desladroar. Rodar com outras famílias (míldio).,Stake and remove side shoots. Rotate with other families (blight).,42,56,sim
+pimento,Pimento,Sweet pepper,Capsicum annuum,Solanaceae,fruto,quente,120,150,nao,60×40,Germinação lenta; precisa de calor.,Slow to germinate; needs heat.,56,70,sim
+malagueta,Malagueta,Chilli pepper,Capsicum annuum / frutescens,Solanaceae,fruto,quente,120,160,nao,60×40,Mesmo calendário do pimento.,Same calendar as sweet pepper.,56,70,sim
+beringela,Beringela,Aubergine,Solanum melongena,Solanaceae,fruto,quente,120,150,nao,70×50,A mais exigente em calor das solanáceas.,The most heat-hungry of the nightshades.,56,70,sim
+pepino,Pepino,Cucumber,Cucumis sativus,Cucurbitaceae,fruto,quente,60,80,nao,100×40,Rega regular para evitar amargor.,Water regularly to avoid bitterness.,21,30,sim
+courgette,Courgette,Courgette,Cucurbita pepo,Cucurbitaceae,fruto,quente,50,70,nao,100×80,Colher pequena e com frequência.,Pick small and often.,21,30,sim
+abobora,Abóbora,Pumpkin and squash,Cucurbita maxima / moschata,Cucurbitaceae,fruto,quente,120,150,nao,200×150,Ocupa muito espaço. Colher com o pedúnculo seco para conservar.,Takes a lot of space. Harvest with a dry stalk so it keeps.,21,30,sim
+melao,Melão,Melon,Cucumis melo,Cucurbitaceae,fruto,quente,90,120,nao,150×80,Reduzir a rega no amadurecimento.,Water less while the fruit ripens.,25,35,sim
+melancia,Melancia,Watermelon,Citrullus lanatus,Cucurbitaceae,fruto,quente,90,120,nao,200×100,Muito exigente em calor.,Needs a lot of heat.,25,35,sim
+milho_doce,Milho-doce,Sweetcorn,Zea mays var. saccharata,Poaceae,fruto,quente,80,100,nao,70×25,Semear em bloco (várias linhas) para boa polinização.,Sow in a block (several rows) for good pollination.,,,sim
+salsa,Salsa,Parsley,Petroselinum crispum,Apiaceae,folha,neutra,70,90,nao,25×10,Germinação lenta (3–4 semanas); demolhar a semente.,Slow to germinate (3–4 weeks); soak the seed first.,,,nao
+coentros,Coentros,Coriander,Coriandrum sativum,Apiaceae,folha,fresca,40,60,nao,25×5,Sobe à flor com calor; sementeiras escalonadas.,Bolts in the heat; sow in succession.,,,nao
+manjericao,Manjericão,Basil,Ocimum basilicum,Lamiaceae,folha,quente,60,90,nao,30×25,Muito sensível ao frio. Cortar as flores.,Very sensitive to cold. Pinch out the flowers.,35,49,sim
+morango,Morango,Strawberry,Fragaria × ananassa,Rosaceae,fruto,neutra,,,sim,40×30,Planta-se o pé/estolho. Cobrir o solo com palha. Produz 2–3 anos.,Plant crowns or runners. Mulch with straw. Crops for 2–3 years.,,,nao

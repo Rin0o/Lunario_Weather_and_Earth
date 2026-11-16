@@ -125,15 +125,15 @@ describe('validation', () => {
   });
 
   it('requires days to transplant exactly for crops sown in trays (D-20)', () => {
-    const missing = realFiles.culturas.replace(/,28,42$/m, ',,');
+    const missing = realFiles.culturas.replace(/,28,42,(\w+)$/m, ',,,$1');
     expect(problems({ culturas: missing })).toEqual([
       expect.stringContaining('alface is sown in trays (SV) but has no dias_ate_transplante'),
     ]);
-    const extra = realFiles.culturas.replace(/(fava,.*),,$/m, '$1,20,30');
+    const extra = realFiles.culturas.replace(/(fava,.*),,,(\w+)$/m, '$1,20,30,$2');
     expect(problems({ culturas: extra })).toEqual([
       expect.stringContaining('fava has dias_ate_transplante but is never sown in trays'),
     ]);
-    const reversed = realFiles.culturas.replace(/,28,42$/m, ',42,28');
+    const reversed = realFiles.culturas.replace(/,28,42,(\w+)$/m, ',42,28,$1');
     expect(problems({ culturas: reversed })).toEqual([
       expect.stringContaining('days to transplant 42–28'),
     ]);
