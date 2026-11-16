@@ -3,6 +3,7 @@ import {
   CLIMATE_CLASSES,
   EDIBLE_PARTS,
   LUNAR_PERIODS,
+  SAINT_ORIGINS,
   ZONE_IDS,
   type Action,
   type CalendarWindow,
@@ -11,6 +12,8 @@ import {
   type Crop,
   type DerivationRule,
   type LunarRule,
+  type Saint,
+  type Saying,
   type Text,
   type Zone,
   type ZoneId,
@@ -33,6 +36,8 @@ export interface DataFiles {
   regrasDerivacao: string;
   avisosZona: string;
   regrasLunares: string;
+  santos: string;
+  ditados: string;
 }
 
 export const DATA_FILE_NAMES: Record<keyof DataFiles, string> = {
@@ -42,6 +47,8 @@ export const DATA_FILE_NAMES: Record<keyof DataFiles, string> = {
   regrasDerivacao: 'regras-derivacao.csv',
   avisosZona: 'avisos-zona.csv',
   regrasLunares: 'regras-lunares.csv',
+  santos: 'santos.csv',
+  ditados: 'ditados.csv',
 };
 
 /** All IPMA mainland districts; every one must belong to exactly one zone. */
@@ -389,6 +396,79 @@ function parseLunarRules(text: string, problems: string[]): LunarRule[] {
   return rules;
 }
 
+/** Days in each month; 29 February is allowed, as feasts on it exist in leap years. */
+const MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+function checkDate(c: Checker, row: CsvRow, month: number, day: number | null): void {
+  if (month < 1 || month > 12) {
+    c.fail(row, `"mes" is ${String(month)}, expected 1–12`);
+  } else if (day !== null && (day < 1 || day > (MONTH_DAYS[month - 1] ?? 31))) {
+    c.fail(
+      row,
+      `"dia" is ${String(day)}, but month ${String(month)} has ${String(MONTH_DAYS[month - 1])} days`,
+    );
+  }
+}
+
+function parseSaints(text: string, problems: string[]): Saint[] {
+  const file = DATA_FILE_NAMES.santos;
+  const table = readTable(file, text, ['mes', 'dia', 'nome_pt', 'nome_en', 'origem']);
+  const c = new Checker(file);
+  const saints = table.rows.map((row): Saint => {
+    const month = c.int(row, 'mes');
+    const day = c.int(row, 'dia');
+    checkDate(c, row, month, day);
+    return {
+      month,
+      day,
+      name: c.bilingual(row, 'nome') as Text,
+      origin: c.oneOf(row, 'origem', SAINT_ORIGINS),
+    };
+  });
+  const seen = new Set<string>();
+  table.rows.forEach((row, i) => {
+    const s = saints[i];
+    if (!s) return;
+    const key = `${String(s.month)}-${String(s.day)}-${s.name.pt}`;
+    if (seen.has(key)) c.fail(row, `"${s.name.pt}" is listed twice on the same day`);
+    seen.add(key);
+  });
+  problems.push(...c.problems);
+  return saints;
+}
+
+/** Each month needs this many sayings without a day, so the daily rotation has variety. */
+export const MIN_SAYINGS_PER_MONTH = 5;
+
+function parseSayings(text: string, problems: string[]): Saying[] {
+  const file = DATA_FILE_NAMES.ditados;
+  const table = readTable(file, text, ['mes', 'dia', 'ditado', 'sentido_en']);
+  const c = new Checker(file);
+  const seen = new Set<string>();
+  const sayings = table.rows.map((row): Saying => {
+    const month = c.int(row, 'mes');
+    const day = row.values.dia ? c.int(row, 'dia') : null;
+    checkDate(c, row, month, day);
+    const saying = c.text(row, 'ditado');
+    const meaning = row.values.sentido_en ?? '';
+    if (!meaning) c.fail(row, '"sentido_en" is empty (every saying needs its meaning, D-13)');
+    if (seen.has(saying)) c.fail(row, `"${saying}" is listed twice`);
+    seen.add(saying);
+    return { month, day, text: saying, meaning };
+  });
+  for (let month = 1; month <= 12; month++) {
+    const n = sayings.filter((s) => s.month === month && s.day === null).length;
+    if (n < MIN_SAYINGS_PER_MONTH) {
+      c.fail(
+        null,
+        `month ${String(month)} has ${String(n)} sayings without a day; at least ${String(MIN_SAYINGS_PER_MONTH)} are needed`,
+      );
+    }
+  }
+  problems.push(...c.problems);
+  return sayings;
+}
+
 /** Spring if the window starts January–June, autumn otherwise (as in the dataset). */
 export function seasonOf(start: number): 'primavera' | 'outono' {
   return start <= 12 ? 'primavera' : 'outono';
@@ -501,6 +581,8 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   const rules = parseRules(files.regrasDerivacao, problems);
   const zoneNotes = parseZoneNotes(files.avisosZona, crops, problems);
   const lunarRules = parseLunarRules(files.regrasLunares, problems);
+  const saints = parseSaints(files.santos, problems);
+  const sayings = parseSayings(files.ditados, problems);
   if (problems.length) throw new DataError(problems);
 
   const established = [...base, ...deriveWindows(base, crops, rules)];
@@ -510,7 +592,7 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   });
 
   return {
-    catalog: { zones, crops, windows, rules, lunarRules },
+    catalog: { zones, crops, windows, rules, lunarRules, saints, sayings },
     warnings: findWarnings(windows, crops),
   };
 }

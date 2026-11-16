@@ -91,10 +91,36 @@ export interface LunarRule {
   reason: Text;
 }
 
+/** geral: General Roman Calendar; portugal: Portugal's own calendar; popular: popular devotion. */
+export const SAINT_ORIGINS = ['geral', 'portugal', 'popular'] as const;
+export type SaintOrigin = (typeof SAINT_ORIGINS)[number];
+
+/** A saint or feast on a fixed date (RF-08). A day may have several. */
+export interface Saint {
+  /** 1–12. */
+  month: number;
+  day: number;
+  name: Text;
+  origin: SaintOrigin;
+}
+
+/**
+ * A traditional saying (RF-08). Sayings are not translated: English shows the meaning (D-13).
+ * With a day, it belongs to that date (usually a saint's day); otherwise to the whole month.
+ */
+export interface Saying {
+  month: number;
+  day: number | null;
+  text: string;
+  meaning: string;
+}
+
 export interface Catalog {
   zones: Zone[];
   crops: Crop[];
   windows: CalendarWindow[];
   rules: DerivationRule[];
   lunarRules: LunarRule[];
+  saints: Saint[];
+  sayings: Saying[];
 }

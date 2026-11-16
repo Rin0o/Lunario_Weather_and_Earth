@@ -1,0 +1,237 @@
+mes,dia,nome_pt,nome_en,origem
+1,1,"Santa Maria, Mãe de Deus","Mary, Mother of God",geral
+1,2,São Basílio Magno e São Gregório de Nazianzo,Saints Basil the Great and Gregory Nazianzen,geral
+1,3,Santíssimo Nome de Jesus,Most Holy Name of Jesus,geral
+1,6,Epifania do Senhor (Dia de Reis),Epiphany of the Lord,geral
+1,7,São Raimundo de Peñafort,Saint Raymond of Penyafort,geral
+1,10,São Gonçalo de Amarante,Saint Gonçalo of Amarante,popular
+1,13,Santo Hilário,Saint Hilary,geral
+1,15,Santo Amaro,Saint Maurus,popular
+1,17,Santo Antão,Saint Anthony the Abbot,geral
+1,20,São Fabião e São Sebastião,Saints Fabian and Sebastian,geral
+1,21,Santa Inês,Saint Agnes,geral
+1,22,São Vicente,Saint Vincent,geral
+1,24,São Francisco de Sales,Saint Francis de Sales,geral
+1,25,Conversão de São Paulo,Conversion of Saint Paul,geral
+1,26,São Timóteo e São Tito,Saints Timothy and Titus,geral
+1,27,Santa Ângela Merici,Saint Angela Merici,geral
+1,28,São Tomás de Aquino,Saint Thomas Aquinas,geral
+1,31,São João Bosco,Saint John Bosco,geral
+2,2,Apresentação do Senhor (Senhora das Candeias),Presentation of the Lord (Candlemas),geral
+2,3,São Brás,Saint Blaise,geral
+2,3,São Óscar (Ansgário),Saint Ansgar,geral
+2,4,São João de Brito,Saint John de Brito,portugal
+2,5,Santa Águeda,Saint Agatha,geral
+2,6,São Paulo Miki e companheiros,Saint Paul Miki and companions,geral
+2,8,São Jerónimo Emiliani,Saint Jerome Emiliani,geral
+2,8,Santa Josefina Bakhita,Saint Josephine Bakhita,geral
+2,10,Santa Escolástica,Saint Scholastica,geral
+2,11,Nossa Senhora de Lourdes,Our Lady of Lourdes,geral
+2,14,São Cirilo e São Metódio,Saints Cyril and Methodius,geral
+2,14,São Valentim,Saint Valentine,popular
+2,17,Sete Santos Fundadores dos Servitas,Seven Holy Founders of the Servites,geral
+2,18,São Teotónio,Saint Theotonius,portugal
+2,20,São Francisco e Santa Jacinta Marto,Saints Francisco and Jacinta Marto,portugal
+2,21,São Pedro Damião,Saint Peter Damian,geral
+2,22,Cátedra de São Pedro,Chair of Saint Peter,geral
+2,23,São Policarpo,Saint Polycarp,geral
+2,27,São Gregório de Narek,Saint Gregory of Narek,geral
+3,4,São Casimiro,Saint Casimir,geral
+3,7,Santa Perpétua e Santa Felicidade,Saints Perpetua and Felicity,geral
+3,8,São João de Deus,Saint John of God,geral
+3,9,Santa Francisca Romana,Saint Frances of Rome,geral
+3,17,São Patrício,Saint Patrick,geral
+3,18,São Cirilo de Jerusalém,Saint Cyril of Jerusalem,geral
+3,19,São José,Saint Joseph,geral
+3,23,São Turíbio de Mogrovejo,Saint Turibius of Mogrovejo,geral
+3,25,Anunciação do Senhor,Annunciation of the Lord,geral
+4,2,São Francisco de Paula,Saint Francis of Paola,geral
+4,4,Santo Isidoro,Saint Isidore,geral
+4,5,São Vicente Ferrer,Saint Vincent Ferrer,geral
+4,7,São João Batista de La Salle,Saint John Baptist de La Salle,geral
+4,11,Santo Estanislau,Saint Stanislaus,geral
+4,13,São Martinho I,Saint Martin I,geral
+4,21,Santo Anselmo,Saint Anselm,geral
+4,23,São Jorge,Saint George,geral
+4,23,Santo Adalberto,Saint Adalbert,geral
+4,24,São Fidélis de Sigmaringa,Saint Fidelis of Sigmaringen,geral
+4,25,São Marcos,Saint Mark,geral
+4,28,São Pedro Chanel,Saint Peter Chanel,geral
+4,28,São Luís Maria Grignion de Montfort,Saint Louis Grignion de Montfort,geral
+4,29,Santa Catarina de Sena,Saint Catherine of Siena,geral
+4,30,São Pio V,Saint Pius V,geral
+5,1,São José Operário,Saint Joseph the Worker,geral
+5,2,Santo Atanásio,Saint Athanasius,geral
+5,3,São Filipe e São Tiago,Saints Philip and James,geral
+5,10,São João de Ávila,Saint John of Ávila,geral
+5,12,São Nereu e Santo Aquiles,Saints Nereus and Achilleus,geral
+5,12,São Pancrácio,Saint Pancras,geral
+5,12,Santa Joana Princesa,Blessed Joan of Portugal,portugal
+5,13,Nossa Senhora de Fátima,Our Lady of Fátima,geral
+5,14,São Matias,Saint Matthias,geral
+5,15,Santo Isidro Lavrador,Saint Isidore the Farmer,popular
+5,18,São João I,Saint John I,geral
+5,20,São Bernardino de Sena,Saint Bernardine of Siena,geral
+5,21,São Cristóvão Magalhães e companheiros,Saint Christopher Magallanes and companions,geral
+5,22,Santa Rita de Cássia,Saint Rita of Cascia,geral
+5,22,Santa Quitéria,Saint Quiteria,popular
+5,25,São Beda,Saint Bede,geral
+5,25,São Gregório VII,Saint Gregory VII,geral
+5,25,Santa Maria Madalena de Pazzi,Saint Mary Magdalene de' Pazzi,geral
+5,26,São Filipe Néri,Saint Philip Neri,geral
+5,27,Santo Agostinho de Cantuária,Saint Augustine of Canterbury,geral
+5,29,São Paulo VI,Saint Paul VI,geral
+5,31,Visitação de Nossa Senhora,Visitation of the Blessed Virgin Mary,geral
+6,1,São Justino,Saint Justin,geral
+6,2,São Marcelino e São Pedro,Saints Marcellinus and Peter,geral
+6,3,São Carlos Lwanga e companheiros,Saint Charles Lwanga and companions,geral
+6,5,São Bonifácio,Saint Boniface,geral
+6,6,São Norberto,Saint Norbert,geral
+6,9,Santo Efrém,Saint Ephrem,geral
+6,10,Anjo da Guarda de Portugal,Guardian Angel of Portugal,portugal
+6,11,São Barnabé,Saint Barnabas,geral
+6,13,Santo António,Saint Anthony,geral
+6,19,São Romualdo,Saint Romuald,geral
+6,21,São Luís Gonzaga,Saint Aloysius Gonzaga,geral
+6,22,São Paulino de Nola,Saint Paulinus of Nola,geral
+6,22,São João Fisher e São Tomás Moro,Saints John Fisher and Thomas More,geral
+6,24,Nascimento de São João Batista,Birth of Saint John the Baptist,geral
+6,27,São Cirilo de Alexandria,Saint Cyril of Alexandria,geral
+6,28,Santo Ireneu,Saint Irenaeus,geral
+6,29,São Pedro e São Paulo,Saints Peter and Paul,geral
+6,30,Primeiros Santos Mártires de Roma,First Martyrs of the Church of Rome,geral
+7,3,São Tomé,Saint Thomas,geral
+7,4,Santa Isabel de Portugal (Rainha Santa),Saint Elizabeth of Portugal,geral
+7,5,Santo António Maria Zaccaria,Saint Anthony Mary Zaccaria,geral
+7,6,Santa Maria Goretti,Saint Maria Goretti,geral
+7,9,Santo Agostinho Zhao Rong e companheiros,Saint Augustine Zhao Rong and companions,geral
+7,11,São Bento,Saint Benedict,geral
+7,13,Santo Henrique,Saint Henry,geral
+7,14,São Camilo de Lélis,Saint Camillus de Lellis,geral
+7,15,São Boaventura,Saint Bonaventure,geral
+7,16,Nossa Senhora do Carmo,Our Lady of Mount Carmel,geral
+7,18,São Bartolomeu dos Mártires,Saint Bartholomew of the Martyrs,portugal
+7,18,Santa Marinha,Saint Marina,popular
+7,20,Santo Apolinário,Saint Apollinaris,geral
+7,21,São Lourenço de Brindes,Saint Lawrence of Brindisi,geral
+7,22,Santa Maria Madalena,Saint Mary Magdalene,geral
+7,23,Santa Brígida,Saint Bridget,geral
+7,24,São Charbel Makhlouf,Saint Sharbel Makhluf,geral
+7,25,São Tiago,Saint James,geral
+7,25,São Cristóvão,Saint Christopher,popular
+7,26,São Joaquim e Santa Ana,Saints Joachim and Anne,geral
+7,29,"Santa Marta, Santa Maria e São Lázaro","Saints Martha, Mary and Lazarus",geral
+7,30,São Pedro Crisólogo,Saint Peter Chrysologus,geral
+7,31,Santo Inácio de Loiola,Saint Ignatius of Loyola,geral
+8,1,Santo Afonso de Ligório,Saint Alphonsus Liguori,geral
+8,2,Santo Eusébio de Vercelli,Saint Eusebius of Vercelli,geral
+8,2,São Pedro Julião Eymard,Saint Peter Julian Eymard,geral
+8,4,São João Maria Vianney,Saint John Vianney,geral
+8,5,Dedicação da Basílica de Santa Maria Maior,Dedication of the Basilica of Saint Mary Major,geral
+8,6,Transfiguração do Senhor,Transfiguration of the Lord,geral
+8,7,São Sisto II e companheiros,Saint Sixtus II and companions,geral
+8,7,São Caetano,Saint Cajetan,geral
+8,8,São Domingos,Saint Dominic,geral
+8,9,Santa Teresa Benedita da Cruz,Saint Teresa Benedicta of the Cross,geral
+8,10,São Lourenço,Saint Lawrence,geral
+8,11,Santa Clara,Saint Clare,geral
+8,12,Santa Joana Francisca de Chantal,Saint Jane Frances de Chantal,geral
+8,13,São Ponciano e Santo Hipólito,Saints Pontian and Hippolytus,geral
+8,14,São Maximiliano Kolbe,Saint Maximilian Kolbe,geral
+8,15,Assunção de Nossa Senhora,Assumption of the Blessed Virgin Mary,geral
+8,16,Santo Estêvão da Hungria,Saint Stephen of Hungary,geral
+8,17,São Mamede,Saint Mammes,popular
+8,19,São João Eudes,Saint John Eudes,geral
+8,20,São Bernardo,Saint Bernard,geral
+8,21,São Pio X,Saint Pius X,geral
+8,22,Nossa Senhora Rainha,Queenship of the Blessed Virgin Mary,geral
+8,23,Santa Rosa de Lima,Saint Rose of Lima,geral
+8,24,São Bartolomeu,Saint Bartholomew,geral
+8,25,São Luís de França,Saint Louis of France,geral
+8,25,São José de Calasanz,Saint Joseph Calasanz,geral
+8,27,Santa Mónica,Saint Monica,geral
+8,28,Santo Agostinho,Saint Augustine,geral
+8,29,Martírio de São João Batista,Passion of Saint John the Baptist,geral
+9,3,São Gregório Magno,Saint Gregory the Great,geral
+9,5,Santa Teresa de Calcutá,Saint Teresa of Calcutta,geral
+9,8,Natividade de Nossa Senhora,Nativity of the Blessed Virgin Mary,geral
+9,9,São Pedro Claver,Saint Peter Claver,geral
+9,12,Santíssimo Nome de Maria,Most Holy Name of Mary,geral
+9,13,São João Crisóstomo,Saint John Chrysostom,geral
+9,14,Exaltação da Santa Cruz,Exaltation of the Holy Cross,geral
+9,15,Nossa Senhora das Dores,Our Lady of Sorrows,geral
+9,16,São Cornélio e São Cipriano,Saints Cornelius and Cyprian,geral
+9,17,São Roberto Belarmino,Saint Robert Bellarmine,geral
+9,17,Santa Hildegarda de Bingen,Saint Hildegard of Bingen,geral
+9,19,São Januário,Saint Januarius,geral
+9,20,Santo André Kim Taegon e companheiros,Saint Andrew Kim Taegon and companions,geral
+9,21,São Mateus,Saint Matthew,geral
+9,23,São Pio de Pietrelcina,Saint Pius of Pietrelcina,geral
+9,26,São Cosme e São Damião,Saints Cosmas and Damian,geral
+9,27,São Vicente de Paulo,Saint Vincent de Paul,geral
+9,28,São Venceslau,Saint Wenceslaus,geral
+9,28,São Lourenço Ruiz e companheiros,Saint Lawrence Ruiz and companions,geral
+9,29,"São Miguel, São Gabriel e São Rafael","Saints Michael, Gabriel and Raphael",geral
+9,30,São Jerónimo,Saint Jerome,geral
+10,1,Santa Teresa do Menino Jesus,Saint Thérèse of the Child Jesus,geral
+10,2,Santos Anjos da Guarda,Holy Guardian Angels,geral
+10,4,São Francisco de Assis,Saint Francis of Assisi,geral
+10,5,Santa Faustina Kowalska,Saint Faustina Kowalska,geral
+10,6,São Bruno,Saint Bruno,geral
+10,7,Nossa Senhora do Rosário,Our Lady of the Rosary,geral
+10,9,São João Henrique Newman,Saint John Henry Newman,geral
+10,9,São João Leonardi,Saint John Leonardi,geral
+10,11,São João XXIII,Saint John XXIII,geral
+10,14,São Calisto I,Saint Callistus I,geral
+10,15,Santa Teresa de Jesus,Saint Teresa of Ávila,geral
+10,16,Santa Edviges,Saint Hedwig,geral
+10,16,Santa Margarida Maria Alacoque,Saint Margaret Mary Alacoque,geral
+10,17,Santo Inácio de Antioquia,Saint Ignatius of Antioch,geral
+10,18,São Lucas,Saint Luke,geral
+10,19,"São João de Brébeuf, Santo Isaac Jogues e companheiros","Saints John de Brébeuf, Isaac Jogues and companions",geral
+10,19,São Paulo da Cruz,Saint Paul of the Cross,geral
+10,22,São João Paulo II,Saint John Paul II,geral
+10,23,São João de Capistrano,Saint John of Capistrano,geral
+10,24,Santo António Maria Claret,Saint Anthony Mary Claret,geral
+10,28,São Simão e São Judas,Saints Simon and Jude,geral
+11,1,Todos os Santos,All Saints,geral
+11,2,Fiéis Defuntos,All Souls,geral
+11,3,São Martinho de Porres,Saint Martin de Porres,geral
+11,4,São Carlos Borromeu,Saint Charles Borromeo,geral
+11,6,São Nuno de Santa Maria,Saint Nuno of Saint Mary,portugal
+11,9,Dedicação da Basílica de Latrão,Dedication of the Lateran Basilica,geral
+11,10,São Leão Magno,Saint Leo the Great,geral
+11,11,São Martinho,Saint Martin of Tours,geral
+11,12,São Josafat,Saint Josaphat,geral
+11,15,Santo Alberto Magno,Saint Albert the Great,geral
+11,16,Santa Margarida da Escócia,Saint Margaret of Scotland,geral
+11,16,Santa Gertrudes,Saint Gertrude,geral
+11,17,Santa Isabel da Hungria,Saint Elizabeth of Hungary,geral
+11,18,Dedicação das Basílicas de São Pedro e São Paulo,Dedication of the Basilicas of Saints Peter and Paul,geral
+11,21,Apresentação de Nossa Senhora,Presentation of the Blessed Virgin Mary,geral
+11,22,Santa Cecília,Saint Cecilia,geral
+11,23,São Clemente I,Saint Clement I,geral
+11,23,São Columbano,Saint Columban,geral
+11,24,Santo André Dung-Lac e companheiros,Saint Andrew Dung-Lac and companions,geral
+11,25,Santa Catarina de Alexandria,Saint Catherine of Alexandria,geral
+11,30,Santo André,Saint Andrew,geral
+12,3,São Francisco Xavier,Saint Francis Xavier,geral
+12,4,São João Damasceno,Saint John Damascene,geral
+12,4,Santa Bárbara,Saint Barbara,popular
+12,6,São Nicolau,Saint Nicholas,geral
+12,7,Santo Ambrósio,Saint Ambrose,geral
+12,8,Imaculada Conceição,Immaculate Conception,geral
+12,9,São João Diego,Saint Juan Diego,geral
+12,10,Nossa Senhora do Loreto,Our Lady of Loreto,geral
+12,11,São Dâmaso I,Saint Damasus I,geral
+12,12,Nossa Senhora de Guadalupe,Our Lady of Guadalupe,geral
+12,13,Santa Luzia,Saint Lucy,geral
+12,14,São João da Cruz,Saint John of the Cross,geral
+12,21,São Pedro Canísio,Saint Peter Canisius,geral
+12,23,São João Câncio,Saint John of Kanty,geral
+12,25,Natal do Senhor,Christmas,geral
+12,26,Santo Estêvão,Saint Stephen,geral
+12,27,São João Evangelista,Saint John the Evangelist,geral
+12,28,Santos Inocentes,Holy Innocents,geral
+12,29,São Tomás Becket,Saint Thomas Becket,geral
+12,31,São Silvestre,Saint Sylvester,geral
