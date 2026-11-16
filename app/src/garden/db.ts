@@ -8,7 +8,7 @@ import type { NewPlanting, Planting } from './plantings.ts';
  *   v2: meta (key/value: last backup, reminder snooze, calendar reminder settings)
  */
 export type MetaKey =
-  'lastBackupAt' | 'backupReminderSnoozedAt' | 'reminderDaysBefore' | 'reminderTime';
+  'lastBackupAt' | 'backupReminderSnoozedAt' | 'reminderDaysBefore' | 'reminderTime' | 'moonMode';
 
 interface LunarioDb extends DBSchema {
   plantings: { key: string; value: Planting };

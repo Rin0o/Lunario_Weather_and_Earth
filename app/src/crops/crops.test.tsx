@@ -1,6 +1,8 @@
+import { IDBFactory } from 'fake-indexeddb';
 import { act, render, screen, within } from '@testing-library/react';
 import i18n from 'i18next';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { setMeta } from '../garden/db.ts';
 import { initI18n } from '../i18n/index.ts';
 import { CropSheet } from './CropSheet.tsx';
 import { CropsList } from './CropsList.tsx';
@@ -82,6 +84,28 @@ describe('CropSheet', () => {
       },
       { action: 'Colher', ranges: ['1 de abril – 30 de junho'] },
     ]);
+  });
+
+  it('shows the lunar tradition for the crop only in Moon mode', async () => {
+    globalThis.indexedDB = new IDBFactory();
+    const { unmount } = render(<CropSheet cropId="alface" now={NOV_15} district="Coimbra" />);
+    expect(screen.queryByRole('heading', { name: 'Tradição lunar' })).not.toBeInTheDocument();
+    unmount();
+
+    await setMeta('moonMode', 'on');
+    render(<CropSheet cropId="alface" now={NOV_15} district="Coimbra" />);
+    const card = await screen.findByRole('article', { name: 'Tradição lunar' });
+    expect(
+      within(card)
+        .getAllByRole('listitem')
+        .map((li) => li.textContent),
+    ).toEqual([
+      'Semear culturas de folha: quarto crescente',
+      'Transplantar: quarto minguante',
+      'Colher para conservar (batata, cebola, alho, abóbora): quarto minguante',
+      'Colher para consumo imediato: crescente ou cheia',
+    ]);
+    expect(within(card).getByText(/^Tradição popular/)).toBeInTheDocument();
   });
 
   it('says when a crop does not exist', () => {
