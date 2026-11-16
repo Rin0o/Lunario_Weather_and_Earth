@@ -28,6 +28,7 @@
     "saved": "Saved.",
     "outOfSeason": "Outside the recommended season to {{action}} in {{zone}}.",
     "empty": "You haven't logged any plantings yet.",
+    "listLabel": "Plantings",
     "loading": "Loading…",
     "storageError": "Couldn't save on this phone. Check that the browser allows storing data.",
     "did": {
@@ -37,6 +38,7 @@
       "PL": "Planted"
     },
     "harvest": "Expected harvest: {{from}} – {{to}}.",
+    "transplant": "Expected transplant: {{from}} – {{to}}.",
     "harvestPerennial": "Perennial: harvest in its season.",
     "transplantHint": "Counted from transplanting; it may come sooner.",
     "stages": {
@@ -50,6 +52,19 @@
     "markActive": "Mark as active",
     "remove": "Delete",
     "confirmRemove": "Delete the {{crop}} entry from {{date}}?"
+  },
+  "calendar": {
+    "add": "Add to calendar",
+    "events": "Reminders",
+    "transplant": "Transplant {{crop}} (Lunário)",
+    "harvest": "Harvest begins: {{crop}} (Lunário)",
+    "description": "Planted on {{date}}. Expected between {{from}} and {{to}}.",
+    "google": "Open in Google Calendar",
+    "daysBefore": "Remind how many days before",
+    "at": "At what time",
+    "create": "Create calendar file",
+    "created": "File created. Open it to add it to your calendar.",
+    "nothing": "No upcoming dates to remind you of."
   },
   "backup": {
     "title": "Backup",

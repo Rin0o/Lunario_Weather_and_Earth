@@ -28,6 +28,7 @@
     "saved": "Registado.",
     "outOfSeason": "Fora da época recomendada para {{action}} em {{zone}}.",
     "empty": "Ainda não registou nenhum plantio.",
+    "listLabel": "Plantios",
     "loading": "A carregar…",
     "storageError": "Não foi possível guardar neste telemóvel. Verifique se o navegador permite guardar dados.",
     "did": {
@@ -37,6 +38,7 @@
       "PL": "Plantado"
     },
     "harvest": "Colheita prevista: {{from}} – {{to}}.",
+    "transplant": "Transplante previsto: {{from}} – {{to}}.",
     "harvestPerennial": "Cultura perene: colhe-se na época própria.",
     "transplantHint": "Contado a partir do transplante; pode ser mais cedo.",
     "stages": {
@@ -50,6 +52,19 @@
     "markActive": "Voltar a ativo",
     "remove": "Apagar",
     "confirmRemove": "Apagar o registo de {{crop}} de {{date}}?"
+  },
+  "calendar": {
+    "add": "Adicionar ao calendário",
+    "events": "Lembretes",
+    "transplant": "Transplantar {{crop}} (Lunário)",
+    "harvest": "Início da colheita: {{crop}} (Lunário)",
+    "description": "Plantio de {{date}}. Previsto entre {{from}} e {{to}}.",
+    "google": "Abrir no Google Calendar",
+    "daysBefore": "Avisar quantos dias antes",
+    "at": "A que horas",
+    "create": "Criar ficheiro do calendário",
+    "created": "Ficheiro criado. Abra-o para o adicionar ao calendário.",
+    "nothing": "Não há datas futuras para lembrar."
   },
   "backup": {
     "title": "Cópia de segurança",

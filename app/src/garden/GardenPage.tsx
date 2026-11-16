@@ -8,6 +8,8 @@ import { href } from '../navigation/route.ts';
 import { PlantingForm } from './PlantingForm.tsx';
 import { expectedHarvest, sortPlantings, stageOf, type Planting } from './plantings.ts';
 import { BackupCard, BackupReminder } from './BackupCard.tsx';
+import { CalendarPanel } from './CalendarPanel.tsx';
+import { expectedTransplant } from './reminders.ts';
 import { useBackup } from './useBackup.ts';
 import { useGarden } from './useGarden.ts';
 
@@ -65,11 +67,12 @@ export function GardenPage({
       ) : garden.plantings.length === 0 ? (
         <p>{t('garden.empty')}</p>
       ) : (
-        <ul className="plantings">
+        <ul className="plantings" aria-label={t('garden.listLabel')}>
           {sortPlantings(garden.plantings).map((p) => {
             const info = describe(p);
             if (!info) return null;
             const { crop, harvest, stage } = info;
+            const transplant = expectedTransplant(p, crop);
             return (
               <li key={p.id} className={`card planting stage-${stage}`}>
                 <div className="planting-head">
@@ -81,6 +84,14 @@ export function GardenPage({
                 <p>
                   {t(`garden.did.${p.action}`)} · {fullDate(p.date)}
                 </p>
+                {transplant && p.status === 'active' && (
+                  <p className="hint">
+                    {t('garden.transplant', {
+                      from: fullDate(transplant.from),
+                      to: fullDate(transplant.to),
+                    })}
+                  </p>
+                )}
                 {harvest ? (
                   <p className="hint">
                     {t('garden.harvest', {
@@ -93,6 +104,7 @@ export function GardenPage({
                   <p className="hint">{t('garden.harvestPerennial')}</p>
                 )}
                 {p.notes && <p className="planting-notes">{p.notes}</p>}
+                {p.status === 'active' && <CalendarPanel planting={p} crop={crop} today={today} />}
                 <div className="planting-actions">
                   <button
                     type="button"

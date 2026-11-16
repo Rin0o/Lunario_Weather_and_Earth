@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { dateInZone } from '../astro/time.ts';
+import { downloadFile } from '../lib/download.ts';
 import { backupFileName, isBackupDue, mergePlantings, parseBackup, toBackup } from './backup.ts';
 import { getMeta, putPlantings, setMeta } from './db.ts';
 import type { Garden } from './useGarden.ts';
@@ -15,15 +16,6 @@ export interface Backup {
   /** Merges a backup file into the device; throws BackupError for a file that isn't one. */
   importBackup: (file: Blob) => Promise<ImportOutcome>;
   snooze: () => Promise<void>;
-}
-
-function download(file: File) {
-  const url = URL.createObjectURL(file);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = file.name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
 /** Export, import and the backup reminder for "A minha horta" (RF-11, RF-15). */
@@ -57,10 +49,10 @@ export function useBackup(garden: Garden, now: Date): Backup {
         outcome = 'shared';
       } catch (error) {
         if ((error as Error).name === 'AbortError') return 'cancelled';
-        download(file); // sharing failed for another reason: save the file instead
+        downloadFile(file); // sharing failed for another reason: save the file instead
       }
     } else {
-      download(file);
+      downloadFile(file);
     }
     await setMeta('lastBackupAt', at.toISOString()).catch(() => undefined);
     setLastBackupAt(at.toISOString());
