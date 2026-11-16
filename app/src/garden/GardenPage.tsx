@@ -7,6 +7,8 @@ import { formatFullDate } from '../i18n/format.ts';
 import { href } from '../navigation/route.ts';
 import { PlantingForm } from './PlantingForm.tsx';
 import { expectedHarvest, sortPlantings, stageOf, type Planting } from './plantings.ts';
+import { BackupCard, BackupReminder } from './BackupCard.tsx';
+import { useBackup } from './useBackup.ts';
 import { useGarden } from './useGarden.ts';
 
 interface GardenPageProps {
@@ -26,6 +28,7 @@ export function GardenPage({
   confirm = (message) => window.confirm(message),
 }: GardenPageProps) {
   const garden = useGarden();
+  const backup = useBackup(garden, now);
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
   const pick = (text: Text) => (lang === 'en' ? text.en : text.pt);
@@ -44,6 +47,7 @@ export function GardenPage({
     <section aria-labelledby="garden-heading" className="garden">
       <h2 id="garden-heading">{t('garden.title')}</h2>
       <p className="hint">{t('garden.intro')}</p>
+      <BackupReminder backup={backup} />
 
       <article className="card" aria-labelledby="add-heading">
         <h3 id="add-heading">{t('garden.add')}</h3>
@@ -117,6 +121,8 @@ export function GardenPage({
           })}
         </ul>
       )}
+
+      <BackupCard backup={backup} />
     </section>
   );
 }

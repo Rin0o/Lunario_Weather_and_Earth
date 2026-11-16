@@ -16,6 +16,8 @@ export interface Garden {
   add: (input: NewPlanting) => Promise<void>;
   setStatus: (id: string, status: Planting['status']) => Promise<void>;
   remove: (id: string) => Promise<void>;
+  /** Re-reads the device storage (after an import). */
+  reload: () => Promise<void>;
 }
 
 /** The plantings stored on this device, with the operations the garden screen needs. */
@@ -71,5 +73,5 @@ export function useGarden(): Garden {
   );
   const remove = useCallback((id: string) => run(() => deletePlanting(id)), [run]);
 
-  return { plantings, loading, failed, add, setStatus, remove };
+  return { plantings, loading, failed, add, setStatus, remove, reload };
 }

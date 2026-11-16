@@ -406,6 +406,44 @@ a {
   color: var(--action-CO);
 }
 
+.reminder {
+  border: 1px solid var(--accent);
+  border-left-width: 4px;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: var(--card);
+}
+
+.reminder p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* A file input styled as a button; the input stays focusable for keyboard and screen readers. */
+.file-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: var(--paper);
+  cursor: pointer;
+}
+
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-button:focus-within {
+  outline: 2px solid var(--accent);
+}
+
 /* --- Crops --- */
 .crops-index {
   list-style: none;
