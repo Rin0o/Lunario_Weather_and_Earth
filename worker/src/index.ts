@@ -101,7 +101,12 @@ export async function handleRequest(
       await store.remove(endpoint);
       return json(410, { error: 'subscription expired' }, cors);
     }
-    if (status < 200 || status >= 300) return json(502, { error: 'push service refused' }, cors);
+    if (status < 200 || status >= 300) {
+      // The push service's status tells a key mismatch (401/403) from other problems.
+      // Status only: never log endpoints or locations.
+      console.log(JSON.stringify({ job: 'test-alert', status }));
+      return json(502, { error: 'push service refused', status }, cors);
+    }
     return new Response(null, { status: 204, headers: cors });
   }
 
@@ -148,6 +153,12 @@ export function pushSender(env: Env, fetchImpl: typeof fetch = fetch): Sender {
         },
       );
       const response = await fetchImpl(sub.endpoint, payload);
+      if (!response.ok) {
+        // The push service's short reason (e.g. Mozilla's errno, Apple's "BadJwtToken"),
+        // never the endpoint.
+        const reason = (await response.text().catch(() => '')).slice(0, 200);
+        console.log(JSON.stringify({ job: 'push', status: response.status, reason }));
+      }
       return response.status;
     },
   };

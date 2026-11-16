@@ -138,8 +138,13 @@ describe('test notification', () => {
     const e = env();
     const store = new D1Store(e.DB);
     await handleRequest(request('POST', BODY), e);
-    expect((await test(e, sender(500))).status).toBe(502);
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const refused = await test(e, sender(401));
+    expect(refused.status).toBe(502);
+    expect(await refused.json()).toEqual({ error: 'push service refused', status: 401 });
+    expect(log).toHaveBeenCalledWith(JSON.stringify({ job: 'test-alert', status: 401 }));
     expect((await test(e, sender(new Error('network')))).status).toBe(502);
+    log.mockRestore();
     expect(await store.count()).toBe(1);
     expect((await test(e, sender(410))).status).toBe(410);
     expect(await store.count()).toBe(0);
@@ -203,6 +208,52 @@ describe('push sending', () => {
       authSecret,
     );
     expect(JSON.parse(plaintext)).toEqual({ ...message, url: '/' });
+  });
+});
+
+describe('push refusals', () => {
+  it('logs the status and the short reason, not the endpoint', async () => {
+    const vapid = await generateVapidKeys();
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const fetchImpl = vi.fn(() =>
+      Promise.resolve(new Response('{"errno":109,"message":"Invalid VAPID"}', { status: 401 })),
+    );
+    const browser = (await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, [
+      'deriveBits',
+    ])) as CryptoKeyPair;
+    const raw = new Uint8Array(
+      (await crypto.subtle.exportKey('raw', browser.publicKey)) as ArrayBuffer,
+    );
+    const b64url = (bytes: Uint8Array) =>
+      btoa(String.fromCharCode(...bytes))
+        .replaceAll('+', '-')
+        .replaceAll('/', '_')
+        .replace(/=+$/, '');
+    const sender = pushSender(
+      { ...env(), VAPID_PUBLIC_KEY: vapid.publicKey, VAPID_PRIVATE_KEY: vapid.privateKey },
+      fetchImpl as unknown as typeof fetch,
+    );
+    const status = await sender.send(
+      {
+        endpoint: 'https://push.example/secret-endpoint',
+        p256dh: b64url(raw),
+        auth: b64url(crypto.getRandomValues(new Uint8Array(16))),
+        latitude: 40.54,
+        longitude: -7.27,
+        crops: [],
+        language: 'pt-PT',
+      },
+      { title: 't', body: 'b', tag: 'x' },
+    );
+    expect(status).toBe(401);
+    const line = String(log.mock.calls[0]?.[0]);
+    expect(JSON.parse(line)).toEqual({
+      job: 'push',
+      status: 401,
+      reason: '{"errno":109,"message":"Invalid VAPID"}',
+    });
+    expect(line).not.toContain('secret-endpoint');
+    log.mockRestore();
   });
 });
 
