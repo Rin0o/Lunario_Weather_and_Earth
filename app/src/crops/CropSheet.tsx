@@ -3,6 +3,8 @@ import { dateInZone } from '../astro/time.ts';
 import { catalog, fortnightOf, zoneForDistrict } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { href } from '../navigation/route.ts';
+import { traditionForCrop } from '../astro/lunarTradition.ts';
+import { useMoonMode } from '../today/useMoonMode.ts';
 import { CropCalendar } from './CropCalendar.tsx';
 
 interface CropSheetProps {
@@ -17,6 +19,7 @@ interface CropSheetProps {
 export function CropSheet({ cropId, now, district, source = catalog }: CropSheetProps) {
   const { t, i18n } = useTranslation();
   const pick = (text: Text) => (i18n.resolvedLanguage === 'en' ? text.en : text.pt);
+  const [moonMode] = useMoonMode();
   const crop = source.crops.find((c) => c.id === cropId);
   const zone = zoneForDistrict(district, source);
 
@@ -71,6 +74,20 @@ export function CropSheet({ cropId, now, district, source = catalog }: CropSheet
             currentFortnight={fortnightOf(now)}
             year={Number(dateInZone(now).slice(0, 4))}
           />
+        </article>
+      )}
+
+      {moonMode && (
+        <article className="card tradition" aria-labelledby="crop-tradition-heading">
+          <h3 id="crop-tradition-heading">{t('moonMode.title')}</h3>
+          <ul>
+            {traditionForCrop(source.lunarRules, crop.ediblePart).map((rule) => (
+              <li key={pick(rule.advice)}>
+                {pick(rule.advice)}: <strong>{pick(rule.phase).toLowerCase()}</strong>
+              </li>
+            ))}
+          </ul>
+          <p className="hint">{t('moonMode.disclaimer')}</p>
         </article>
       )}
     </section>

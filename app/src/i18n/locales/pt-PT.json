@@ -227,6 +227,21 @@
     "noneSet": "não se põe hoje",
     "next": "Próximas fases"
   },
+  "moonMode": {
+    "toggle": "Mostrar a tradição lunar (modo Lua)",
+    "title": "Tradição lunar",
+    "period": "período de {{period}}",
+    "periods": {
+      "nova": "lua nova",
+      "crescente": "quarto crescente",
+      "cheia": "lua cheia",
+      "minguante": "quarto minguante"
+    },
+    "favours": "Segundo a tradição, é altura de:",
+    "nothing": "A tradição não aponta nada de especial para este período.",
+    "avoidToday": "Hoje é dia de {{phase}}.",
+    "disclaimer": "Tradição popular, sem suporte científico consistente. Não substitui o calendário agrícola."
+  },
   "sun": {
     "title": "Sol",
     "rise": "Nascer do sol",

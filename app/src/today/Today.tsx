@@ -5,6 +5,8 @@ import { moonDay, nextMoonQuarters, type MoonPhaseName } from '../astro/moon.ts'
 import { sunDay } from '../astro/sun.ts';
 import { formatLongDate, formatPercent, formatShortDate, formatTime } from '../i18n/format.ts';
 import { HolidaysCard } from './HolidaysCard.tsx';
+import { MoonTradition } from './MoonTradition.tsx';
+import { useMoonMode } from './useMoonMode.ts';
 
 const PHASE_ICONS: Record<MoonPhaseName, string> = {
   new: '🌑',
@@ -35,6 +37,7 @@ export function Today({ now, location, locationControl, weather, sowing }: Today
   const moon = useMemo(() => moonDay(now, location), [now, location]);
   const sun = useMemo(() => sunDay(now, location), [now, location]);
   const quarters = useMemo(() => nextMoonQuarters(now, 4), [now]);
+  const [moonMode, setMoonMode] = useMoonMode();
 
   const time = (d: Date | null, missing: string) => (d ? formatTime(d, lang) : missing);
 
@@ -78,6 +81,15 @@ export function Today({ now, location, locationControl, weather, sowing }: Today
             </li>
           ))}
         </ul>
+        <label className="toggle">
+          <input
+            type="checkbox"
+            checked={moonMode}
+            onChange={(e) => setMoonMode(e.target.checked)}
+          />
+          {t('moonMode.toggle')}
+        </label>
+        {moonMode && <MoonTradition phase={moon.phase} />}
       </article>
 
       <article className="card" aria-labelledby="sun-heading">

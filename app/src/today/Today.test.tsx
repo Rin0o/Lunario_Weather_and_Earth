@@ -1,7 +1,10 @@
-import { act, render, screen, within } from '@testing-library/react';
+import { IDBFactory } from 'fake-indexeddb';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import i18n from 'i18next';
 import type { Location } from '../astro/location.ts';
+import { getMeta } from '../garden/db.ts';
 import { initI18n } from '../i18n/index.ts';
 import { Today } from './Today.tsx';
 
@@ -18,7 +21,38 @@ const fact = (term: string) => {
 
 describe('Today', () => {
   beforeEach(async () => {
+    globalThis.indexedDB = new IDBFactory();
     await initI18n('pt-PT');
+  });
+
+  it('keeps the Moon mode off by default, and shows the tradition once turned on', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<Today now={FULL_MOON_DAY} location={LISBON} />);
+    const toggle = screen.getByRole('checkbox', { name: 'Mostrar a tradição lunar (modo Lua)' });
+    expect(toggle).not.toBeChecked();
+    expect(screen.queryByText(/Tradição lunar/)).not.toBeInTheDocument();
+
+    await user.click(toggle);
+    expect(
+      screen.getByRole('heading', { name: 'Tradição lunar · período de lua cheia' }),
+    ).toBeInTheDocument();
+    // 13 January 2025 is the exact day of the full moon.
+    expect(
+      screen.getByText('Hoje é dia de lua cheia. Evitar semear, plantar e transplantar.'),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/^Colher para consumo imediato/)).toBeInTheDocument();
+    expect(screen.getByText(/^Tradição popular, sem suporte científico/)).toBeInTheDocument();
+
+    // The choice is saved on the device.
+    await waitFor(async () => expect(await getMeta('moonMode')).toBe('on'));
+    unmount();
+    render(<Today now={FULL_MOON_DAY} location={LISBON} />);
+    expect(
+      await screen.findByRole('checkbox', {
+        name: 'Mostrar a tradição lunar (modo Lua)',
+        checked: true,
+      }),
+    ).toBeInTheDocument();
   });
 
   it('shows the moon phase of the day with its exact time', () => {

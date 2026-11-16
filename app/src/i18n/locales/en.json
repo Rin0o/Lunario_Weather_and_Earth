@@ -227,6 +227,21 @@
     "noneSet": "does not set today",
     "next": "Next phases"
   },
+  "moonMode": {
+    "toggle": "Show lunar tradition (Moon mode)",
+    "title": "Lunar tradition",
+    "period": "{{period}} period",
+    "periods": {
+      "nova": "new moon",
+      "crescente": "first quarter",
+      "cheia": "full moon",
+      "minguante": "last quarter"
+    },
+    "favours": "According to tradition, it is a time to:",
+    "nothing": "Tradition has nothing special for this period.",
+    "avoidToday": "Today is the day of the {{phase}}.",
+    "disclaimer": "Folk tradition, without consistent scientific support. It does not replace the sowing calendar."
+  },
   "sun": {
     "title": "Sun",
     "rise": "Sunrise",

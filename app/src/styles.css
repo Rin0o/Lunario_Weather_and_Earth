@@ -436,6 +436,31 @@ a {
   gap: 0.5rem;
 }
 
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.5rem;
+}
+
+.toggle input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--accent);
+}
+
+.tradition ul {
+  margin: 0.25rem 0;
+  padding-left: 1.2rem;
+}
+
+.tradition h4 {
+  margin-top: 0.5rem;
+}
+
 .reminder {
   border: 1px solid var(--accent);
   border-left-width: 4px;
