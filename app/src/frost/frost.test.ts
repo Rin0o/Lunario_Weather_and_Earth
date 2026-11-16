@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { openMeteoJson } from './fixtures.ts';
-import { frostForecastUrl, frostRisk, parseFrostForecast, requestFrostJson } from './frost.ts';
+import {
+  frostBetween,
+  frostForecastUrl,
+  frostRisk,
+  parseFrostForecast,
+  requestFrostJson,
+} from './frost.ts';
 
 describe('frost risk (Q-07 thresholds)', () => {
   it('is frost when the surface reaches 0 °C', () => {
@@ -66,5 +72,28 @@ describe('parseFrostForecast', () => {
     expect(parseFrostForecast(null)).toEqual([]);
     expect(parseFrostForecast({ error: true })).toEqual([]);
     expect(parseFrostForecast({ hourly: { time: [], temperature_2m: 'x' } })).toEqual([]);
+  });
+});
+
+describe('frostBetween', () => {
+  const json = openMeteoJson([
+    { date: '2026-11-17', air: 6, surface: 4 },
+    { date: '2026-11-18', air: 1, surface: -1 },
+  ]);
+
+  it('takes the lows inside the span only', () => {
+    // The fixture is coldest at 06:00 each day.
+    expect(frostBetween(json, '2026-11-17T18:00', '2026-11-18T10:00')).toEqual({
+      minAir: 1,
+      minSurface: -1,
+      risk: 'frost',
+    });
+    expect(frostBetween(json, '2026-11-17T00:00', '2026-11-17T12:00')?.risk).toBe('none');
+  });
+
+  it('is null without data in the span or without a forecast', () => {
+    expect(frostBetween(json, '2026-11-20T00:00', '2026-11-21T00:00')).toBeNull();
+    expect(frostBetween(null, 'a', 'b')).toBeNull();
+    expect(frostBetween({ hourly: {} }, 'a', 'b')).toBeNull();
   });
 });
