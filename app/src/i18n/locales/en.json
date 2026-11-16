@@ -282,6 +282,11 @@
       "christmas": "Christmas Day"
     }
   },
+  "almanac": {
+    "title": "Almanac",
+    "saint": "Saint of the day",
+    "sources": "Saints and sayings:"
+  },
   "language": {
     "label": "Language",
     "names": {
