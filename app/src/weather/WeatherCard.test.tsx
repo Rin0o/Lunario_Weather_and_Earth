@@ -1,6 +1,6 @@
 import { act, render, screen, within } from '@testing-library/react';
 import i18n from 'i18next';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { initI18n } from '../i18n/index.ts';
 import { COIMBRA_FORECAST_JSON, jsonResponse } from './fixtures.ts';
 import { WeatherCard } from './WeatherCard.tsx';
@@ -13,7 +13,15 @@ const fact = (term: string) =>
 
 describe('WeatherCard', () => {
   beforeEach(async () => {
+    // The download time comes from the clock: pin it to the fixture's day. Only Date is faked
+    // so promises and waitFor still run normally.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOV_15);
     await initI18n('pt-PT');
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("shows today's forecast and the next days", async () => {
