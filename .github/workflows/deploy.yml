@@ -46,12 +46,13 @@ jobs:
             echo "Refusing to deploy unsafe branch name: $BRANCH"; exit 1
           fi
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+      # No wranglerVersion: the action uses the wrangler that npm ci installed, pinned in
+      # package.json and the lockfile, so its peer dependencies always match.
       - id: pages
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: '4.162.0'
           command: pages deploy dist --project-name=lunario --branch=${{ steps.meta.outputs.branch }} --commit-hash=${{ github.event.workflow_run.head_sha }}
 
   # Frost alerts Worker (D-33): production only, after the same green CI run.
@@ -89,7 +90,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: '4.162.0'
           workingDirectory: worker
           command: |
             d1 migrations apply lunario-alerts --remote
