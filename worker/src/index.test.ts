@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from 'vitest';
 import { generateVapidKeys } from '../../scripts/lib/vapid.ts';
-import worker, { handleRequest, originAllowed, pushSender, type Env } from './index.ts';
+import worker, { handleRequest, originAllowed, padJson, pushSender, type Env } from './index.ts';
 import { D1Store } from './store.ts';
 import { BODY } from './subscription.test.ts';
 import { fakeD1 } from './test/fakeD1.ts';
@@ -208,6 +208,18 @@ describe('push sending', () => {
       authSecret,
     );
     expect(JSON.parse(plaintext)).toEqual({ ...message, url: '/' });
+    // Padded to 256 bytes, not to 4 KB: Firefox for Android refuses big messages (413).
+    expect(new TextEncoder().encode(plaintext).length).toBe(256);
+    expect((init?.body as Uint8Array).byteLength).toBeLessThan(512);
+  });
+
+  it('pads JSON to whole blocks, counting bytes not characters', () => {
+    expect(padJson({ a: 1 }, 16)).toBe('{"a":1}         ');
+    const accented = padJson({ t: 'geada ❄️' }, 32);
+    expect(new TextEncoder().encode(accented).length).toBe(32);
+    expect(JSON.parse(accented)).toEqual({ t: 'geada ❄️' });
+    const exact = JSON.stringify({ a: 'xxxxxxxx' }); // 16 bytes
+    expect(padJson({ a: 'xxxxxxxx' }, 16)).toBe(exact);
   });
 });
 
