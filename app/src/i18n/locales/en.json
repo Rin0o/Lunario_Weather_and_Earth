@@ -218,6 +218,14 @@
       "30": "Rain and snow"
     }
   },
+  "frost": {
+    "title": "Frost risk",
+    "frost": "frost (ground {{surface}}, air {{air}})",
+    "possible": "frost possible (air {{air}})",
+    "protect": "Protect in your garden: {{crops}}.",
+    "caveat": "This is a risk, not a certainty: valleys and hollows get colder than the forecast says.",
+    "source": "Forecast for {{place}} · Source: Open-Meteo (CC BY 4.0)"
+  },
   "moon": {
     "title": "Moon",
     "phases": {

@@ -218,6 +218,14 @@
       "30": "Chuva e neve"
     }
   },
+  "frost": {
+    "title": "Risco de geada",
+    "frost": "geada (superfície {{surface}}, ar {{air}})",
+    "possible": "geada possível (ar {{air}})",
+    "protect": "Proteja na sua horta: {{crops}}.",
+    "caveat": "É um risco, não uma certeza: vales e baixas arrefecem mais do que a previsão indica.",
+    "source": "Previsão para {{place}} · Fonte: Open-Meteo (CC BY 4.0)"
+  },
   "moon": {
     "title": "Lua",
     "phases": {

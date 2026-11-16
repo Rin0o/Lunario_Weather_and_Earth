@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
+import { FrostCard } from './frost/FrostCard.tsx';
 import { GardenPage } from './garden/GardenPage.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
@@ -45,6 +46,7 @@ export function App() {
             now={now}
             location={location}
             locationControl={<LocationPicker location={location} onChange={setLocation} />}
+            frost={<FrostCard now={now} location={location} />}
             weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
             sowing={<SowingCard now={now} district={district} />}
           />
