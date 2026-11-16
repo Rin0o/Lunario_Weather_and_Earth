@@ -406,6 +406,36 @@ a {
   color: var(--action-CO);
 }
 
+.planting-form button.primary {
+  background: var(--accent);
+  color: var(--paper);
+  border: 0;
+  font-weight: 600;
+}
+
+.calendar-panel {
+  margin: 0.5rem 0;
+}
+
+.calendar-panel summary {
+  cursor: pointer;
+  color: var(--accent);
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-events {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.alarm-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
 .reminder {
   border: 1px solid var(--accent);
   border-left-width: 4px;

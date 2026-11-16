@@ -20,7 +20,8 @@ async function logPlanting(crop: string, action?: string, date?: string) {
   await user.click(screen.getByRole('button', { name: 'Guardar' }));
 }
 
-const entries = () => within(screen.getByRole('list')).getAllByRole('listitem');
+/** The planting cards (direct children only: each card has its own list of reminders). */
+const entries = () => Array.from(document.querySelectorAll<HTMLElement>('ul.plantings > li'));
 
 describe('GardenPage', () => {
   beforeEach(async () => {
