@@ -41,7 +41,7 @@
     "react-i18next": "^18.0.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "5.20261031.1",
+    "@cloudflare/workers-types": "5.20261113.1",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
@@ -68,6 +68,7 @@
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
     "vite-plugin-pwa": "^2.0.0",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "wrangler": "4.162.0"
   }
 }
