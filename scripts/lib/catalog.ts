@@ -33,6 +33,7 @@ export interface DataFiles {
   zonas: string;
   culturas: string;
   janelas: string;
+  janelasZona: string;
   regrasDerivacao: string;
   avisosZona: string;
   regrasLunares: string;
@@ -44,6 +45,7 @@ export const DATA_FILE_NAMES: Record<keyof DataFiles, string> = {
   zonas: 'zonas.csv',
   culturas: 'culturas.csv',
   janelas: 'janelas.csv',
+  janelasZona: 'janelas-zona.csv',
   regrasDerivacao: 'regras-derivacao.csv',
   avisosZona: 'avisos-zona.csv',
   regrasLunares: 'regras-lunares.csv',
@@ -491,6 +493,53 @@ function ruleMatches(
   );
 }
 
+/**
+ * Windows written by hand for a zone other than the base, where the rules give something
+ * incoherent (Q-10). Each crop, zone and action listed here replaces its derived windows.
+ */
+function parseZoneWindows(text: string, crops: Crop[], problems: string[]): CalendarWindow[] {
+  const file = DATA_FILE_NAMES.janelasZona;
+  const table = readTable(file, text, [
+    'cultura',
+    'zona',
+    'acao',
+    'inicio',
+    'fim',
+    'motivo_pt',
+    'motivo_en',
+  ]);
+  const c = new Checker(file);
+  const ids = new Set(crops.map((cr) => cr.id));
+  const otherZones = ZONE_IDS.filter((z) => z !== BASE_ZONE);
+  const windows = table.rows.map((row): CalendarWindow => {
+    const cropId = c.text(row, 'cultura');
+    if (!ids.has(cropId)) c.fail(row, `unknown crop "${cropId}"`);
+    const zoneId = c.oneOf(row, 'zona', otherZones);
+    const action = c.oneOf(row, 'acao', ['SV', 'SD', 'TR', 'PL'] as const);
+    c.bilingual(row, 'motivo');
+    return {
+      cropId,
+      zoneId,
+      action,
+      start: c.fortnight(row, 'inicio'),
+      end: c.fortnight(row, 'fim'),
+      origin: 'manual',
+    };
+  });
+  problems.push(...c.problems);
+  return windows;
+}
+
+/** Replaces the derived windows of every crop, zone and action that has manual ones. */
+export function applyZoneWindows(
+  derived: CalendarWindow[],
+  manual: CalendarWindow[],
+): CalendarWindow[] {
+  const key = (w: CalendarWindow) => `${w.cropId} ${w.zoneId} ${w.action}`;
+  const replaced = new Set(manual.map(key));
+  return [...derived.filter((w) => !replaced.has(key(w))), ...manual];
+}
+
 /** Derives the other zones' windows from the base zone's (D-08). No matching rule: unchanged. */
 export function deriveWindows(
   base: CalendarWindow[],
@@ -580,6 +629,7 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   const zones = parseZones(files.zonas, problems);
   const crops = parseCrops(files.culturas, problems);
   const base = parseBaseWindows(files.janelas, crops, problems);
+  const manual = parseZoneWindows(files.janelasZona, crops, problems);
   const rules = parseRules(files.regrasDerivacao, problems);
   const zoneNotes = parseZoneNotes(files.avisosZona, crops, problems);
   const lunarRules = parseLunarRules(files.regrasLunares, problems);
@@ -587,7 +637,7 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   const sayings = parseSayings(files.ditados, problems);
   if (problems.length) throw new DataError(problems);
 
-  const established = [...base, ...deriveWindows(base, crops, rules)];
+  const established = [...base, ...applyZoneWindows(deriveWindows(base, crops, rules), manual)];
   const windows = [...established, ...calculateHarvests(established, crops)].map((w) => {
     const zoneNote = zoneNotes.find((n) => n.cropId === w.cropId && n.zoneId === w.zoneId);
     return zoneNote && !w.note ? { ...w, note: zoneNote.note } : w;

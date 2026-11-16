@@ -60,8 +60,11 @@ export interface CalendarWindow {
   /** Inclusive; when end < start the window crosses the new year. */
   start: Fortnight;
   end: Fortnight;
-  /** base: entered by hand (Litoral Centro); derived: by a rule; calculated: harvest from the cycle. */
-  origin: 'base' | 'derived' | 'calculated';
+  /**
+   * base: entered by hand (Litoral Centro); derived: by a rule; manual: entered by hand for
+   * another zone, replacing the derived ones; calculated: harvest from the cycle.
+   */
+  origin: 'base' | 'derived' | 'manual' | 'calculated';
   note?: Text;
 }
 
