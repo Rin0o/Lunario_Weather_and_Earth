@@ -15,6 +15,10 @@ export default tseslint.config(
     extends: [reactHooks.configs.flat['recommended-latest'], reactRefresh.configs.vite],
   },
   {
+    files: ['public/push-sw.js'],
+    languageOptions: { globals: globals.serviceworker },
+  },
+  {
     files: ['*.{js,ts}', 'scripts/**/*.ts'],
     languageOptions: { globals: globals.node },
   },

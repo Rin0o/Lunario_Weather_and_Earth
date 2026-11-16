@@ -5,10 +5,18 @@ import type { NewPlanting, Planting } from './plantings.ts';
  * The device-only database (RNF-03). Bump DB_VERSION and add a step in `upgrade` for any
  * schema change; steps run in order, so a phone on any older version catches up.
  *   v1: plantings
- *   v2: meta (key/value: last backup, reminder snooze, calendar reminder settings)
+ *   v2: meta (key/value: last backup, reminder snooze, calendar reminder settings, frost alerts)
  */
 export type MetaKey =
-  'lastBackupAt' | 'backupReminderSnoozedAt' | 'reminderDaysBefore' | 'reminderTime' | 'moonMode';
+  | 'lastBackupAt'
+  | 'backupReminderSnoozedAt'
+  | 'reminderDaysBefore'
+  | 'reminderTime'
+  | 'moonMode'
+  /** 'on' once the user turned frost alerts on (RF-14). */
+  | 'frostAlerts'
+  /** The last subscription sent to the alerts Worker, to send it again only when it changes. */
+  | 'frostAlertsSent';
 
 interface LunarioDb extends DBSchema {
   plantings: { key: string; value: Planting };

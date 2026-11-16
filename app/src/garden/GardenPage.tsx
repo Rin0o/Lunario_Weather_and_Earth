@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dateInZone } from '../astro/time.ts';
 import { catalog, zoneForDistrict } from '../catalog/catalog.ts';
@@ -15,6 +16,8 @@ import { useGarden } from './useGarden.ts';
 
 interface GardenPageProps {
   now: Date;
+  /** Frost alerts card (RF-14), before the backup. */
+  alerts?: ReactNode;
   /** IPMA district name of the user's location, for the season check. */
   district: string;
   source?: Catalog;
@@ -25,6 +28,7 @@ interface GardenPageProps {
 /** RF-10: "A minha horta", the user's plantings, kept only on this device. */
 export function GardenPage({
   now,
+  alerts,
   district,
   source = catalog,
   confirm = (message) => window.confirm(message),
@@ -134,6 +138,7 @@ export function GardenPage({
         </ul>
       )}
 
+      {alerts}
       <BackupCard backup={backup} />
     </section>
   );

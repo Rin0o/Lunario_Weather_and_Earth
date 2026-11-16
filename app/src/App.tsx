@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { catalog } from './catalog/catalog.ts';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
+import { syncFrostAlerts } from './frost/alerts.ts';
+import { FrostAlertsCard } from './frost/FrostAlertsCard.tsx';
 import { FrostCard } from './frost/FrostCard.tsx';
+import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
 import { GardenPage } from './garden/GardenPage.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
@@ -14,11 +19,19 @@ import { useNow } from './today/useNow.ts';
 import { WeatherCard } from './weather/WeatherCard.tsx';
 
 export function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const now = useNow();
   const [location, setLocation] = useUserLocation();
   const route = useRoute();
   const district = DISTRICTS[location.district] ?? '';
+  const resolved = i18n.resolvedLanguage ?? '';
+  const language = isSupportedLanguage(resolved) ? resolved : DEFAULT_LANGUAGE;
+
+  // RF-14: keep the frost alerts in step with the location, language and garden. Runs on
+  // start and on every page change (so garden edits count); sends nothing if nothing changed.
+  useEffect(() => {
+    void syncFrostAlerts({ location, language, source: catalog }).catch(() => undefined);
+  }, [location, language, route.name]);
 
   const navLink = (to: string, label: string, active: boolean) => (
     <a href={to} aria-current={active ? 'page' : undefined}>
@@ -51,7 +64,13 @@ export function App() {
             sowing={<SowingCard now={now} district={district} />}
           />
         )}
-        {route.name === 'garden' && <GardenPage now={now} district={district} />}
+        {route.name === 'garden' && (
+          <GardenPage
+            now={now}
+            district={district}
+            alerts={<FrostAlertsCard location={location} />}
+          />
+        )}
         {route.name === 'crops' && <CropsList />}
         {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
       </main>

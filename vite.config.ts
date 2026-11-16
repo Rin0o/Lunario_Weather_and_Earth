@@ -121,6 +121,8 @@ export default defineConfig({
         // app shell answer navigations to it.
         globIgnores: ['teste-calendario/**', 'assets/calendarTest-*'],
         navigateFallbackDenylist: [/^\/teste-calendario/],
+        // Frost alert notifications (RF-14), from public/push-sw.js.
+        importScripts: ['push-sw.js'],
       },
     }),
   ],

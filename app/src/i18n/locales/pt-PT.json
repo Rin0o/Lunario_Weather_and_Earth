@@ -16,7 +16,7 @@
   },
   "garden": {
     "title": "A minha horta",
-    "intro": "Os registos ficam só neste telemóvel.",
+    "intro": "Os registos ficam só neste telemóvel. Só os alertas de geada, se os ligar, enviam o mínimo explicado abaixo.",
     "add": "Registar plantio",
     "crop": "Cultura",
     "chooseCrop": "Escolher…",
@@ -225,6 +225,16 @@
     "protect": "Proteja na sua horta: {{crops}}.",
     "caveat": "É um risco, não uma certeza: vales e baixas arrefecem mais do que a previsão indica.",
     "source": "Previsão para {{place}} · Fonte: Open-Meteo (CC BY 4.0)"
+  },
+  "frostAlerts": {
+    "title": "Alertas de geada no telemóvel",
+    "intro": "Receba uma notificação ao fim da tarde quando houver risco de geada nessa noite, mesmo com a app fechada.",
+    "privacy": "Enquanto estiverem ligados, o Lunário envia ao servidor de alertas a sua localização arredondada a cerca de 1 km, os nomes das culturas sensíveis à geada na sua horta e a língua. Mais nada. Ao desligar, estes dados são apagados.",
+    "toggle": "Avisar-me de geada",
+    "on": "Ligados para {{place}}. O aviso chega por volta das 18h (19h no verão), só quando houver risco.",
+    "unsupported": "Este browser não recebe notificações. No iPhone, adicione o Lunário ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e ligue os alertas a partir daí.",
+    "blocked": "As notificações estão bloqueadas para o Lunário. Permita-as nas definições do browser ou do telemóvel e volte a tentar.",
+    "failed": "Não foi possível mudar os alertas. Verifique a ligação à Internet e tente de novo."
   },
   "moon": {
     "title": "Lua",

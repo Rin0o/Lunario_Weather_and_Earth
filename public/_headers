@@ -1,12 +1,15 @@
 # Cloudflare Pages response headers. https://developers.cloudflare.com/pages/configuration/headers/
 /*
-  Content-Security-Policy: default-src 'self'; connect-src 'self' https://api.ipma.pt https://api.open-meteo.com; img-src 'self' data:; style-src 'self'; script-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; connect-src 'self' https://api.ipma.pt https://api.open-meteo.com https://lunario-alerts.31rino.workers.dev; img-src 'self' data:; style-src 'self'; script-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(self), camera=(), microphone=()
 
 # The service worker must always be revalidated so updates reach installed apps.
 /sw.js
+  Cache-Control: no-cache
+
+/push-sw.js
   Cache-Control: no-cache
 
 /manifest.webmanifest
