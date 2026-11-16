@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Crop, Text } from '../catalog/types.ts';
 import { isoDateToNoonUtc, type IsoDate } from '../calendar/dates.ts';
@@ -31,12 +31,14 @@ export function CalendarPanel({ planting, crop, today }: CalendarPanelProps) {
   const [daysBefore, setDaysBefore] = useState(String(DEFAULT_ALARM.daysBefore));
   const [time, setTime] = useState<string>(DEFAULT_ALARM.time);
   const [message, setMessage] = useState('');
+  // If the user edits before the saved settings load, their edit wins.
+  const touched = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
     void Promise.all([getMeta('reminderDaysBefore'), getMeta('reminderTime')])
       .then(([days, savedTime]) => {
-        if (cancelled) return;
+        if (cancelled || touched.current) return;
         const alarm = normaliseAlarm(
           days ?? DEFAULT_ALARM.daysBefore,
           savedTime ?? DEFAULT_ALARM.time,
@@ -105,12 +107,22 @@ export function CalendarPanel({ planting, crop, today }: CalendarPanelProps) {
                 min={0}
                 max={30}
                 value={daysBefore}
-                onChange={(e) => setDaysBefore(e.target.value)}
+                onChange={(e) => {
+                  touched.current = true;
+                  setDaysBefore(e.target.value);
+                }}
               />
             </label>
             <label>
               {t('calendar.at')}
-              <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => {
+                  touched.current = true;
+                  setTime(e.target.value);
+                }}
+              />
             </label>
           </div>
           <button type="button" className="primary" onClick={() => void create()}>
