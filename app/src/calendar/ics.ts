@@ -29,7 +29,7 @@ export interface IcsCalendar {
   /** Calendar name shown by apps that subscribe to the feed. */
   name?: string;
   /** Moment the file is generated; injectable for tests. */
-  now?: Date;
+  now?: Date | undefined;
 }
 
 const CRLF = '\r\n';

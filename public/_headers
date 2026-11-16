@@ -18,5 +18,9 @@
   Cache-Control: no-cache
   Content-Type: text/calendar; charset=utf-8
 
+/calendarios/*
+  Cache-Control: no-cache
+  Content-Type: text/calendar; charset=utf-8
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
