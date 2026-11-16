@@ -282,6 +282,11 @@
       "christmas": "Natal"
     }
   },
+  "almanac": {
+    "title": "Almanaque",
+    "saint": "Santo do dia",
+    "sources": "Santos e ditados:"
+  },
   "language": {
     "label": "Idioma",
     "names": {

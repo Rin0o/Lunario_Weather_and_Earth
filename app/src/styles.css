@@ -656,6 +656,23 @@ a.button.primary {
   border-radius: 2px;
 }
 
+.saying {
+  margin: 0.75rem 0 0;
+}
+
+.saying blockquote {
+  margin: 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+}
+
+.saying figcaption {
+  margin-top: 0.25rem;
+  padding-left: calc(0.75rem + 3px);
+  font-size: 0.9rem;
+}
+
 .holiday-today {
   margin: 0 0 0.5rem;
   font-weight: 600;

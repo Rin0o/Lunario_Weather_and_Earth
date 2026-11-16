@@ -4,6 +4,7 @@ import type { Location } from '../astro/location.ts';
 import { moonDay, nextMoonQuarters, type MoonPhaseName } from '../astro/moon.ts';
 import { sunDay } from '../astro/sun.ts';
 import { formatLongDate, formatPercent, formatShortDate, formatTime } from '../i18n/format.ts';
+import { AlmanacCard } from './AlmanacCard.tsx';
 import { HolidaysCard } from './HolidaysCard.tsx';
 import { MoonTradition } from './MoonTradition.tsx';
 import { useMoonMode } from './useMoonMode.ts';
@@ -48,6 +49,7 @@ export function Today({ now, location, locationControl, weather, sowing }: Today
       {locationControl}
       {weather}
       {sowing}
+      <AlmanacCard now={now} />
 
       <article className="card" aria-labelledby="moon-heading">
         <h3 id="moon-heading">{t('moon.title')}</h3>
