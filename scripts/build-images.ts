@@ -5,10 +5,18 @@
  * Each image is made at a few widths, so phones download the small one. An output newer
  * than its original is left alone, so the script is quick when nothing changed.
  */
-import { mkdirSync, statSync } from 'node:fs';
+import { mkdirSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { APP_ICON, IMAGES, outputName } from './lib/images.ts';
+import {
+  APP_ICON,
+  IMAGES,
+  PLATE_INK,
+  PLATE_WIDTHS,
+  PLATES_DIR,
+  outputName,
+  plateName,
+} from './lib/images.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const outDir = `${root}app/src/assets/images`;
@@ -35,6 +43,44 @@ for (const image of IMAGES) {
     made++;
   }
 }
+// Botanical plates: greyscale engravings become brown ink on a transparent background. The
+// paper tone of each scan (its most common light tone) is taken as white, so a greyish scan
+// comes out as clean as the others.
+mkdirSync(`${outDir}/plates`, { recursive: true });
+for (const file of readdirSync(`${root}${PLATES_DIR}`).filter((f) => f.endsWith('.png'))) {
+  const cropId = file.slice(0, -'.png'.length);
+  const source = `${root}${PLATES_DIR}/${file}`;
+  for (const width of Object.values(PLATE_WIDTHS)) {
+    const target = `${outDir}/plates/${plateName(cropId, width)}`;
+    if (mtime(target) > mtime(source)) continue;
+    const { data, info } = await sharp(source)
+      .flatten({ background: '#ffffff' })
+      .greyscale()
+      .resize({ width, withoutEnlargement: true })
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    // The paper: the most common light tone, less a margin for the grain of old scans.
+    const counts = new Array<number>(256).fill(0);
+    for (const value of data) counts[value] = (counts[value] ?? 0) + 1;
+    let mode = 255;
+    for (let v = 128; v < 256; v++) if ((counts[v] ?? 0) > (counts[mode] ?? 0)) mode = v;
+    const paper = mode - 18;
+    const black = 30;
+    const rgba = Buffer.alloc(info.width * info.height * 4);
+    for (let i = 0; i < data.length; i++) {
+      const ink = Math.min(1, Math.max(0, (paper - (data[i] ?? 255)) / (paper - black)));
+      rgba[i * 4] = PLATE_INK.r;
+      rgba[i * 4 + 1] = PLATE_INK.g;
+      rgba[i * 4 + 2] = PLATE_INK.b;
+      rgba[i * 4 + 3] = Math.round(ink * 255);
+    }
+    await sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } })
+      .webp({ quality: 80, alphaQuality: 85 })
+      .toFile(target);
+    made++;
+  }
+}
+
 // The app icon source for the PWA icon generator (pwa-assets.config.ts), which reads from
 // public/: a 512 px copy, so the full-size original is never shipped.
 const iconTarget = `${root}public/app-icon.png`;

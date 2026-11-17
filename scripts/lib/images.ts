@@ -19,6 +19,17 @@ export const IMAGES: ImageSpec[] = [
   { name: 'logo-round', source: 'art/backgrounds/Logo_round.png', widths: [96, 144], quality: 85 },
 ];
 
+/**
+ * Botanical plates (RF-06): art/plates/<crop id>.png, greyscale engravings on white. They are
+ * turned into ink on a transparent background, so they look printed on the notebook page:
+ * a thumbnail for the crop list and a larger one for the crop sheet.
+ */
+export const PLATES_DIR = 'art/plates';
+export const PLATE_WIDTHS = { thumb: 128, sheet: 560 } as const;
+/** The ink colour: a dark brown, like old printing ink on paper. */
+export const PLATE_INK = { r: 52, g: 38, b: 26 };
+export const plateName = (cropId: string, width: number) => `plate-${cropId}-${width}.webp`;
+
 /** The square logo, source of the installed app icon and the favicon. */
 export const APP_ICON = 'art/backgrounds/Logo_round-square.png';
 

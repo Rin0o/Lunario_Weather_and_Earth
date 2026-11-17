@@ -111,6 +111,7 @@
   },
   "crops": {
     "title": "Crops",
+    "plateAlt": "Engraving of {{crop}}",
     "all": "All crops",
     "notFound": "This crop is not in the calendar.",
     "family": "Family",

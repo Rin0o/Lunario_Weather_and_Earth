@@ -118,14 +118,16 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,json,webp}'],
         // The test page is not part of the offline app: don't precache it, and don't let the
-        // app shell answer navigations to it. The large artwork (for wide screens) and the icon
-        // generator's source are not precached either; the phone sizes are.
+        // app shell answer navigations to it. The large artwork (for wide screens), the crop
+        // sheets' plates and the icon generator's source are not precached either; the phone
+        // sizes and the plate thumbnails are.
         globIgnores: [
           'teste-calendario/**',
           'assets/calendarTest-*',
           'app-icon.png',
           'assets/*-1024-*.webp',
           'assets/*-960-*.webp',
+          'assets/plate-*-560-*.webp',
         ],
         // The wide-screen artwork, cached once seen.
         runtimeCaching: [

@@ -111,6 +111,7 @@
   },
   "crops": {
     "title": "Culturas",
+    "plateAlt": "Gravura de {{crop}}",
     "all": "Todas as culturas",
     "notFound": "Esta cultura não existe no calendário.",
     "family": "Família",
