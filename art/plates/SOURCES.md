@@ -1,13 +1,15 @@
 # Botanical plates (RF-06)
 
 One engraving per crop, `<crop id>.png`. Captions under the drawings were cut and the margins
-trimmed; the coriander scan also had its grey paper whitened. `npm run images` turns them into
+trimmed; the pea plate also lost a stray caption line at the top, and the coriander drawing its
+"2/3" scale mark. `npm run images` turns them into
 brown ink on a transparent background for the app.
 
 Sources, all in the **public domain** on Wikimedia Commons:
 
 - _Les Plantes potagères_, Vilmorin-Andrieux & Cie, Paris, 1883 and 1904 editions.
-- Coriander: _The American Cyclopædia_, c. 1879 (Vilmorin describes coriander but has no
+- Coriander: _An Illustrated Flora of the Northern United States and Canada_, N. L. Britton
+  & A. Brown, 2nd edition, 1913, vol. 2, p. 647 (Vilmorin describes coriander but has no
   engraving of it).
 
 | Crop              | Plate                                                         | Source                                                                                                                            |
@@ -24,13 +26,13 @@ Sources, all in the **public domain** on Wikimedia Commons:
 | `brocolo`         | Brocoli branchu violet Vilmorin-Andrieux 1904                 | [Public domain](https://commons.wikimedia.org/wiki/File:Brocoli_branchu_violet_Vilmorin-Andrieux_1904.png)                        |
 | `cebola`          | Ognon jaune des Vertus Vilmorin-Andrieux 1883                 | [Public domain](https://commons.wikimedia.org/wiki/File:Ognon_jaune_des_Vertus_Vilmorin-Andrieux_1883.png)                        |
 | `cenoura`         | Carotte rouge demi-longue de Chantenay Vilmorin-Andrieux 1904 | [Public domain](https://commons.wikimedia.org/wiki/File:Carotte_rouge_demi-longue_de_Chantenay_Vilmorin-Andrieux_1904.png)        |
-| `coentros`        | AmCyc Coriander                                               | [Public domain](https://commons.wikimedia.org/wiki/File:AmCyc_Coriander.jpg)                                                      |
+| `coentros`        | Coriandrum sativum (Britton & Brown 1913)                     | [Public domain](https://commons.wikimedia.org/wiki/File:Coriandrum_sativum.jpg)                                                   |
 | `courgette`       | Courge blanche non coureuse Vilmorin-Andrieux 1883            | [Public domain](https://commons.wikimedia.org/wiki/File:Courge_blanche_non_coureuse_Vilmorin-Andrieux_1883.png)                   |
 | `couve_coracao`   | Chou cœur-de-bœuf moyen de la Halle Vilmorin-Andrieux 1904    | [Public domain](https://commons.wikimedia.org/wiki/File:Chou_c%C5%93ur-de-b%C5%93uf_moyen_de_la_Halle_Vilmorin-Andrieux_1904.png) |
 | `couve_flor`      | Chou-fleur demi-dur de Paris Vilmorin-Andrieux 1904           | [Public domain](https://commons.wikimedia.org/wiki/File:Chou-fleur_demi-dur_de_Paris_Vilmorin-Andrieux_1904.png)                  |
 | `couve_galega`    | Chou cavalier Vilmorin-Andrieux 1904                          | [Public domain](https://commons.wikimedia.org/wiki/File:Chou_cavalier_Vilmorin-Andrieux_1904.png)                                 |
 | `couve_tronchuda` | Chou à grosses côtes ordinaire Vilmorin-Andrieux 1904         | [Public domain](https://commons.wikimedia.org/wiki/File:Chou_%C3%A0_grosses_c%C3%B4tes_ordinaire_Vilmorin-Andrieux_1904.png)      |
-| `ervilha`         | Pois de Clamart Vilmorin-Andrieux 1883                        | [Public domain](https://commons.wikimedia.org/wiki/File:Pois_de_Clamart_Vilmorin-Andrieux_1883.png)                               |
+| `ervilha`         | Pois nain hâtif Vilmorin-Andrieux 1883                        | [Public domain](https://commons.wikimedia.org/wiki/File:Pois_nain_h%C3%A2tif_Vilmorin-Andrieux_1883.png)                          |
 | `espinafre`       | Épinard monstrueux de Viroflay Vilmorin-Andrieux 1883         | [Public domain](https://commons.wikimedia.org/wiki/File:%C3%89pinard_monstrueux_de_Viroflay_Vilmorin-Andrieux_1883.png)           |
 | `fava`            | Fève de Séville à longue cosse Vilmorin-Andrieux 1883         | [Public domain](https://commons.wikimedia.org/wiki/File:F%C3%A8ve_de_S%C3%A9ville_%C3%A0_longue_cosse_Vilmorin-Andrieux_1883.png) |
 | `feijao_verde`    | Haricot nain du Bouscat Vilmorin-Andrieux 1904                | [Public domain](https://commons.wikimedia.org/wiki/File:Haricot_nain_du_Bouscat_Vilmorin-Andrieux_1904.png)                       |
