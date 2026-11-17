@@ -19,7 +19,7 @@ function stubNavigator(props: Record<string, unknown>) {
 async function renderWithOnePlanting(now = NOV_16, createdAt = NOV_16) {
   await addPlanting({ cropId: 'fava', action: 'SD', date: '2026-11-10', notes: '' }, createdAt);
   render(<GardenPage now={now} district="Coimbra" />);
-  await screen.findByRole('list', { name: 'Plantios' });
+  await screen.findByRole('list', { name: 'Na horta' });
 }
 
 const backupCard = () => screen.getByRole('article', { name: 'Cópia de segurança' });

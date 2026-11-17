@@ -29,7 +29,7 @@ function captureDownloads() {
 async function renderWith(cropId: string, action: 'SV' | 'SD' | 'PL', date: IsoDate) {
   await addPlanting({ cropId, action, date, notes: '' });
   render(<GardenPage now={NOV_16} district="Coimbra" />);
-  await screen.findByRole('list', { name: 'Plantios' });
+  await screen.findByRole('list', { name: 'Na horta' });
 }
 
 describe('"Adicionar ao calendário" (RF-13)', () => {

@@ -31,7 +31,7 @@ describe('GardenPage', () => {
 
   it('logs a planting and shows its expected harvest', async () => {
     render(<GardenPage now={NOV_16} district="Coimbra" />);
-    expect(await screen.findByText('Ainda não registou nenhum plantio.')).toBeInTheDocument();
+    expect(await screen.findByText('Ainda não tem nada na horta.')).toBeInTheDocument();
     expect(screen.getByLabelText('Data')).toHaveValue('2026-11-16');
 
     await logPlanting('Fava');
@@ -60,7 +60,7 @@ describe('GardenPage', () => {
   it("offers only the crop's actions and flags out-of-season entries", async () => {
     const user = userEvent.setup();
     render(<GardenPage now={NOV_16} district="Coimbra" />);
-    await screen.findByText('Ainda não registou nenhum plantio.');
+    await screen.findByText('Ainda não tem nada na horta.');
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Cultura' }), 'Tomate');
     const actions = within(screen.getByRole('combobox', { name: 'O que fez' }))
@@ -79,7 +79,7 @@ describe('GardenPage', () => {
     const user = userEvent.setup();
     const confirm = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
     render(<GardenPage now={NOV_16} district="Coimbra" confirm={confirm} />);
-    await screen.findByText('Ainda não registou nenhum plantio.');
+    await screen.findByText('Ainda não tem nada na horta.');
     await logPlanting('Alho');
     await screen.findByText('Registado.');
 
@@ -93,12 +93,12 @@ describe('GardenPage', () => {
     expect(entries()).toHaveLength(1);
 
     await user.click(screen.getByRole('button', { name: 'Apagar' }));
-    expect(await screen.findByText('Ainda não registou nenhum plantio.')).toBeInTheDocument();
+    expect(await screen.findByText('Ainda não tem nada na horta.')).toBeInTheDocument();
   });
 
   it('handles perennials, transplants and keeps entries after a reload', async () => {
     const { unmount } = render(<GardenPage now={NOV_16} district="Coimbra" />);
-    await screen.findByText('Ainda não registou nenhum plantio.');
+    await screen.findByText('Ainda não tem nada na horta.');
     await logPlanting('Morango');
     await screen.findByText('Registado.');
     await logPlanting('Couve-galega', 'Transplantar', '2026-11-01');
@@ -119,7 +119,7 @@ describe('GardenPage', () => {
   it('keeps the form folded away once there are plantings, and open after a save', async () => {
     const user = userEvent.setup();
     const { unmount } = render(<GardenPage now={NOV_16} district="Coimbra" />);
-    await screen.findByText('Ainda não registou nenhum plantio.');
+    await screen.findByText('Ainda não tem nada na horta.');
     await logPlanting('Fava');
     await screen.findByText('Registado.');
     // Still open, to log the next one.
@@ -130,13 +130,13 @@ describe('GardenPage', () => {
     await waitFor(() => expect(entries()).toHaveLength(1));
     const form = document.querySelector('details.add-planting');
     expect(form).not.toHaveAttribute('open');
-    await user.click(screen.getByText('Registar plantio'));
+    await user.click(screen.getByText('Adicionar à horta'));
     expect(form).toHaveAttribute('open');
   });
 
   it('switches to English', async () => {
     render(<GardenPage now={NOV_16} district="Coimbra" />);
-    await screen.findByText('Ainda não registou nenhum plantio.');
+    await screen.findByText('Ainda não tem nada na horta.');
     await logPlanting('Fava');
     await screen.findByText('Registado.');
     await act(() => i18n.changeLanguage('en'));

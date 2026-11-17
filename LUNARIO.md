@@ -52,13 +52,13 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 | RF-07 | Feriados nacionais, incluindo os móveis, calculados localmente | 1 |
 | RF-08 | Santos do dia e ditados populares | 1 |
 | RF-09 | Modo **Lua** opcional, com as regras lunares tradicionais e separado das janelas agronómicas | 2 |
-| RF-10 | **A minha horta**: registar plantios (cultura, ação, data) e ver as datas previstas de transplante e de colheita, calculadas a partir da data e do ciclo da cultura (ver D-19) | 2 |
+| RF-10 | **A minha horta**: adicionar à horta o que se semeia, transplanta ou planta (cultura, ação, data); na app, "Adicionar à horta" e ver as datas previstas de transplante e de colheita, calculadas a partir da data e do ciclo da cultura (ver D-19) | 2 |
 | RF-11 | Exportar e importar a horta em JSON (cópia de segurança) | 2 |
 | RF-12 | Subscrição de um calendário `.ics` por zona com os lembretes quinzenais | 2 |
-| RF-13 | Botão "Adicionar ao calendário" num plantio, que cria os eventos **transplante** (para sementeira em viveiro) e **início da colheita**, com alerta **5 dias antes às 13:00** por omissão, configurável (ver D-20) | 2 |
+| RF-13 | Botão "Adicionar ao calendário" num registo da horta, que cria os eventos **transplante** (para sementeira em viveiro) e **início da colheita**, com alerta **5 dias antes às 13:00** por omissão, configurável (ver D-20) | 2 |
 | RF-14 | Alertas de geada **para o local de cada utilizador**, por Web Push, a partir da previsão do Open-Meteo (temperatura do ar a 2 m e da superfície) (ver D-15, D-33) | 3 |
 | RF-15 | Pedir armazenamento persistente (`navigator.storage.persist()`) e lembrar periodicamente a cópia de segurança da horta | 2 |
-| RF-16 | Ao abrir a app, avisar se há risco de geada nos próximos dias para os plantios sensíveis do utilizador | 3 |
+| RF-16 | Ao abrir a app, avisar se há risco de geada nos próximos dias para as culturas sensíveis que o utilizador tem na horta | 3 |
 | RF-17 | Notificações push (opcionais) de risco de geada para as culturas que o utilizador tem na horta (ver D-21) | 3 |
 
 ## 4. Requisitos não funcionais
@@ -136,7 +136,7 @@ culturas sensíveis e a língua; ao desligar, o registo é apagado.
 |---|---|---|
 | Regional (quinzenal) | Subscrição de `zona-XX.ics` no calendário do telemóvel | O Google Calendar só atualiza subscrições de tempos a tempos, o que é aceitável para conteúdo quinzenal. |
 | Pessoal (transplante e colheita) | Evento `.ics` gerado pela PWA com `VALARM` (5 dias antes, 13:00, configurável) | Fica no calendário do utilizador, sem servidor. **A validar no Google Calendar para Android (Q-09).** |
-| Geada nos meus plantios (ao abrir) | A PWA consulta o Open-Meteo e cruza com os plantios sensíveis (D-32) | Sem servidor; só funciona quando a app é aberta. |
+| Geada na minha horta (ao abrir) | A PWA consulta o Open-Meteo e cruza com as culturas sensíveis da horta (D-32) | Sem servidor; só funciona quando a app é aberta. |
 | Geada no meu local (push) | Cloudflare Worker (cron às 18:00 UTC) → Web Push | Opcional, liga-se no ecrã **Alertas** (sino no topo). O Worker guarda a subscrição, o local arredondado a ~1 km, as culturas sensíveis e a língua (D-33). Os Cron Triggers são gratuitos e não são desativados por inatividade. Testado no Firefox (PC e Android), com a app fechada; falta o iPhone. |
 
 ## 6. Modelo de dados (catálogo)
@@ -263,7 +263,7 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 | ~~Q-05~~ | ~~Canal de alertas: **ntfy** ou **Telegram**?~~ | **Resolvida por D-33:** só Web Push, sem nada para instalar além da app. |
 | Q-06 | Mapeamento concelho → zona | A app já guarda o local IPMA mais próximo (24 pontos no continente) e o seu distrito (D-23). A tabela distrito → zona está em `data/zonas.csv` e o cartão "Esta quinzena" já a usa. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
 | ~~Q-07~~ | ~~Limiares e pontos da geada~~ | **Resolvida:** limiares de D-32 (superfície ≤ 0 °C → geada; ar a 2 m ≤ 3 °C → geada possível), a validar este inverno. Os pontos por zona deixaram de ser precisos: cada alerta usa o local do utilizador (D-33). A lista `sensivel_geada` foi revista e confirmada em 2026-11-16. |
-| Q-08 | Notificações da horta: o que fazer quando um plantio muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
+| Q-08 | Notificações da horta: o que fazer quando um registo da horta muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
 | Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
 | ~~Q-10~~ | ~~Regras de derivação que geram janelas incoerentes~~ | **Resolvida (2026-11-16):** janelas escritas à mão em `data/janelas-zona.csv`, que substituem as derivadas dessa cultura, zona e ação. Interior: couve-tronchuda viveiro jun Q1→ago Q1 e transplante jul Q2→set Q2; brócolo viveiro mai Q2→jul Q2 e transplante jul Q1→set Q1. Sul: cebola com um só viveiro, out Q1→jan Q2. O build já não dá avisos. |
 | ~~Q-12~~ | ~~Validar `dias_ate_transplante`~~ | **Resolvida (2026-11-16):** os valores das 18 culturas com viveiro foram revistos e confirmados. |

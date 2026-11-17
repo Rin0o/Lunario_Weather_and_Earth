@@ -37,7 +37,7 @@
   "garden": {
     "title": "A minha horta",
     "intro": "Os registos ficam só neste telemóvel.",
-    "add": "Registar plantio",
+    "add": "Adicionar à horta",
     "crop": "Cultura",
     "chooseCrop": "Escolher…",
     "action": "O que fez",
@@ -47,8 +47,8 @@
     "save": "Guardar",
     "saved": "Registado.",
     "outOfSeason": "Fora da época recomendada para {{action}} em {{zone}}.",
-    "empty": "Ainda não registou nenhum plantio.",
-    "listLabel": "Plantios",
+    "empty": "Ainda não tem nada na horta.",
+    "listLabel": "Na horta",
     "loading": "A carregar…",
     "storageError": "Não foi possível guardar neste telemóvel. Verifique se o navegador permite guardar dados.",
     "did": {
@@ -81,7 +81,7 @@
     "events": "Lembretes",
     "transplant": "Transplantar {{crop}} (Lunário)",
     "harvest": "Início da colheita: {{crop}} (Lunário)",
-    "description": "Plantio de {{date}}. Previsto entre {{from}} e {{to}}.",
+    "description": "Na horta desde {{date}}. Previsto entre {{from}} e {{to}}.",
     "google": "Abrir no Google Calendar",
     "daysBefore": "Avisar quantos dias antes",
     "at": "A que horas",
