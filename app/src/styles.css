@@ -655,6 +655,26 @@ a.button.primary {
   opacity: 0.85;
 }
 
+/* An empty list: a large, faded engraving over the message, like a drawing on a blank page. */
+.empty-state {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.empty-state img {
+  display: block;
+  width: 11rem;
+  max-width: 60%;
+  margin: 0 auto 0.75rem;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin: 0;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.2rem;
+}
+
 .today-date > span:first-child::first-letter {
   text-transform: uppercase;
 }

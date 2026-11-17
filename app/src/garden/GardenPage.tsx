@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { vignetteFor } from '../assets/vignettes.ts';
 import { dateInZone } from '../astro/time.ts';
 import { catalog, zoneForDistrict } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
@@ -36,6 +37,7 @@ export function GardenPage({
   const pick = (text: Text) => (lang === 'en' ? text.en : text.pt);
   const today = dateInZone(now) as IsoDate;
   const zone = zoneForDistrict(district, source);
+  const wateringCan = vignetteFor('regador');
   // The form starts open only while the garden is empty; then it is the user's choice.
   const [formOpen, setFormOpen] = useState<boolean | null>(null);
   const showForm = formOpen ?? (!garden.loading && garden.plantings.length === 0);
@@ -74,7 +76,10 @@ export function GardenPage({
       {garden.loading ? (
         <p className="hint">{t('garden.loading')}</p>
       ) : garden.plantings.length === 0 ? (
-        <p>{t('garden.empty')}</p>
+        <div className="empty-state">
+          {wateringCan && <img src={wateringCan} alt="" />}
+          <p>{t('garden.empty')}</p>
+        </div>
       ) : (
         <ul className="plantings" aria-label={t('garden.listLabel')}>
           {sortPlantings(garden.plantings).map((p) => {

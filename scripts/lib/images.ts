@@ -33,8 +33,8 @@ export const PLATE_INK = { r: 52, g: 38, b: 26 };
 export const plateName = (cropId: string, width: number) => `plate-${cropId}-${width}.webp`;
 
 /**
- * Vignettes beside screen titles: art/vignettes/<name>.png, engravings on white, printed in
- * the same ink as the plates. Shown at about 6 rem, so one width covers 3× screens.
+ * Vignettes beside screen titles and in empty states: art/vignettes/<name>.png, engravings on
+ * white, printed in the same ink as the plates. Shown at 6–11 rem, so one width is enough.
  */
 export const VIGNETTES_DIR = 'art/vignettes';
 export const VIGNETTE_WIDTH = 320;
