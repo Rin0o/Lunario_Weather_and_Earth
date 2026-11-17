@@ -37,7 +37,7 @@
   "garden": {
     "title": "My garden",
     "intro": "Your entries stay on this phone only.",
-    "add": "Log a planting",
+    "add": "Add to garden",
     "crop": "Crop",
     "chooseCrop": "Choose…",
     "action": "What you did",
@@ -47,8 +47,8 @@
     "save": "Save",
     "saved": "Saved.",
     "outOfSeason": "Outside the recommended season to {{action}} in {{zone}}.",
-    "empty": "You haven't logged any plantings yet.",
-    "listLabel": "Plantings",
+    "empty": "Nothing in your garden yet.",
+    "listLabel": "In the garden",
     "loading": "Loading…",
     "storageError": "Couldn't save on this phone. Check that the browser allows storing data.",
     "did": {
@@ -81,7 +81,7 @@
     "events": "Reminders",
     "transplant": "Transplant {{crop}} (Lunário)",
     "harvest": "Harvest begins: {{crop}} (Lunário)",
-    "description": "Planted on {{date}}. Expected between {{from}} and {{to}}.",
+    "description": "In the garden since {{date}}. Expected between {{from}} and {{to}}.",
     "google": "Open in Google Calendar",
     "daysBefore": "Remind how many days before",
     "at": "At what time",
