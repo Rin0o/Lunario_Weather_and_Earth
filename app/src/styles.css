@@ -675,6 +675,93 @@ a.button.primary {
   font-size: 1.2rem;
 }
 
+/* Sobre: set like the colophon on an old almanac's last page. No cards, everything centred,
+   each group of credits under a heading between fleurons, what it is used for in small caps. */
+.about-masthead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.5rem 0 1.25rem;
+  text-align: center;
+}
+
+.about-masthead img {
+  flex: none;
+  border-radius: 50%;
+}
+
+.about-masthead p {
+  margin: 0;
+}
+
+.about-name {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.about .card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+
+.about .card h3 {
+  margin-bottom: 0.4rem;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.about .card h3::before,
+.about .card h3::after {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.about .card h3::before {
+  content: '☙ ';
+}
+
+.about .card h3::after {
+  content: ' ❧';
+}
+
+.credits {
+  margin: 0;
+}
+
+.credits > div + div {
+  margin-top: 0.5rem;
+}
+
+.credits dt {
+  font-size: 0.8rem;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.credits dd {
+  margin: 0;
+}
+
+.credit-meta {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.about-own {
+  margin: 0 0 1rem;
+  font-style: italic;
+  text-align: center;
+}
+
 .today-date > span:first-child::first-letter {
   text-transform: uppercase;
 }

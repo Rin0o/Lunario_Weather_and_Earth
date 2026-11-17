@@ -11,6 +11,35 @@
   "settings": {
     "title": "Settings"
   },
+  "about": {
+    "title": "About",
+    "summary": "Credits for the engravings, data, icons and typeface.",
+    "more": "See credits",
+    "source": "Source code",
+    "mit": "MIT licence",
+    "publicDomain": "Public domain",
+    "attribution": "Free use, crediting IPMA",
+    "groups": {
+      "engravings": "Engravings",
+      "data": "Data",
+      "type": "Icons and type"
+    },
+    "uses": {
+      "crops": "Crops",
+      "coriander": "Coriander",
+      "moon": "Moon",
+      "wateringCan": "Watering can",
+      "weather": "Weather forecast",
+      "frost": "Frost",
+      "saints": "Saints of the day",
+      "sayings": "Sayings",
+      "astronomy": "Moon and Sun",
+      "weatherIcons": "Weather and Moon icons",
+      "interfaceIcons": "App icons",
+      "headings": "Titles"
+    },
+    "own": "The logos, the app icon, the notebook paper, the scrap behind the plates and the leather cover were made for Lunário."
+  },
   "alerts": {
     "title": "Alerts",
     "intro": "Warnings sent to your phone, even with the app closed."
@@ -27,7 +56,8 @@
     "today": "Today",
     "sky": "Sky",
     "garden": "Garden",
-    "crops": "Crops"
+    "crops": "Crops",
+    "about": "About"
   },
   "sky": {
     "title": "Sky",

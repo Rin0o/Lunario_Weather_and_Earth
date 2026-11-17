@@ -17,6 +17,9 @@ from either source. The weather card shows "Fonte: IPMA" / "Source: IPMA", and t
 "Fonte: Open-Meteo (CC BY 4.0)". The almanac card credits Wikipedia and
 Wikiquote with links and the licence; the two data files stay under CC BY-SA 4.0.
 
+The **Sobre / About** page (Definições → Ver créditos, `#/sobre`) lists every credit below
+in the app itself (`app/src/about/AboutPage.tsx`). Keep it in step with this file.
+
 ## Libraries with a visible role
 
 | Library                                                                  | Used for                                      | Licence |

@@ -48,6 +48,29 @@ describe('App', () => {
     expect(localStorage.getItem('lunario.language')).toBe('en');
   });
 
+  it('opens the About page from the settings, with the credits', () => {
+    render(<App />);
+    goTo('#/definicoes');
+    expect(screen.getByRole('link', { name: /Ver créditos/ })).toHaveAttribute('href', '#/sobre');
+
+    goTo('#/sobre');
+    expect(screen.getByRole('heading', { level: 2, name: 'Sobre' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Voltar a Definições' })).toHaveAttribute(
+      'href',
+      '#/definicoes',
+    );
+    for (const group of ['Gravuras', 'Dados', 'Ícones e letra']) {
+      expect(screen.getByRole('article', { name: group })).toBeInTheDocument();
+    }
+    expect(screen.getByRole('article', { name: 'Gravuras' })).toHaveTextContent(
+      'Les Plantes potagères',
+    );
+    expect(screen.getByRole('link', { name: 'IPMA' })).toHaveAttribute(
+      'href',
+      'https://api.ipma.pt',
+    );
+  });
+
   it('navigates between Today, the crop list and a crop sheet', async () => {
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Secções' });

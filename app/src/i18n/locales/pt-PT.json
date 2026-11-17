@@ -11,6 +11,35 @@
   "settings": {
     "title": "Definições"
   },
+  "about": {
+    "title": "Sobre",
+    "summary": "Créditos das gravuras, dos dados, dos ícones e da letra.",
+    "more": "Ver créditos",
+    "source": "Código-fonte",
+    "mit": "licença MIT",
+    "publicDomain": "Domínio público",
+    "attribution": "Uso livre, citando o IPMA",
+    "groups": {
+      "engravings": "Gravuras",
+      "data": "Dados",
+      "type": "Ícones e letra"
+    },
+    "uses": {
+      "crops": "Culturas",
+      "coriander": "Coentros",
+      "moon": "Lua",
+      "wateringCan": "Regador",
+      "weather": "Previsão do tempo",
+      "frost": "Geada",
+      "saints": "Santos do dia",
+      "sayings": "Ditados",
+      "astronomy": "Lua e Sol",
+      "weatherIcons": "Ícones do tempo e da Lua",
+      "interfaceIcons": "Ícones da app",
+      "headings": "Títulos"
+    },
+    "own": "Os logótipos, o ícone, o papel do caderno, o recorte por trás das gravuras e a capa de couro foram feitos para o Lunário."
+  },
   "alerts": {
     "title": "Alertas",
     "intro": "Avisos que chegam ao telemóvel, mesmo com a app fechada."
@@ -27,7 +56,8 @@
     "today": "Hoje",
     "sky": "Céu",
     "garden": "Horta",
-    "crops": "Culturas"
+    "crops": "Culturas",
+    "about": "Sobre"
   },
   "sky": {
     "title": "Céu",

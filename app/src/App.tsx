@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AboutPage } from './about/AboutPage.tsx';
 import { AlertsPage } from './alerts/AlertsPage.tsx';
 import { artwork } from './assets/artwork.ts';
 import { catalog } from './catalog/catalog.ts';
@@ -91,7 +92,7 @@ export function App() {
             href={href.settings}
             aria-label={t('nav.settings')}
             title={t('nav.settings')}
-            aria-current={route.name === 'settings' ? 'page' : undefined}
+            aria-current={route.name === 'settings' || route.name === 'about' ? 'page' : undefined}
           >
             <Settings aria-hidden="true" size={20} />
           </a>
@@ -115,6 +116,7 @@ export function App() {
                 locationControl={<LocationPicker location={location} onChange={setLocation} />}
               />
             )}
+            {route.name === 'about' && <AboutPage />}
             {route.name === 'alerts' && (
               <AlertsPage>
                 <FrostAlertsCard location={location} />
