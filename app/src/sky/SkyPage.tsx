@@ -1,5 +1,6 @@
 import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { vignetteFor } from '../assets/vignettes.ts';
 import type { Location } from '../astro/location.ts';
 import { moonDay, nextMoonQuarters } from '../astro/moon.ts';
 import { sunDay } from '../astro/sun.ts';
@@ -25,16 +26,22 @@ export function SkyPage({ now, location, locationControl }: SkyPageProps) {
   const sun = useMemo(() => sunDay(now, location), [now, location]);
   const quarters = useMemo(() => nextMoonQuarters(now, 4), [now]);
   const [moonMode, setMoonMode] = useMoonMode();
+  const moonVignette = vignetteFor('lua');
 
   const time = (d: Date | null, missing: string) => (d ? formatTime(d, lang) : missing);
 
   return (
     <section aria-labelledby="sky-heading" className="page">
-      <h2 id="sky-heading">{t('sky.title')}</h2>
-      <p className="today-date">
-        <span>{formatLongDate(now, lang)}</span>
-        {locationControl}
-      </p>
+      <header className="sky-head">
+        <div>
+          <h2 id="sky-heading">{t('sky.title')}</h2>
+          <p className="today-date">
+            <span>{formatLongDate(now, lang)}</span>
+            {locationControl}
+          </p>
+        </div>
+        {moonVignette && <img className="sky-vignette" src={moonVignette} alt="" />}
+      </header>
 
       <article className="card" aria-labelledby="moon-heading">
         <h3 id="moon-heading">{t('moon.title')}</h3>

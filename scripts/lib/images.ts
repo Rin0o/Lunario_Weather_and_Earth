@@ -32,6 +32,14 @@ export const PLATE_WIDTHS = { thumb: 128, sheet: 560 } as const;
 export const PLATE_INK = { r: 52, g: 38, b: 26 };
 export const plateName = (cropId: string, width: number) => `plate-${cropId}-${width}.webp`;
 
+/**
+ * Vignettes beside screen titles: art/vignettes/<name>.png, engravings on white, printed in
+ * the same ink as the plates. Shown at about 6 rem, so one width covers 3× screens.
+ */
+export const VIGNETTES_DIR = 'art/vignettes';
+export const VIGNETTE_WIDTH = 320;
+export const vignetteName = (name: string) => `vignette-${name}-${VIGNETTE_WIDTH}.webp`;
+
 /** The square logo, source of the installed app icon and the favicon. */
 export const APP_ICON = 'art/backgrounds/Logo_round-square.png';
 
