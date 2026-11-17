@@ -260,6 +260,81 @@ a {
   color: var(--ink-muted);
 }
 
+/* Turning the notebook's pages between the four tabs (by swipe or by the tab bar). Where the
+   browser has View Transitions (navigation/route.ts), the page itself turns on its binding:
+   forward, the old page lifts and turns over to the left, showing the next one beneath;
+   backward, the earlier page falls back over the current one. The header and the tab bar
+   are left out of the snapshot, so they stay still. */
+.app-header {
+  view-transition-name: header;
+}
+
+.tab-bar {
+  view-transition-name: tab-bar;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* The notebook's binding: the left edge of the page column. */
+  transform-origin: calc((100vw - min(100vw, 42rem)) / 2) 50%;
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+html[data-turn='next']::view-transition-old(root) {
+  z-index: 1;
+  animation: 480ms cubic-bezier(0.45, 0, 0.75, 0.6) both page-turn-over;
+}
+
+html[data-turn='previous']::view-transition-new(root) {
+  animation: 480ms cubic-bezier(0.25, 0.4, 0.55, 1) both page-turn-back;
+}
+
+@keyframes page-turn-over {
+  to {
+    filter: brightness(0.8);
+    transform: perspective(1800px) rotateY(-100deg);
+  }
+}
+
+@keyframes page-turn-back {
+  from {
+    filter: brightness(0.8);
+    transform: perspective(1800px) rotateY(-100deg);
+  }
+}
+
+/* Without View Transitions, the new page slides in from the side it was turned from. */
+.page-turn {
+  animation: 260ms ease-out both page-in;
+}
+
+/* No sideways scrollbar while a page slides in. */
+main {
+  overflow-x: clip;
+}
+
+.turn-next {
+  --turn-from: 2.5rem;
+}
+
+.turn-previous {
+  --turn-from: -2.5rem;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--turn-from));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-turn {
+    animation: none;
+  }
+}
+
 /* ================================================================================== */
 /* 4. Shared pieces                                                                    */
 /* ================================================================================== */
