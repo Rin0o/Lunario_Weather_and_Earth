@@ -6,6 +6,7 @@ import { dateInZone } from '../astro/time.ts';
 import { catalog, zoneForDistrict } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { isoDateToNoonUtc, type IsoDate } from '../calendar/dates.ts';
+import { Modal } from '../components/Modal.tsx';
 import { formatFullDate } from '../i18n/format.ts';
 import { BackupCard, BackupReminder } from './BackupCard.tsx';
 import { PlantingCard } from './PlantingCard.tsx';
@@ -38,12 +39,10 @@ export function GardenPage({
   const today = dateInZone(now) as IsoDate;
   const zone = zoneForDistrict(district, source);
   const wateringCan = vignetteFor('regador');
-  // The form starts open only while the garden is empty; then it is the user's choice.
-  const [formOpen, setFormOpen] = useState<boolean | null>(null);
-  const showForm = formOpen ?? (!garden.loading && garden.plantings.length === 0);
+  // The form lives in a window; it stays open after a save, to log the next one.
+  const [formOpen, setFormOpen] = useState(false);
 
   const add = async (input: NewPlanting) => {
-    setFormOpen(true);
     await garden.add(input);
   };
 
@@ -53,19 +52,18 @@ export function GardenPage({
       <p className="hint">{t('garden.intro')}</p>
       <BackupReminder backup={backup} />
 
-      <details
+      <button
+        type="button"
         className="add-planting"
-        open={showForm}
-        onToggle={(e) => setFormOpen(e.currentTarget.open)}
+        aria-haspopup="dialog"
+        onClick={() => setFormOpen(true)}
       >
-        <summary>
-          <Plus aria-hidden="true" size={20} />
-          {t('garden.add')}
-        </summary>
-        <div className="card">
-          <PlantingForm today={today} zone={zone} onAdd={add} source={source} />
-        </div>
-      </details>
+        <Plus aria-hidden="true" size={20} />
+        {t('garden.add')}
+      </button>
+      <Modal open={formOpen} onClose={() => setFormOpen(false)} title={t('garden.add')}>
+        <PlantingForm today={today} zone={zone} onAdd={add} source={source} />
+      </Modal>
 
       {garden.failed && (
         <p role="alert" className="zone-note">

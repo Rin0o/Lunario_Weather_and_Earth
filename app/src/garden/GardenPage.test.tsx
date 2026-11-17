@@ -8,8 +8,15 @@ import { GardenPage } from './GardenPage.tsx';
 
 const NOV_16 = new Date('2026-11-16T10:00:00Z');
 
+/** Opens the "Adicionar à horta" window, unless it is already open. */
+async function openForm() {
+  if (screen.queryByRole('dialog')) return;
+  await userEvent.setup().click(screen.getByRole('button', { name: 'Adicionar à horta' }));
+}
+
 async function logPlanting(crop: string, action?: string, date?: string) {
   const user = userEvent.setup();
+  await openForm();
   await user.selectOptions(screen.getByRole('combobox', { name: 'Cultura' }), crop);
   if (action) await user.selectOptions(screen.getByRole('combobox', { name: 'O que fez' }), action);
   if (date) {
@@ -32,6 +39,7 @@ describe('GardenPage', () => {
   it('logs a planting and shows its expected harvest', async () => {
     render(<GardenPage now={NOV_16} district="Coimbra" />);
     expect(await screen.findByText('Ainda não tem nada na horta.')).toBeInTheDocument();
+    await openForm();
     expect(screen.getByLabelText('Data')).toHaveValue('2026-11-16');
 
     await logPlanting('Fava');
@@ -61,6 +69,7 @@ describe('GardenPage', () => {
     const user = userEvent.setup();
     render(<GardenPage now={NOV_16} district="Coimbra" />);
     await screen.findByText('Ainda não tem nada na horta.');
+    await openForm();
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Cultura' }), 'Tomate');
     const actions = within(screen.getByRole('combobox', { name: 'O que fez' }))
@@ -116,22 +125,21 @@ describe('GardenPage', () => {
     expect(within(kale as HTMLElement).getByTitle(/Contado a partir do transplante/)).toBeVisible();
   });
 
-  it('keeps the form folded away once there are plantings, and open after a save', async () => {
+  it('opens the form in a window, keeps it open after a save and closes it', async () => {
     const user = userEvent.setup();
-    const { unmount } = render(<GardenPage now={NOV_16} district="Coimbra" />);
+    render(<GardenPage now={NOV_16} district="Coimbra" />);
     await screen.findByText('Ainda não tem nada na horta.');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
     await logPlanting('Fava');
     await screen.findByText('Registado.');
     // Still open, to log the next one.
+    expect(screen.getByRole('dialog', { name: 'Adicionar à horta' })).toBeVisible();
     expect(screen.getByRole('combobox', { name: 'Cultura' })).toBeVisible();
-    unmount();
 
-    render(<GardenPage now={NOV_16} district="Coimbra" />);
-    await waitFor(() => expect(entries()).toHaveLength(1));
-    const form = document.querySelector('details.add-planting');
-    expect(form).not.toHaveAttribute('open');
-    await user.click(screen.getByText('Adicionar à horta'));
-    expect(form).toHaveAttribute('open');
+    await user.click(screen.getByRole('button', { name: 'Fechar' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(entries()).toHaveLength(1);
   });
 
   it('switches to English', async () => {
