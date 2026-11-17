@@ -170,7 +170,7 @@ sent to anyone.
    calls it from `ALERTS_URL` in `app/src/frost/alerts.ts`, and `public/_headers` allows it
    in the CSP `connect-src`; change both if the address changes.
 
-The app turns alerts on from "A minha horta". This only works on the production site and
+The app turns alerts on from the Alerts screen (the bell at the top, `#/alertas`). This only works on the production site and
 its previews: the Worker refuses other origins, and the dev server has no service worker.
 Notifications are shown by `public/push-sw.js`, imported into the generated service worker.
 To check the whole chain without waiting for a frosty night, send a test notification to a
