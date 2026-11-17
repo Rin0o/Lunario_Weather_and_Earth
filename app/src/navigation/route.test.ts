@@ -21,6 +21,7 @@ describe('parseRoute', () => {
     expect(parseRoute(href.crop('tomate'))).toEqual({ name: 'crop', id: 'tomate' });
     expect(parseRoute(href.crops)).toEqual({ name: 'crops' });
     expect(parseRoute(href.garden)).toEqual({ name: 'garden' });
+    expect(parseRoute(href.sky)).toEqual({ name: 'sky' });
     expect(parseRoute(href.today)).toEqual({ name: 'today' });
   });
 });

@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DISTRICTS, findLocation, MAINLAND_LOCATIONS, nearestLocation } from './locations.ts';
@@ -60,8 +61,10 @@ export function LocationPicker({
   return (
     <details className="location-picker">
       <summary>
-        <span aria-hidden="true">📍</span>{' '}
-        {location.source === 'gps' ? t('location.near', { name: location.name }) : location.name}{' '}
+        <MapPin aria-hidden="true" size={18} />
+        {location.source === 'gps'
+          ? t('location.near', { name: location.name })
+          : location.name}{' '}
         <span className="location-change">{t('location.change')}</span>
       </summary>
 

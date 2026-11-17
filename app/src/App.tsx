@@ -1,6 +1,9 @@
+import { CalendarDays, Carrot, MoonStar, Sprout, type LucideIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { artwork } from './assets/artwork.ts';
 import { catalog } from './catalog/catalog.ts';
+import { Cover } from './components/Cover.tsx';
 import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
@@ -13,6 +16,7 @@ import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
 import { href, useRoute } from './navigation/route.ts';
+import { SkyPage } from './sky/SkyPage.tsx';
 import { SowingCard } from './today/SowingCard.tsx';
 import { Today } from './today/Today.tsx';
 import { useNow } from './today/useNow.ts';
@@ -33,36 +37,46 @@ export function App() {
     void syncFrostAlerts({ location, language, source: catalog }).catch(() => undefined);
   }, [location, language, route.name]);
 
-  const navLink = (to: string, label: string, active: boolean) => (
+  const navLink = (to: string, label: string, Icon: LucideIcon, active: boolean) => (
     <a href={to} aria-current={active ? 'page' : undefined}>
-      {label}
+      <Icon aria-hidden="true" size={22} strokeWidth={active ? 2.25 : 1.75} />
+      <span>{label}</span>
     </a>
   );
+  const locationControl = <LocationPicker location={location} onChange={setLocation} />;
 
   return (
     <>
       <header className="app-header">
-        <div>
-          <h1>{t('app.name')}</h1>
-          <p className="tagline">{t('app.tagline')}</p>
+        <div className="brand">
+          <img
+            src={artwork.logoRound.src}
+            srcSet={artwork.logoRound.srcSet}
+            sizes="44px"
+            alt=""
+            width={44}
+            height={44}
+          />
+          <div>
+            <h1>{t('app.name')}</h1>
+            <p className="tagline">{t('app.tagline')}</p>
+          </div>
         </div>
         <LanguageSwitcher />
       </header>
-      <nav className="app-nav" aria-label={t('nav.label')}>
-        {navLink(href.today, t('nav.today'), route.name === 'today')}
-        {navLink(href.garden, t('nav.garden'), route.name === 'garden')}
-        {navLink(href.crops, t('nav.crops'), route.name === 'crops' || route.name === 'crop')}
-      </nav>
       <main>
         {route.name === 'today' && (
           <Today
             now={now}
             location={location}
-            locationControl={<LocationPicker location={location} onChange={setLocation} />}
+            locationControl={locationControl}
             frost={<FrostCard now={now} location={location} />}
             weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
             sowing={<SowingCard now={now} district={district} />}
           />
+        )}
+        {route.name === 'sky' && (
+          <SkyPage now={now} location={location} locationControl={locationControl} />
         )}
         {route.name === 'garden' && (
           <GardenPage
@@ -77,6 +91,18 @@ export function App() {
       <footer className="app-footer">
         <small>{t('app.version', { version: __APP_VERSION__ })}</small>
       </footer>
+      <Cover />
+      <nav className="tab-bar" aria-label={t('nav.label')}>
+        {navLink(href.today, t('nav.today'), CalendarDays, route.name === 'today')}
+        {navLink(href.sky, t('nav.sky'), MoonStar, route.name === 'sky')}
+        {navLink(href.garden, t('nav.garden'), Sprout, route.name === 'garden')}
+        {navLink(
+          href.crops,
+          t('nav.crops'),
+          Carrot,
+          route.name === 'crops' || route.name === 'crop',
+        )}
+      </nav>
     </>
   );
 }

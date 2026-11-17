@@ -1,3 +1,4 @@
+import { Droplet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { dateInZone } from '../astro/time.ts';
 import { isoDateToNoonUtc } from '../calendar/dates.ts';
@@ -43,9 +44,7 @@ export function WeatherCard({ now, ipmaId, fetchImpl = fetch }: WeatherCardProps
       {today && (
         <>
           <p className="weather-today">
-            <span className="weather-icon" aria-hidden="true">
-              {weatherIcon(today.weatherType)}
-            </span>
+            <img className="weather-icon" src={weatherIcon(today.weatherType)} alt="" />
             <span>
               {!isToday && (
                 <>
@@ -81,15 +80,19 @@ export function WeatherCard({ now, ipmaId, fetchImpl = fetch }: WeatherCardProps
               {nextDays.map((d) => (
                 <li key={d.date}>
                   <span className="strip-day">{formatWeekday(isoDateToNoonUtc(d.date), lang)}</span>
-                  <span className="strip-icon" role="img" aria-label={description(d)}>
-                    {weatherIcon(d.weatherType)}
-                  </span>
+                  <img
+                    className="strip-icon"
+                    src={weatherIcon(d.weatherType)}
+                    alt={description(d)}
+                  />
                   <span className="temps">
                     {degrees(d.tMax)}
                     <small> {degrees(d.tMin)}</small>
                   </span>
                   {d.rainProbability !== null && (
-                    <small className="strip-rain">💧 {d.rainProbability}%</small>
+                    <small className="strip-rain">
+                      <Droplet aria-hidden="true" size={12} /> {d.rainProbability}%
+                    </small>
                   )}
                 </li>
               ))}

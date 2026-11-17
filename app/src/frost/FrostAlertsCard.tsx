@@ -1,3 +1,4 @@
+import { BellRing } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Location } from '../astro/location.ts';
@@ -67,7 +68,7 @@ export function FrostAlertsCard({
   return (
     <article className="card" aria-labelledby="frost-alerts-heading">
       <h3 id="frost-alerts-heading">
-        <span aria-hidden="true">❄️ </span>
+        <BellRing aria-hidden="true" size={20} />
         {t('frostAlerts.title')}
       </h3>
       <p>{t('frostAlerts.intro')}</p>

@@ -1,14 +1,24 @@
+/*
+ * The look of an old farm notebook (art/): a paper page with a ring binding behind every
+ * screen, colours taken from the logo. Light only: the paper is the identity.
+ */
 :root {
-  --paper: #f4ecd8;
-  --ink: #2b2a26;
-  --ink-muted: #6b6457;
-  --accent: #2f3b2a;
-  --rule: #d8ccb0;
-  --card: #fbf6ea;
+  --paper: #efe0bf;
+  --leather: #4a2e1c;
+  --leather-dark: #2f1d12;
+  --ink: #2b2118;
+  --ink-muted: #6b5843;
+  --accent: #1d3346;
+  --accent-soft: #e9d49a;
+  --gold: #c8932f;
+  --green: #4f6b2f;
+  --rule: #d6bf92;
+  --card: rgb(253 248 236 / 90%);
   --frost: #1f5f8b;
-  --frost-bg: #e6f0f7;
+  --frost-bg: rgb(230 240 247 / 92%);
+  --binding: 2.6rem;
 
-  color-scheme: light dark;
+  color-scheme: light;
   font-family:
     system-ui,
     -apple-system,
@@ -18,56 +28,101 @@
   line-height: 1.5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #1d1f1a;
-    --ink: #ece4d0;
-    --ink-muted: #a89f8c;
-    --accent: #b9c9a6;
-    --rule: #3a3c33;
-    --card: #262922;
-    --frost: #9cc8e8;
-    --frost-bg: #1c2a33;
-  }
-}
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: var(--paper);
+  /* The desk around the notebook on wide screens. */
+  background: var(--leather-dark);
   color: var(--ink);
 }
 
-#root {
-  max-width: 40rem;
+/* The notebook page, fixed behind the content and kept to the column width. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: min(100%, 42rem);
   margin: 0 auto;
-  padding: 1rem;
+  /* A wash of paper over the texture, so stains and tears never fight with the text. */
+  background:
+    linear-gradient(rgb(244 232 205 / 55%), rgb(244 232 205 / 55%)),
+    var(--paper) url('./assets/images/page-640.webp') left center / cover no-repeat;
 }
 
+@media (min-width: 640px) {
+  body::before {
+    background-image:
+      linear-gradient(rgb(244 232 205 / 55%), rgb(244 232 205 / 55%)),
+      url('./assets/images/page-1024.webp');
+  }
+}
+
+#root {
+  max-width: 42rem;
+  margin: 0 auto;
+  /* Clear the ring binding on the left, and the fixed tab bar (and home indicator) below. */
+  padding: 0.75rem 1.75rem calc(5.5rem + env(safe-area-inset-bottom)) var(--binding);
+}
 h1,
 h2 {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-weight: 400;
   color: var(--accent);
   margin: 0;
+}
+
+h2 {
+  font-size: 1.85rem;
+  line-height: 1.2;
 }
 
 .app-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid var(--rule);
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand img {
+  width: 2.75rem;
+  height: 2.75rem;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 30%));
+}
+
+.brand h1 {
+  font-size: 1.6rem;
+  line-height: 1.1;
 }
 
 .tagline {
-  margin: 0.25rem 0 0;
+  margin: 0;
   color: var(--ink-muted);
   font-style: italic;
+  font-size: 0.85rem;
+}
+
+.language-switcher select {
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: inherit;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
 }
 
 .today-date {
@@ -82,9 +137,10 @@ h2 {
 .card {
   background: var(--card);
   border: 1px solid var(--rule);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
   margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
 
 h3,
@@ -107,8 +163,44 @@ h4 {
 }
 
 .moon-icon {
-  font-size: 2.5rem;
-  line-height: 1;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: none;
+}
+
+.inline-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+}
+
+.facts dt:has(.inline-icon) {
+  display: flex;
+  align-items: center;
+}
+
+.sky-summary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.sky-summary-row p {
+  margin: 0;
+}
+
+.more-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  margin: 0.5rem -0.25rem -0.25rem;
+  padding: 0 0.25rem;
+  border-top: 1px solid var(--rule);
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .facts {
@@ -210,8 +302,9 @@ h4 {
 }
 
 .weather-icon {
-  font-size: 2.75rem;
-  line-height: 1;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex: none;
 }
 
 .temps {
@@ -240,7 +333,9 @@ h4 {
 }
 
 .strip-icon {
-  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  justify-self: center;
 }
 
 .strip-rain {
@@ -286,29 +381,46 @@ h4 {
   content: '· ';
 }
 
-/* --- Navigation --- */
-.app-nav {
-  display: flex;
-  gap: 0.5rem;
-  margin: -0.25rem 0 1rem;
+/* --- Navigation: a tab bar fixed at the bottom, within thumb reach. --- */
+.tab-bar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
+  background: linear-gradient(var(--leather), var(--leather-dark));
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 25%);
 }
 
-.app-nav a {
-  padding: 0.4rem 0.9rem;
-  min-height: 2.5rem;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  border: 1px solid var(--rule);
-  color: var(--ink);
+.tab-bar a {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  min-height: 3.25rem;
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+  color: #d9c39a;
   text-decoration: none;
 }
 
-.app-nav a[aria-current='page'] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--paper);
+.tab-bar a svg {
+  width: 3.5rem;
+  height: 1.9rem;
+  padding: 0.2rem 0;
+  border-radius: 999px;
+}
+
+.tab-bar a[aria-current='page'] {
+  color: #f3d58a;
   font-weight: 600;
+}
+
+.tab-bar a[aria-current='page'] svg {
+  background: rgb(243 213 138 / 18%);
 }
 
 a {
@@ -542,8 +654,28 @@ a.button.primary {
   text-align: right;
 }
 
-.back {
-  margin: 0 0 0.5rem;
+.back-button {
+  /* Stays in reach at the top while the sheet scrolls. */
+  position: sticky;
+  top: 0.5rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 2.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0 1rem 0 0.6rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: linear-gradient(var(--leather), var(--leather-dark));
+  color: #f3d58a;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
+}
+
+.back-button:active {
+  transform: translateY(1px);
 }
 
 .scientific-name {
@@ -719,4 +851,91 @@ a.button.primary {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+h3 > svg {
+  margin-right: 0.35rem;
+  vertical-align: -0.15em;
+}
+
+.strip-rain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+}
+
+.page > h2 + .today-date {
+  margin-top: 0.15rem;
+}
+
+/* --- Opening screen: the leather cover, which opens onto the notebook. --- */
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 1rem;
+  border: 0;
+  background: radial-gradient(circle at 50% 40%, var(--leather), var(--leather-dark) 75%);
+  cursor: pointer;
+  transition:
+    opacity 450ms ease,
+    transform 450ms ease;
+}
+
+.cover > img {
+  grid-area: 1 / 1;
+}
+
+.cover-book {
+  width: min(90vw, 32.5rem, 60vh);
+  height: auto;
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 50%));
+}
+
+.cover-logo {
+  width: min(72vw, 26rem, 48vh);
+  height: auto;
+  /* On the leather, a little left of centre: the spine takes the left edge. */
+  translate: 3% -4%;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 45%));
+}
+
+.cover-hint {
+  position: absolute;
+  bottom: calc(2rem + env(safe-area-inset-bottom));
+  inset-inline: 0;
+  color: #f3d58a;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 60%);
+}
+
+.cover.opening {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover {
+    transition: none;
+  }
+}
+
+/* Meteocons' moon is pale: draw it on a small night-sky disc so it reads on paper. */
+.moon-disc {
+  padding: 0.15em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #34506a, var(--accent));
+}
+
+.weather-today .weather-icon {
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: -0.5rem -0.25rem -0.5rem -0.5rem;
 }
