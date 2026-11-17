@@ -112,9 +112,26 @@ h2 {
   color: var(--accent);
 }
 
+/* Screen titles and the crop's name: large, the thin face thickened with a stroke (IM Fell
+   English has a single weight, and a faked bold looks smudged), over a double rule like an
+   old almanac's heading. */
 h2 {
-  font-size: 1.85rem;
-  line-height: 1.2;
+  font-size: 2.4rem;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  -webkit-text-stroke: 0.6px currentcolor;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 5.5rem;
+  height: 6px;
+  margin: 0.35rem 0 0.3rem;
+  background:
+    linear-gradient(var(--accent), var(--accent)) 0 0 / 100% 1.5px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) 0 4px / 70% 1px no-repeat;
+  opacity: 0.55;
 }
 
 h3,
@@ -1186,6 +1203,12 @@ a.button.primary {
 
 .crop-head > div {
   min-width: 0;
+}
+
+/* Beside the plate there is less room: long names (Couve-tronchuda) must still fit. */
+.crop-head h2 {
+  font-size: 2rem;
+  overflow-wrap: anywhere;
 }
 
 .crop-head .scientific-name {
