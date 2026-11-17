@@ -35,8 +35,8 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 | Feiras e mercados | Dados dinâmicos e dispersos, que obrigariam a backend e a curadoria contínua. Retirado. |
 | App nativa iOS | Não é necessária para o público-alvo. |
 | Publicação na Google Play | Não é necessária. Evita custos e burocracia. |
-| Contas de utilizador | Desnecessárias para um grupo pequeno. |
-| Marés | Exigem uma fonte paga ou harmónicas por porto. Fica para avaliar mais tarde. |
+| Contas de utilizador | Desnecessárias para um grupo pequeno na v1. Em reavaliação (ver §8, Futuro). |
+| Marés | Exigem uma fonte paga ou harmónicas por porto. Em reavaliação como parte de um ecrã Mar (ver §8, Futuro). |
 | Madeira e Açores | A v1 cobre só o continente. |
 
 ## 3. Requisitos funcionais
@@ -198,6 +198,8 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | **2** | A minha horta, modo Lua, calendários `.ics` regionais e pessoais, cópia de segurança (RF-15) | Nenhum |
 | **3** | Aviso de geada ao abrir (RF-16) e alertas Web Push para o local de cada utilizador, com as culturas da horta (RF-14, RF-17, D-33) | Worker agendado + D1 mínima (subscrições push) |
 | Futuro | Cópia da horta por código, se for preciso | Cloudflare Worker + D1 (ver D-16) |
+| Futuro (ideia) | Ecrã **Mar**: marés, vento, ondulação (altura, período, direção), temperatura da água. A avaliar: fontes (IPMA, Open-Meteo Marine, harmónicas por porto) e escolha do porto mais próximo | A definir |
+| Futuro (ideia) | **Contas de utilizador** para guardar a horta e as definições e passá-las entre dispositivos. A avaliar: forma de entrar (e-mail com link, Google), privacidade/RGPD e relação com a cópia por código | Worker + D1 + autenticação |
 
 ## 9. Registo de decisões
 
