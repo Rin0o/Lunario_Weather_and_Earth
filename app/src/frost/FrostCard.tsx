@@ -1,3 +1,4 @@
+import { Snowflake } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Location } from '../astro/location.ts';
 import { dateInZone } from '../astro/time.ts';
@@ -46,7 +47,7 @@ export function FrostCard({ now, location, fetchImpl = fetch, source = catalog }
   return (
     <article className="card frost-card" aria-labelledby="frost-heading">
       <h3 id="frost-heading">
-        <span aria-hidden="true">❄️ </span>
+        <Snowflake aria-hidden="true" size={20} />
         {t('frost.title')}
       </h3>
       <ul className="frost-days">

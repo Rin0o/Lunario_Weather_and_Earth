@@ -1,18 +1,28 @@
 {
   "app": {
     "name": "Lunário",
-    "tagline": "Um almanaque rural no bolso.",
+    "tagline": "Lua e Leira",
     "version": "Versão {{version}}"
   },
   "today": {
     "title": "Hoje",
     "location": "Horas para {{name}}"
   },
+  "cover": {
+    "open": "Abrir o Lunário",
+    "hint": "Toque para abrir"
+  },
   "nav": {
     "label": "Secções",
     "today": "Hoje",
+    "sky": "Céu",
     "garden": "Horta",
     "crops": "Culturas"
+  },
+  "sky": {
+    "title": "Céu",
+    "summary": "Lua e sol",
+    "more": "Lua, sol e feriados"
   },
   "garden": {
     "title": "A minha horta",

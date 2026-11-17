@@ -1,24 +1,16 @@
+import { ChevronRight } from 'lucide-react';
 import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Location } from '../astro/location.ts';
-import { moonDay, nextMoonQuarters, type MoonPhaseName } from '../astro/moon.ts';
+import { moonDay } from '../astro/moon.ts';
 import { sunDay } from '../astro/sun.ts';
-import { formatLongDate, formatPercent, formatShortDate, formatTime } from '../i18n/format.ts';
+import { dateInZone } from '../astro/time.ts';
+import type { IsoDate } from '../calendar/dates.ts';
+import { holidayOn } from '../calendar/holidays.ts';
+import { formatLongDate, formatPercent, formatTime } from '../i18n/format.ts';
+import { href } from '../navigation/route.ts';
+import { meteocon, moonIcon } from '../weather/icons.ts';
 import { AlmanacCard } from './AlmanacCard.tsx';
-import { HolidaysCard } from './HolidaysCard.tsx';
-import { MoonTradition } from './MoonTradition.tsx';
-import { useMoonMode } from './useMoonMode.ts';
-
-const PHASE_ICONS: Record<MoonPhaseName, string> = {
-  new: '🌑',
-  'waxing-crescent': '🌒',
-  'first-quarter': '🌓',
-  'waxing-gibbous': '🌔',
-  full: '🌕',
-  'waning-gibbous': '🌖',
-  'last-quarter': '🌗',
-  'waning-crescent': '🌘',
-};
 
 interface TodayProps {
   now: Date;
@@ -33,19 +25,18 @@ interface TodayProps {
   sowing?: ReactNode;
 }
 
+/** "Hoje" (RF-01): what matters today; the full Moon and Sun are in "Céu". */
 export function Today({ now, location, locationControl, frost, weather, sowing }: TodayProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
 
   const moon = useMemo(() => moonDay(now, location), [now, location]);
   const sun = useMemo(() => sunDay(now, location), [now, location]);
-  const quarters = useMemo(() => nextMoonQuarters(now, 4), [now]);
-  const [moonMode, setMoonMode] = useMoonMode();
-
-  const time = (d: Date | null, missing: string) => (d ? formatTime(d, lang) : missing);
+  const holiday = holidayOn(dateInZone(now) as IsoDate);
+  const time = (d: Date | null) => (d ? formatTime(d, lang) : '—');
 
   return (
-    <section aria-labelledby="today-heading" className="today">
+    <section aria-labelledby="today-heading" className="page today">
       <h2 id="today-heading">{t('today.title')}</h2>
       <p className="today-date">{formatLongDate(now, lang)}</p>
       {locationControl}
@@ -54,69 +45,44 @@ export function Today({ now, location, locationControl, frost, weather, sowing }
       {sowing}
       <AlmanacCard now={now} />
 
-      <article className="card" aria-labelledby="moon-heading">
-        <h3 id="moon-heading">{t('moon.title')}</h3>
-        <p className="moon-phase">
-          <span className="moon-icon" aria-hidden="true">
-            {PHASE_ICONS[moon.phase]}
-          </span>
-          <span>
+      <article className="card sky-summary" aria-labelledby="sky-summary-heading">
+        <h3 id="sky-summary-heading">{t('sky.summary')}</h3>
+        {holiday && (
+          <p className="holiday-today">
+            {t('holidays.today', {
+              name: holiday.optional
+                ? `${t(`holidays.names.${holiday.id}`)} (${t('holidays.optional')})`
+                : t(`holidays.names.${holiday.id}`),
+            })}
+          </p>
+        )}
+        <div className="sky-summary-row">
+          <img className="moon-icon moon-disc" src={moonIcon(moon.phase)} alt="" />
+          <p>
             <strong>{t(`moon.phases.${moon.phase}`)}</strong>
-            {moon.phaseTime && (
-              <> {t('moon.phaseAt', { time: formatTime(moon.phaseTime, lang) })}</>
-            )}
-          </span>
-        </p>
+            <br />
+            <span className="hint">
+              {t('moon.illumination')} {formatPercent(moon.illumination, lang)}
+            </span>
+          </p>
+        </div>
         <dl className="facts">
-          <dt>{t('moon.illumination')}</dt>
-          <dd>{formatPercent(moon.illumination, lang)}</dd>
-          <dt>{t('moon.rise')}</dt>
-          <dd>{time(moon.rise, t('moon.none'))}</dd>
-          <dt>{t('moon.set')}</dt>
-          <dd>{time(moon.set, t('moon.noneSet'))}</dd>
+          <dt>
+            <img className="inline-icon" src={meteocon('sunrise')} alt="" />
+            {t('sun.rise')}
+          </dt>
+          <dd>{time(sun.sunrise)}</dd>
+          <dt>
+            <img className="inline-icon" src={meteocon('sunset')} alt="" />
+            {t('sun.set')}
+          </dt>
+          <dd>{time(sun.sunset)}</dd>
         </dl>
-        <h4>{t('moon.next')}</h4>
-        <ul className="quarters">
-          {quarters.map((q) => (
-            <li key={q.time.toISOString()}>
-              <span aria-hidden="true">{PHASE_ICONS[q.phase]}</span> {t(`moon.phases.${q.phase}`)}
-              <span className="quarter-date">
-                {formatShortDate(q.time, lang)}, {formatTime(q.time, lang)}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <label className="toggle">
-          <input
-            type="checkbox"
-            checked={moonMode}
-            onChange={(e) => setMoonMode(e.target.checked)}
-          />
-          {t('moonMode.toggle')}
-        </label>
-        {moonMode && <MoonTradition phase={moon.phase} />}
+        <a className="more-link" href={href.sky}>
+          {t('sky.more')}
+          <ChevronRight aria-hidden="true" size={18} />
+        </a>
       </article>
-
-      <article className="card" aria-labelledby="sun-heading">
-        <h3 id="sun-heading">{t('sun.title')}</h3>
-        <dl className="facts">
-          <dt>{t('sun.rise')}</dt>
-          <dd>{time(sun.sunrise, '—')}</dd>
-          <dt>{t('sun.set')}</dt>
-          <dd>{time(sun.sunset, '—')}</dd>
-          <dt>{t('sun.dayLength')}</dt>
-          <dd>
-            {sun.dayLengthMinutes === null
-              ? '—'
-              : t('sun.duration', {
-                  hours: Math.floor(sun.dayLengthMinutes / 60),
-                  minutes: sun.dayLengthMinutes % 60,
-                })}
-          </dd>
-        </dl>
-      </article>
-
-      <HolidaysCard now={now} />
 
       {!locationControl && <p className="hint">{t('today.location', { name: location.name })}</p>}
     </section>

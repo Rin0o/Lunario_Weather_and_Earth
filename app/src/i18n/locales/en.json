@@ -1,18 +1,28 @@
 {
   "app": {
     "name": "Lunário",
-    "tagline": "A rural almanac in your pocket.",
+    "tagline": "Lua e Leira",
     "version": "Version {{version}}"
   },
   "today": {
     "title": "Today",
     "location": "Times for {{name}}"
   },
+  "cover": {
+    "open": "Open Lunário",
+    "hint": "Tap to open"
+  },
   "nav": {
     "label": "Sections",
     "today": "Today",
+    "sky": "Sky",
     "garden": "Garden",
     "crops": "Crops"
+  },
+  "sky": {
+    "title": "Sky",
+    "summary": "Moon and sun",
+    "more": "Moon, sun and holidays"
   },
   "garden": {
     "title": "My garden",

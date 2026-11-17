@@ -52,6 +52,11 @@ describe('App', () => {
       screen.getByRole('heading', { name: 'Calendário · Litoral Centro' }),
     ).toBeInTheDocument();
 
+    goTo('#/ceu');
+    expect(screen.getByRole('heading', { level: 2, name: 'Céu' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Céu' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('article', { name: 'Lua' })).toBeInTheDocument();
+
     goTo('#/horta');
     expect(screen.getByRole('heading', { level: 2, name: 'A minha horta' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Horta' })).toHaveAttribute('aria-current', 'page');
