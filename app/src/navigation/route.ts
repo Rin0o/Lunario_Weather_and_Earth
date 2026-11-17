@@ -10,6 +10,7 @@ export type Route =
   | { name: 'sky' }
   | { name: 'alerts' }
   | { name: 'settings' }
+  | { name: 'about' }
   | { name: 'garden' }
   | { name: 'crops' }
   | { name: 'crop'; id: string };
@@ -19,6 +20,7 @@ export function parseRoute(hash: string): Route {
   if (path === 'ceu') return { name: 'sky' };
   if (path === 'alertas') return { name: 'alerts' };
   if (path === 'definicoes') return { name: 'settings' };
+  if (path === 'sobre') return { name: 'about' };
   if (path === 'horta') return { name: 'garden' };
   if (path === 'culturas') return { name: 'crops' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
@@ -31,6 +33,7 @@ export const href = {
   sky: '#/ceu',
   alerts: '#/alertas',
   settings: '#/definicoes',
+  about: '#/sobre',
   garden: '#/horta',
   crops: '#/culturas',
   crop: (id: string) => `#/cultura/${id}`,
