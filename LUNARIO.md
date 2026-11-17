@@ -261,6 +261,9 @@ Propostas durante o refresh visual (2026-11-17), ainda por decidir:
 | Vinheta no ecrã **Céu** | Gravura antiga da Lua ou de um céu estrelado, em domínio público, no mesmo papel rasgado das fichas de cultura, ao lado do título. |
 | **Estados vazios** ilustrados | Por exemplo, a horta sem registos: uma gravura grande e esbatida (regador, enxada) com o texto "Ainda não há nada na horta". |
 | Página **Sobre** nas Definições | Créditos visíveis na app: gravuras (Vilmorin-Andrieux, American Cyclopædia), IPMA, Open-Meteo, Wikipedia/Wikiquote, ícones e tipografia, a partir de `CREDITS.md`. |
+| **Gestos** para mudar de separador, como as páginas de um livro | Arrastar para o lado passa de Hoje → Céu → Horta → Culturas e para trás. Só nos quatro separadores principais: as páginas secundárias (Definições, Alertas, ficha de cultura) não reagem ao gesto. A considerar: não chocar com o gesto "voltar" do Android e do iOS junto às margens do ecrã nem com zonas que deslizam na horizontal; animação de virar a página, desligada com `prefers-reduced-motion`; a barra de separadores continua a ser a forma principal (acessibilidade). |
+| **Títulos** maiores e com mais peso | Os títulos dos ecrãs (Hoje, Céu, A minha horta, Culturas…) e os nomes das culturas na ficha devem ser maiores e mais fortes. |
+| **Calendário** da ficha de cultura mais legível | As iniciais dos meses (J F M A…) são pouco explícitas: usar abreviaturas (jan, fev, mar…) ou outra forma clara. A quinzena atual deve destacar-se mais. |
 | Trocar a gravura da **ervilha** e dos **coentros** | A ervilha só mostra duas vagens e fica fina em miniatura; os coentros vêm de outra obra. Procurar gravuras com a planta inteira e do mesmo traço (Biodiversity Heritage Library no Flickr, confirmando a licença de cada uma). |
 
 ## 11. Questões em aberto
