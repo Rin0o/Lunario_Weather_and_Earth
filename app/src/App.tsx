@@ -24,7 +24,7 @@ import { LocationChip } from './location/LocationChip.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
-import { href, useRoute } from './navigation/route.ts';
+import { PreviousRouteContext, href, useNavigation } from './navigation/route.ts';
 import { SettingsPage } from './settings/SettingsPage.tsx';
 import { SkyPage } from './sky/SkyPage.tsx';
 import { SowingCard } from './today/SowingCard.tsx';
@@ -36,7 +36,7 @@ export function App() {
   const { t, i18n } = useTranslation();
   const now = useNow();
   const [location, setLocation] = useUserLocation();
-  const route = useRoute();
+  const { route, previous } = useNavigation();
   const district = DISTRICTS[location.district] ?? '';
   const resolved = i18n.resolvedLanguage ?? '';
   const language = isSupportedLanguage(resolved) ? resolved : DEFAULT_LANGUAGE;
@@ -94,32 +94,34 @@ export function App() {
         </div>
       </header>
       <main>
-        {route.name === 'today' && (
-          <Today
-            now={now}
-            location={location}
-            locationControl={locationControl}
-            frost={<FrostCard now={now} location={location} />}
-            weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
-            sowing={<SowingCard now={now} district={district} />}
-          />
-        )}
-        {route.name === 'settings' && (
-          <SettingsPage
-            locationControl={<LocationPicker location={location} onChange={setLocation} />}
-          />
-        )}
-        {route.name === 'alerts' && (
-          <AlertsPage>
-            <FrostAlertsCard location={location} />
-          </AlertsPage>
-        )}
-        {route.name === 'sky' && (
-          <SkyPage now={now} location={location} locationControl={locationControl} />
-        )}
-        {route.name === 'garden' && <GardenPage now={now} district={district} />}
-        {route.name === 'crops' && <CropsList />}
-        {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
+        <PreviousRouteContext.Provider value={previous}>
+          {route.name === 'today' && (
+            <Today
+              now={now}
+              location={location}
+              locationControl={locationControl}
+              frost={<FrostCard now={now} location={location} />}
+              weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
+              sowing={<SowingCard now={now} district={district} />}
+            />
+          )}
+          {route.name === 'settings' && (
+            <SettingsPage
+              locationControl={<LocationPicker location={location} onChange={setLocation} />}
+            />
+          )}
+          {route.name === 'alerts' && (
+            <AlertsPage>
+              <FrostAlertsCard location={location} />
+            </AlertsPage>
+          )}
+          {route.name === 'sky' && (
+            <SkyPage now={now} location={location} locationControl={locationControl} />
+          )}
+          {route.name === 'garden' && <GardenPage now={now} district={district} />}
+          {route.name === 'crops' && <CropsList />}
+          {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
+        </PreviousRouteContext.Provider>
       </main>
       <footer className="app-footer">
         <small>{t('app.version', { version: __APP_VERSION__ })}</small>

@@ -1,8 +1,8 @@
-import { ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { dateInZone } from '../astro/time.ts';
 import { catalog, fortnightOf, zoneForDistrict } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
+import { BackButton } from '../navigation/BackButton.tsx';
 import { href } from '../navigation/route.ts';
 import { traditionForCrop } from '../astro/lunarTradition.ts';
 import { useMoonMode } from '../today/useMoonMode.ts';
@@ -40,10 +40,7 @@ export function CropSheet({ cropId, now, district, source = catalog }: CropSheet
 
   return (
     <section className="crop-sheet" aria-labelledby="crop-heading">
-      <a className="back-button" href={href.crops}>
-        <ChevronLeft aria-hidden="true" size={20} />
-        {t('crops.all')}
-      </a>
+      <BackButton fallback={{ name: 'crops' }} source={source} />
       <h2 id="crop-heading">{pick(crop.name)}</h2>
       <p className="scientific-name">{crop.scientificName}</p>
 

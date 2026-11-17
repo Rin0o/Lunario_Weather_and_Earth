@@ -124,8 +124,10 @@ describe('CropSheet', () => {
     expect(screen.getByRole('heading', { name: 'Calendar · South' })).toBeInTheDocument();
     const sow = calendarEntries().find((e) => e.action === 'Sow directly');
     expect(sow?.ranges).toEqual(['16 October – 31 January']);
-    expect(
-      within(screen.getByRole('link', { name: /All crops/ })).getByText(/All crops/),
-    ).toBeVisible();
+    // Opened directly, the back button leads to the crop list.
+    expect(screen.getByRole('link', { name: 'Back to Crops' })).toHaveAttribute(
+      'href',
+      '#/culturas',
+    );
   });
 });

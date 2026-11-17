@@ -74,6 +74,8 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Alertas' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Alertas' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('article', { name: 'Geada' })).toBeInTheDocument();
+    // Opened from Céu, the back button leads there.
+    expect(screen.getByRole('link', { name: 'Voltar a Céu' })).toBeInTheDocument();
 
     goTo('#/horta');
     expect(screen.getByRole('heading', { level: 2, name: 'A minha horta' })).toBeInTheDocument();
