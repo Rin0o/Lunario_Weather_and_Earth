@@ -22,6 +22,8 @@ describe('parseRoute', () => {
     expect(parseRoute(href.crops)).toEqual({ name: 'crops' });
     expect(parseRoute(href.garden)).toEqual({ name: 'garden' });
     expect(parseRoute(href.sky)).toEqual({ name: 'sky' });
+    expect(parseRoute(href.alerts)).toEqual({ name: 'alerts' });
+    expect(parseRoute(href.settings)).toEqual({ name: 'settings' });
     expect(parseRoute(href.today)).toEqual({ name: 'today' });
   });
 });

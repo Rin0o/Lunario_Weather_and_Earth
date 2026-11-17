@@ -21,7 +21,7 @@ interface CalendarPanelProps {
   today: IsoDate;
 }
 
-/** RF-13: "Adicionar ao calendário" for one planting, with the reminder time to choose. */
+/** RF-13: "Adicionar ao calendário" for one planting, with the reminder time to choose; opened from the planting card. */
 export function CalendarPanel({ planting, crop, today }: CalendarPanelProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
@@ -78,8 +78,7 @@ export function CalendarPanel({ planting, crop, today }: CalendarPanelProps) {
   };
 
   return (
-    <details className="calendar-panel">
-      <summary>{t('calendar.add')}</summary>
+    <div className="calendar-panel">
       {events.length === 0 ? (
         <p className="hint">{t('calendar.nothing')}</p>
       ) : (
@@ -133,6 +132,6 @@ export function CalendarPanel({ planting, crop, today }: CalendarPanelProps) {
           </p>
         </div>
       )}
-    </details>
+    </div>
   );
 }

@@ -8,12 +8,21 @@
     "title": "Hoje",
     "location": "Horas para {{name}}"
   },
+  "settings": {
+    "title": "Definições"
+  },
+  "alerts": {
+    "title": "Alertas",
+    "intro": "Avisos que chegam ao telemóvel, mesmo com a app fechada."
+  },
   "cover": {
     "open": "Abrir o Lunário",
     "hint": "Toque para abrir"
   },
   "nav": {
     "label": "Secções",
+    "settings": "Definições",
+    "alerts": "Alertas",
     "today": "Hoje",
     "sky": "Céu",
     "garden": "Horta",
@@ -26,7 +35,7 @@
   },
   "garden": {
     "title": "A minha horta",
-    "intro": "Os registos ficam só neste telemóvel. Só os alertas de geada, se os ligar, enviam o mínimo explicado abaixo.",
+    "intro": "Os registos ficam só neste telemóvel.",
     "add": "Registar plantio",
     "crop": "Cultura",
     "chooseCrop": "Escolher…",
@@ -49,6 +58,9 @@
     },
     "harvest": "Colheita prevista: {{from}} – {{to}}.",
     "transplant": "Transplante previsto: {{from}} – {{to}}.",
+    "transplantShort": "Transplante previsto",
+    "harvestShort": "Colheita prevista",
+    "harvestPerennialShort": "Na época própria",
     "harvestPerennial": "Cultura perene: colhe-se na época própria.",
     "transplantHint": "Contado a partir do transplante; pode ser mais cedo.",
     "stages": {
@@ -154,8 +166,15 @@
     "delay": "O Google pode demorar até um dia a mostrar alterações."
   },
   "location": {
+    "title": "Localização",
+    "sources": {
+      "gps": "Pela localização do telemóvel",
+      "manual": "Escolhida da lista",
+      "default": "Por omissão: escolha a sua"
+    },
     "near": "Perto de {{name}}",
-    "change": "Alterar",
+    "changeInSettings": "Mudar nas Definições",
+    "chooseShort": "escolher",
     "useGps": "Usar a minha localização",
     "locating": "A localizar…",
     "chooseFromList": "Ou escolha da lista",
@@ -237,7 +256,7 @@
     "source": "Previsão para {{place}} · Fonte: Open-Meteo (CC BY 4.0)"
   },
   "frostAlerts": {
-    "title": "Alertas de geada no telemóvel",
+    "title": "Geada",
     "intro": "Receba uma notificação ao fim da tarde quando houver risco de geada nessa noite, mesmo com a app fechada.",
     "privacy": "Enquanto estiverem ligados, o Lunário envia ao servidor de alertas a sua localização arredondada a cerca de 1 km, os nomes das culturas sensíveis à geada na sua horta e a língua. Mais nada. Ao desligar, estes dados são apagados.",
     "toggle": "Avisar-me de geada",

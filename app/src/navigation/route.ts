@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 export type Route =
   | { name: 'today' }
   | { name: 'sky' }
+  | { name: 'alerts' }
+  | { name: 'settings' }
   | { name: 'garden' }
   | { name: 'crops' }
   | { name: 'crop'; id: string };
@@ -14,6 +16,8 @@ export type Route =
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
   if (path === 'ceu') return { name: 'sky' };
+  if (path === 'alertas') return { name: 'alerts' };
+  if (path === 'definicoes') return { name: 'settings' };
   if (path === 'horta') return { name: 'garden' };
   if (path === 'culturas') return { name: 'crops' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
@@ -24,6 +28,8 @@ export function parseRoute(hash: string): Route {
 export const href = {
   today: '#/',
   sky: '#/ceu',
+  alerts: '#/alertas',
+  settings: '#/definicoes',
   garden: '#/horta',
   crops: '#/culturas',
   crop: (id: string) => `#/cultura/${id}`,

@@ -48,10 +48,10 @@ describe('"Adicionar ao calendário" (RF-13)', () => {
     await renderWith('tomate', 'SV', '2026-11-16');
 
     expect(
-      screen.getByText('Transplante previsto: 28 de dezembro de 2026 – 11 de janeiro de 2027.'),
+      screen.getByTitle('Transplante previsto: 28 de dezembro de 2026 – 11 de janeiro de 2027.'),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByText('Adicionar ao calendário'));
+    await user.click(screen.getByRole('button', { name: 'Adicionar ao calendário' }));
     const events = within(screen.getByRole('list', { name: 'Lembretes' }))
       .getAllByRole('listitem')
       .map((li) => li.textContent);
@@ -90,19 +90,19 @@ describe('"Adicionar ao calendário" (RF-13)', () => {
     await setMeta('reminderDaysBefore', '2');
     await setMeta('reminderTime', '08:00');
     await renderWith('fava', 'SD', '2026-11-16');
-    await userEvent.click(screen.getByText('Adicionar ao calendário'));
+    await userEvent.click(screen.getByRole('button', { name: 'Adicionar ao calendário' }));
     await waitFor(() => expect(screen.getByLabelText('Avisar quantos dias antes')).toHaveValue(2));
     expect(screen.getByLabelText('A que horas')).toHaveValue('08:00');
   });
 
   it('has nothing to add once the dates have passed', async () => {
     await renderWith('rabanete', 'SD', '2026-01-10');
-    await userEvent.click(screen.getByText('Adicionar ao calendário'));
+    await userEvent.click(screen.getByRole('button', { name: 'Adicionar ao calendário' }));
     expect(screen.getByText('Não há datas futuras para lembrar.')).toBeInTheDocument();
   });
 
   it('offers no calendar for a perennial crop', async () => {
     await renderWith('morango', 'PL', '2026-11-10');
-    expect(screen.queryByText('Adicionar ao calendário')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Adicionar ao calendário' })).toBeNull();
   });
 });
