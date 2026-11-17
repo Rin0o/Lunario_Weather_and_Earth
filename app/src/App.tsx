@@ -1,10 +1,18 @@
-import { CalendarDays, Carrot, MoonStar, Sprout, type LucideIcon } from 'lucide-react';
+import {
+  Bell,
+  CalendarDays,
+  Carrot,
+  MoonStar,
+  Settings,
+  Sprout,
+  type LucideIcon,
+} from 'lucide-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AlertsPage } from './alerts/AlertsPage.tsx';
 import { artwork } from './assets/artwork.ts';
 import { catalog } from './catalog/catalog.ts';
 import { Cover } from './components/Cover.tsx';
-import { LanguageSwitcher } from './components/LanguageSwitcher.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
 import { syncFrostAlerts } from './frost/alerts.ts';
@@ -12,10 +20,12 @@ import { FrostAlertsCard } from './frost/FrostAlertsCard.tsx';
 import { FrostCard } from './frost/FrostCard.tsx';
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
 import { GardenPage } from './garden/GardenPage.tsx';
+import { LocationChip } from './location/LocationChip.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
 import { href, useRoute } from './navigation/route.ts';
+import { SettingsPage } from './settings/SettingsPage.tsx';
 import { SkyPage } from './sky/SkyPage.tsx';
 import { SowingCard } from './today/SowingCard.tsx';
 import { Today } from './today/Today.tsx';
@@ -43,7 +53,7 @@ export function App() {
       <span>{label}</span>
     </a>
   );
-  const locationControl = <LocationPicker location={location} onChange={setLocation} />;
+  const locationControl = <LocationChip location={location} />;
 
   return (
     <>
@@ -62,7 +72,26 @@ export function App() {
             <p className="tagline">{t('app.tagline')}</p>
           </div>
         </div>
-        <LanguageSwitcher />
+        <div className="header-tools">
+          <a
+            className="icon-button header-link"
+            href={href.alerts}
+            aria-label={t('nav.alerts')}
+            title={t('nav.alerts')}
+            aria-current={route.name === 'alerts' ? 'page' : undefined}
+          >
+            <Bell aria-hidden="true" size={20} />
+          </a>
+          <a
+            className="icon-button header-link"
+            href={href.settings}
+            aria-label={t('nav.settings')}
+            title={t('nav.settings')}
+            aria-current={route.name === 'settings' ? 'page' : undefined}
+          >
+            <Settings aria-hidden="true" size={20} />
+          </a>
+        </div>
       </header>
       <main>
         {route.name === 'today' && (
@@ -75,16 +104,20 @@ export function App() {
             sowing={<SowingCard now={now} district={district} />}
           />
         )}
+        {route.name === 'settings' && (
+          <SettingsPage
+            locationControl={<LocationPicker location={location} onChange={setLocation} />}
+          />
+        )}
+        {route.name === 'alerts' && (
+          <AlertsPage>
+            <FrostAlertsCard location={location} />
+          </AlertsPage>
+        )}
         {route.name === 'sky' && (
           <SkyPage now={now} location={location} locationControl={locationControl} />
         )}
-        {route.name === 'garden' && (
-          <GardenPage
-            now={now}
-            district={district}
-            alerts={<FrostAlertsCard location={location} />}
-          />
-        )}
+        {route.name === 'garden' && <GardenPage now={now} district={district} />}
         {route.name === 'crops' && <CropsList />}
         {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
       </main>

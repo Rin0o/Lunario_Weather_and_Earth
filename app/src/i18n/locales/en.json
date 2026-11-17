@@ -8,12 +8,21 @@
     "title": "Today",
     "location": "Times for {{name}}"
   },
+  "settings": {
+    "title": "Settings"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "intro": "Warnings sent to your phone, even with the app closed."
+  },
   "cover": {
     "open": "Open Lunário",
     "hint": "Tap to open"
   },
   "nav": {
     "label": "Sections",
+    "settings": "Settings",
+    "alerts": "Alerts",
     "today": "Today",
     "sky": "Sky",
     "garden": "Garden",
@@ -26,7 +35,7 @@
   },
   "garden": {
     "title": "My garden",
-    "intro": "Your entries stay on this phone only. Only frost alerts, if you turn them on, send the minimum explained below.",
+    "intro": "Your entries stay on this phone only.",
     "add": "Log a planting",
     "crop": "Crop",
     "chooseCrop": "Choose…",
@@ -49,6 +58,9 @@
     },
     "harvest": "Expected harvest: {{from}} – {{to}}.",
     "transplant": "Expected transplant: {{from}} – {{to}}.",
+    "transplantShort": "Expected transplant",
+    "harvestShort": "Expected harvest",
+    "harvestPerennialShort": "In its season",
     "harvestPerennial": "Perennial: harvest in its season.",
     "transplantHint": "Counted from transplanting; it may come sooner.",
     "stages": {
@@ -154,8 +166,15 @@
     "delay": "Google may take up to a day to show changes."
   },
   "location": {
+    "title": "Location",
+    "sources": {
+      "gps": "From your phone's location",
+      "manual": "Chosen from the list",
+      "default": "Default: choose yours"
+    },
     "near": "Near {{name}}",
-    "change": "Change",
+    "changeInSettings": "Change in Settings",
+    "chooseShort": "choose",
     "useGps": "Use my location",
     "locating": "Locating…",
     "chooseFromList": "Or choose from the list",
@@ -237,7 +256,7 @@
     "source": "Forecast for {{place}} · Source: Open-Meteo (CC BY 4.0)"
   },
   "frostAlerts": {
-    "title": "Frost alerts on your phone",
+    "title": "Frost",
     "intro": "Get a notification in the early evening when frost is likely that night, even with the app closed.",
     "privacy": "While they are on, Lunário sends the alerts server your location rounded to about 1 km, the names of the frost-sensitive crops in your garden and your language. Nothing else. Turning them off deletes this data.",
     "toggle": "Warn me about frost",

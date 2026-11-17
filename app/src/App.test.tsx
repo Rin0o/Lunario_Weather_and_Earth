@@ -26,11 +26,24 @@ describe('App', () => {
     expect(screen.getByText(`Versão ${__APP_VERSION__}`)).toBeInTheDocument();
   });
 
-  it('switches to English and remembers the choice', async () => {
+  it('switches to English in the settings, and remembers the choice', async () => {
     render(<App />);
+    expect(screen.queryByRole('combobox', { name: 'Idioma' })).toBeNull();
+    expect(screen.getByRole('link', { name: 'Definições' })).toHaveAttribute(
+      'href',
+      '#/definicoes',
+    );
+
+    goTo('#/definicoes');
+    expect(screen.getByRole('heading', { level: 2, name: 'Definições' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Definições' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(screen.getByRole('article', { name: 'Localização' })).toHaveTextContent('Coimbra');
     await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Idioma' }), 'en');
 
-    expect(await screen.findByRole('heading', { level: 2, name: 'Today' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 2, name: 'Settings' })).toBeInTheDocument();
     expect(document.documentElement.lang).toBe('en');
     expect(localStorage.getItem('lunario.language')).toBe('en');
   });
@@ -56,6 +69,11 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Céu' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Céu' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('article', { name: 'Lua' })).toBeInTheDocument();
+
+    goTo('#/alertas');
+    expect(screen.getByRole('heading', { level: 2, name: 'Alertas' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Alertas' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('article', { name: 'Geada' })).toBeInTheDocument();
 
     goTo('#/horta');
     expect(screen.getByRole('heading', { level: 2, name: 'A minha horta' })).toBeInTheDocument();

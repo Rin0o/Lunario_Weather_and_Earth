@@ -38,8 +38,10 @@ export function Today({ now, location, locationControl, frost, weather, sowing }
   return (
     <section aria-labelledby="today-heading" className="page today">
       <h2 id="today-heading">{t('today.title')}</h2>
-      <p className="today-date">{formatLongDate(now, lang)}</p>
-      {locationControl}
+      <p className="today-date">
+        <span>{formatLongDate(now, lang)}</span>
+        {locationControl}
+      </p>
       {frost}
       {weather}
       {sowing}

@@ -13,7 +13,7 @@
   --gold: #c8932f;
   --green: #4f6b2f;
   --rule: #d6bf92;
-  --card: rgb(253 248 236 / 90%);
+  --card: rgb(253 248 236 / 80%);
   --frost: #1f5f8b;
   --frost-bg: rgb(230 240 247 / 92%);
   --binding: 2.6rem;
@@ -363,7 +363,7 @@ h4 {
   border: 1px solid var(--rule);
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
-  background: var(--paper);
+  background: rgb(239 224 191 / 55%);
 }
 
 .crop-mark {
@@ -643,7 +643,7 @@ a.button.primary {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.65rem 0.25rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--rule);
   color: var(--ink);
   text-decoration: none;
@@ -886,8 +886,17 @@ h3 > svg {
     transform 450ms ease;
 }
 
-.cover > img {
+.cover > img,
+.cover-front {
   grid-area: 1 / 1;
+}
+
+/* The logo and the hint together on the leather, a little right of centre (the spine). */
+.cover-front {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  translate: 3% 3%;
 }
 
 .cover-book {
@@ -897,17 +906,12 @@ h3 > svg {
 }
 
 .cover-logo {
-  width: min(72vw, 26rem, 48vh);
+  width: min(62vw, 22.5rem, 40vh);
   height: auto;
-  /* On the leather, a little left of centre: the spine takes the left edge. */
-  translate: 3% -4%;
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / 45%));
 }
 
 .cover-hint {
-  position: absolute;
-  bottom: calc(2rem + env(safe-area-inset-bottom));
-  inset-inline: 0;
   color: #f3d58a;
   font-family: 'IM Fell English', Georgia, serif;
   font-size: 1.25rem;
@@ -938,4 +942,334 @@ h3 > svg {
   width: 5.5rem;
   height: 5.5rem;
   margin: -0.5rem -0.25rem -0.5rem -0.5rem;
+}
+
+/* --- Icon buttons: compact, but a 40 px target for thumbs. --- */
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.icon-button:hover,
+.icon-button[aria-expanded='true'] {
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+
+.icon-button.danger {
+  color: var(--action-CO);
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-link[aria-current='page'] {
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+
+/* --- "A minha horta": a fold-out form and compact cards. --- */
+.add-planting summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.add-planting summary::-webkit-details-marker {
+  display: none;
+}
+
+.add-planting[open] summary {
+  margin-bottom: 0.5rem;
+}
+
+.plantings {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.card.planting {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 0.5rem;
+  margin: 0;
+  padding: 0.6rem 0.75rem 0.6rem 0.9rem;
+  border-left: 5px solid var(--stage-color, var(--green));
+}
+
+.planting .planting-head {
+  grid-column: 1 / -1;
+}
+
+.planting-head a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.planting-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.85rem;
+  align-self: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.planting-dates li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.planting-dates svg {
+  color: var(--ink-muted);
+}
+
+.planting .planting-notes {
+  grid-column: 1 / -1;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.planting-tools {
+  display: flex;
+  gap: 0.35rem;
+  align-self: end;
+}
+
+.planting .calendar-panel {
+  grid-column: 1 / -1;
+  margin: 0.25rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.stage-growing,
+.stage-perennial {
+  --stage-color: var(--green);
+}
+
+.stage-ready {
+  --stage-color: var(--gold);
+}
+
+.stage-late {
+  --stage-color: var(--action-CO);
+}
+
+.stage-harvested {
+  --stage-color: var(--rule);
+}
+
+.planting .stage {
+  font-size: 0.75rem;
+  padding: 0.05rem 0.5rem;
+}
+
+/* The tools stay on the right of the dates and the note, whatever their length. */
+.planting .planting-notes {
+  grid-column: 1;
+}
+
+.planting-tools {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: center;
+}
+
+.planting-tools .icon-button {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.stage-ready .stage {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+/* "Registar plantio": a small pill on the right; the form opens below it as a card. */
+.add-planting {
+  margin-bottom: 0.75rem;
+}
+
+.add-planting summary {
+  display: flex;
+  width: fit-content;
+  min-height: 2.25rem;
+  margin-left: auto;
+  padding: 0 0.85rem 0 0.6rem;
+  gap: 0.25rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.9rem;
+}
+
+.add-planting[open] summary {
+  margin-bottom: 0.5rem;
+  background: var(--accent-soft);
+}
+
+/* Settings: full-width controls. */
+.page .language-switcher select {
+  width: 100%;
+  min-height: 2.75rem;
+  border-radius: 0.5rem;
+}
+
+/* --- The current location: a chip that stands out, opening the choices. --- */
+.location-picker {
+  margin: 0 0 1rem;
+}
+
+.location-picker summary {
+  min-height: 0;
+}
+
+.location-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--gold);
+  border-radius: 1rem;
+  background: var(--card);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  cursor: pointer;
+}
+
+.location-pin {
+  flex: none;
+  color: var(--action-CO);
+}
+
+.location-text {
+  display: grid;
+  line-height: 1.25;
+}
+
+.location-text strong {
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.location-text small {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.location-chip .location-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.location-picker[open] .location-change svg {
+  rotate: 180deg;
+}
+
+.location-picker .location-panel {
+  margin-top: 0.5rem;
+}
+
+.location-panel button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+/* In the settings the card is the frame: no second border. */
+.location-settings .location-chip {
+  margin-bottom: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  cursor: default;
+}
+
+.location-settings .location-panel {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* Next phases and holidays: the date stays on the line; a long name may wrap instead. */
+.quarters li {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.quarter-date {
+  flex: none;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* The location, on the date line of Hoje and Céu: a small link to the settings. */
+.location-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.location-inline svg:first-child {
+  color: var(--action-CO);
+}
+
+.location-choose {
+  color: var(--action-CO);
+}
+
+/* Date and location on one line when they fit; the location wraps whole when they don't. */
+.today-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+}
+
+.today-date .location-inline {
+  font-size: 0.95rem;
+}
+
+/* The flex line no longer takes ::first-letter; the date itself does. */
+.today-date > span:first-child::first-letter {
+  text-transform: uppercase;
 }

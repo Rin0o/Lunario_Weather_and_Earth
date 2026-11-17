@@ -40,9 +40,17 @@ describe('GardenPage', () => {
     const [fava] = entries();
     expect(fava).toHaveTextContent('Fava');
     expect(fava).toHaveTextContent('A crescer');
-    expect(fava).toHaveTextContent('Semeado · 16 de novembro de 2026');
-    // Broad beans: 120–150 days.
-    expect(fava).toHaveTextContent('Colheita prevista: 16 de março de 2027 – 15 de abril de 2027.');
+    // Short dates on the card, the full ones in the tooltip. Broad beans: 120–150 days.
+    expect(fava).toHaveTextContent('16/11');
+    expect(fava).toHaveTextContent('16/03 – 15/04');
+    expect(
+      within(fava as HTMLElement).getByTitle('Semeado · 16 de novembro de 2026'),
+    ).toBeVisible();
+    expect(
+      within(fava as HTMLElement).getByTitle(
+        'Colheita prevista: 16 de março de 2027 – 15 de abril de 2027.',
+      ),
+    ).toBeVisible();
     expect(within(fava as HTMLElement).getByRole('link', { name: 'Fava' })).toHaveAttribute(
       'href',
       '#/cultura/fava',
@@ -101,9 +109,29 @@ describe('GardenPage', () => {
     await waitFor(() => expect(entries()).toHaveLength(2));
     const [strawberry, kale] = entries();
     expect(strawberry).toHaveTextContent('Perene');
-    expect(strawberry).toHaveTextContent('Cultura perene: colhe-se na época própria.');
-    expect(kale).toHaveTextContent('Transplantado · 1 de novembro de 2026');
-    expect(kale).toHaveTextContent('Contado a partir do transplante');
+    expect(strawberry).toHaveTextContent('Na época própria');
+    expect(
+      within(kale as HTMLElement).getByTitle('Transplantado · 1 de novembro de 2026'),
+    ).toBeVisible();
+    expect(within(kale as HTMLElement).getByTitle(/Contado a partir do transplante/)).toBeVisible();
+  });
+
+  it('keeps the form folded away once there are plantings, and open after a save', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<GardenPage now={NOV_16} district="Coimbra" />);
+    await screen.findByText('Ainda não registou nenhum plantio.');
+    await logPlanting('Fava');
+    await screen.findByText('Registado.');
+    // Still open, to log the next one.
+    expect(screen.getByRole('combobox', { name: 'Cultura' })).toBeVisible();
+    unmount();
+
+    render(<GardenPage now={NOV_16} district="Coimbra" />);
+    await waitFor(() => expect(entries()).toHaveLength(1));
+    const form = document.querySelector('details.add-planting');
+    expect(form).not.toHaveAttribute('open');
+    await user.click(screen.getByText('Registar plantio'));
+    expect(form).toHaveAttribute('open');
   });
 
   it('switches to English', async () => {
@@ -114,6 +142,6 @@ describe('GardenPage', () => {
     await act(() => i18n.changeLanguage('en'));
     expect(screen.getByRole('heading', { name: 'My garden' })).toBeInTheDocument();
     expect(entries()[0]).toHaveTextContent('Broad bean');
-    expect(entries()[0]).toHaveTextContent('Sown · 16 November 2026');
+    expect(within(entries()[0] as HTMLElement).getByTitle('Sown · 16 November 2026')).toBeVisible();
   });
 });

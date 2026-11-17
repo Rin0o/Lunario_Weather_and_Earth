@@ -53,15 +53,17 @@ export function Cover() {
         sizes="(min-width: 640px) 520px, 90vw"
         alt=""
       />
-      <img
-        className="cover-logo"
-        src={artwork.logoText.src}
-        srcSet={artwork.logoText.srcSet}
-        sizes="(min-width: 640px) 420px, 72vw"
-        alt=""
-      />
-      <span className="cover-hint" aria-hidden="true">
-        {t('cover.hint')}
+      <span className="cover-front">
+        <img
+          className="cover-logo"
+          src={artwork.logoText.src}
+          srcSet={artwork.logoText.srcSet}
+          sizes="(min-width: 640px) 360px, 62vw"
+          alt=""
+        />
+        <span className="cover-hint" aria-hidden="true">
+          {t('cover.hint')}
+        </span>
       </span>
     </button>
   );

@@ -32,7 +32,6 @@ function setup(geolocation?: Geolocation) {
       geolocation={geolocation}
     />,
   );
-  fireEvent.click(screen.getByText('Alterar'));
   return onChange;
 }
 
@@ -41,9 +40,23 @@ describe('LocationPicker', () => {
     await initI18n('pt-PT');
   });
 
+  it('is always open in the settings, saying how the place was chosen', () => {
+    const onChange = vi.fn<(l: UserLocation) => void>();
+    render(
+      <LocationPicker
+        location={{ ...DEFAULT_USER_LOCATION, source: 'manual' }}
+        onChange={onChange}
+      />,
+    );
+    expect(screen.getByText('Escolhida da lista')).toBeVisible();
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: '1090700' } });
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ name: 'Guarda' }));
+  });
+
   it('shows the current place and lists locations grouped by district', () => {
     setup();
-    expect(screen.getByText('Coimbra', { selector: 'summary' })).toBeInTheDocument();
+    expect(screen.getByText('Coimbra', { selector: 'strong' })).toBeInTheDocument();
+    expect(screen.getByText('Por omissão: escolha a sua')).toBeInTheDocument();
     expect(screen.getByRole('group', { name: 'Faro' })).toHaveTextContent(
       /Loulé.*Portimão.*Sagres/,
     );

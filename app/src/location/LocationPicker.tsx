@@ -1,4 +1,5 @@
-import { MapPin } from 'lucide-react';
+import { LocateFixed } from 'lucide-react';
+import { LocationSummary } from './LocationChip.tsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DISTRICTS, findLocation, MAINLAND_LOCATIONS, nearestLocation } from './locations.ts';
@@ -58,53 +59,53 @@ export function LocationPicker({
     );
   };
 
+  const current = <LocationSummary location={location} />;
+
+  const panel = (
+    <div className="location-panel">
+      <button type="button" onClick={useGps} disabled={status.kind === 'locating'}>
+        <LocateFixed aria-hidden="true" size={18} />
+        {status.kind === 'locating' ? t('location.locating') : t('location.useGps')}
+      </button>
+
+      <label>
+        {t('location.chooseFromList')}
+        <select
+          value={location.source === 'gps' ? '' : String(location.ipmaId)}
+          onChange={(event) => {
+            const chosen = findLocation(Number(event.target.value));
+            if (chosen) {
+              onChange(fromIpma(chosen, 'manual'));
+              setStatus({ kind: 'idle' });
+            }
+          }}
+        >
+          <option value="" disabled>
+            {t('location.choose')}
+          </option>
+          {byDistrict.map((d) => (
+            <optgroup key={d.name} label={d.name}>
+              {d.locations.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </label>
+
+      <p role="status" className="hint">
+        {status.kind === 'error' && t(`location.errors.${status.key}`)}
+        {status.kind === 'far' && t('location.far', { name: status.name })}
+      </p>
+    </div>
+  );
+
   return (
-    <details className="location-picker">
-      <summary>
-        <MapPin aria-hidden="true" size={18} />
-        {location.source === 'gps'
-          ? t('location.near', { name: location.name })
-          : location.name}{' '}
-        <span className="location-change">{t('location.change')}</span>
-      </summary>
-
-      <div className="location-panel">
-        <button type="button" onClick={useGps} disabled={status.kind === 'locating'}>
-          {status.kind === 'locating' ? t('location.locating') : t('location.useGps')}
-        </button>
-
-        <label>
-          {t('location.chooseFromList')}
-          <select
-            value={location.source === 'gps' ? '' : String(location.ipmaId)}
-            onChange={(event) => {
-              const chosen = findLocation(Number(event.target.value));
-              if (chosen) {
-                onChange(fromIpma(chosen, 'manual'));
-                setStatus({ kind: 'idle' });
-              }
-            }}
-          >
-            <option value="" disabled>
-              {t('location.choose')}
-            </option>
-            {byDistrict.map((d) => (
-              <optgroup key={d.name} label={d.name}>
-                {d.locations.map((l) => (
-                  <option key={l.id} value={l.id}>
-                    {l.name}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-        </label>
-
-        <p role="status" className="hint">
-          {status.kind === 'error' && t(`location.errors.${status.key}`)}
-          {status.kind === 'far' && t('location.far', { name: status.name })}
-        </p>
-      </div>
-    </details>
+    <div className="location-settings">
+      <p className="location-chip">{current}</p>
+      {panel}
+    </div>
   );
 }

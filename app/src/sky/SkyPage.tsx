@@ -31,8 +31,10 @@ export function SkyPage({ now, location, locationControl }: SkyPageProps) {
   return (
     <section aria-labelledby="sky-heading" className="page">
       <h2 id="sky-heading">{t('sky.title')}</h2>
-      <p className="today-date">{formatLongDate(now, lang)}</p>
-      {locationControl}
+      <p className="today-date">
+        <span>{formatLongDate(now, lang)}</span>
+        {locationControl}
+      </p>
 
       <article className="card" aria-labelledby="moon-heading">
         <h3 id="moon-heading">{t('moon.title')}</h3>
