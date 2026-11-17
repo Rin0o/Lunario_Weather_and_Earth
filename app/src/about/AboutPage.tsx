@@ -40,9 +40,9 @@ const GROUPS: { key: string; credits: Credit[] }[] = [
       },
       {
         use: 'coriander',
-        title: 'The American Cyclopædia',
+        title: 'An Illustrated Flora of the Northern United States and Canada',
         work: true,
-        by: 'c. 1879',
+        by: 'N. L. Britton & A. Brown, 1913',
         via: 'Wikimedia Commons',
         licence: PD,
       },

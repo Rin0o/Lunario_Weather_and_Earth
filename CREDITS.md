@@ -32,14 +32,14 @@ lists in the holiday tests were checked against [Nager.Date](https://date.nager.
 
 ## Assets
 
-| Asset                                       | Used for                                      | Source                                                                                                     | Licence       |
-| ------------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------- |
-| Botanical plates (`art/plates/`)            | One engraving per crop (crop list and sheet)  | _Les Plantes potagères_, Vilmorin-Andrieux & Cie, 1883 and 1904, via Wikimedia Commons                     | Public domain |
-| Coriander plate (`art/plates/coentros.png`) | Coriander, which Vilmorin does not illustrate | _The American Cyclopædia_, c. 1879, via Wikimedia Commons                                                  | Public domain |
-| Moon vignette (`art/vignettes/lua.png`)     | Beside the Céu title                          | _Full Moon_, Claude Mellan, 1635, The Metropolitan Museum of Art, via Wikimedia Commons                    | CC0           |
-| Watering can (`art/vignettes/regador.png`)  | Empty garden                                  | _Watering can_, Félix Leblanc, c. 1850, The Metropolitan Museum of Art, via Wikimedia Commons              | CC0           |
-| Weather and moon icons                      | Weather card, Moon phases                     | [Meteocons](https://github.com/basmilius/weather-icons) by Bas Milius (`app/src/assets/meteocons/LICENSE`) | MIT           |
-| Heading typeface                            | Titles                                        | [IM Fell English](https://fonts.google.com/specimen/IM+Fell+English) by Igino Marini                       | OFL 1.1       |
+| Asset                                       | Used for                                      | Source                                                                                                                 | Licence       |
+| ------------------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------- |
+| Botanical plates (`art/plates/`)            | One engraving per crop (crop list and sheet)  | _Les Plantes potagères_, Vilmorin-Andrieux & Cie, 1883 and 1904, via Wikimedia Commons                                 | Public domain |
+| Coriander plate (`art/plates/coentros.png`) | Coriander, which Vilmorin does not illustrate | _An Illustrated Flora of the Northern United States and Canada_, N. L. Britton & A. Brown, 1913, via Wikimedia Commons | Public domain |
+| Moon vignette (`art/vignettes/lua.png`)     | Beside the Céu title                          | _Full Moon_, Claude Mellan, 1635, The Metropolitan Museum of Art, via Wikimedia Commons                                | CC0           |
+| Watering can (`art/vignettes/regador.png`)  | Empty garden                                  | _Watering can_, Félix Leblanc, c. 1850, The Metropolitan Museum of Art, via Wikimedia Commons                          | CC0           |
+| Weather and moon icons                      | Weather card, Moon phases                     | [Meteocons](https://github.com/basmilius/weather-icons) by Bas Milius (`app/src/assets/meteocons/LICENSE`)             | MIT           |
+| Heading typeface                            | Titles                                        | [IM Fell English](https://fonts.google.com/specimen/IM+Fell+English) by Igino Marini                                   | OFL 1.1       |
 
 Each plate, with its exact source page, is listed in [art/plates/SOURCES.md](art/plates/SOURCES.md);
 they were cropped (captions removed) and printed in brown ink for the app.
