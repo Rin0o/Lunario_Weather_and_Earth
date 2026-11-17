@@ -372,5 +372,8 @@
       "pt-PT": "Português",
       "en": "English"
     }
+  },
+  "modal": {
+    "close": "Fechar"
   }
 }

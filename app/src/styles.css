@@ -1032,35 +1032,25 @@ a.button.primary {
 /* 8. Horta                                                                            */
 /* ================================================================================== */
 
-/* "Registar plantio": a small pill on the right; the form opens below it as a card. */
+/* "Adicionar à horta": a small pill on the right; the form opens in a window. */
 .add-planting {
-  margin-bottom: 0.75rem;
-}
-
-.add-planting summary {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  width: fit-content;
   min-height: 2.25rem;
-  margin-left: auto;
+  margin: 0 0 0.75rem auto;
   padding: 0 0.85rem 0 0.6rem;
   border: 1px solid var(--green-action);
   border-radius: 999px;
   background: var(--card);
+  font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--accent);
-  list-style: none;
   cursor: pointer;
 }
 
-.add-planting summary::-webkit-details-marker {
-  display: none;
-}
-
-.add-planting[open] summary {
-  margin-bottom: 0.5rem;
+.add-planting:active {
   background: var(--green-soft);
 }
 
@@ -1238,6 +1228,98 @@ a.button.primary {
   min-height: 2.5rem;
   color: var(--accent);
   cursor: pointer;
+}
+
+/* "Receber no calendário" on Hoje: a row at the foot of the card, like "Ver o céu", so it
+   reads as an option without standing out. It opens a window. */
+.subscribe-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: calc(100% + 0.5rem);
+  min-height: 2.75rem;
+  margin: 0.75rem -0.25rem -0.25rem;
+  padding: 0 0.25rem;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: left;
+  cursor: pointer;
+}
+
+.subscribe-chevron {
+  margin-left: auto;
+}
+
+/* Windows over the page (components/Modal.tsx): a sheet of the notebook's paper over a
+   dimmed page, centred, scrolling inside when its content is long. */
+.modal {
+  width: min(28rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 3rem);
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 35%);
+}
+
+.modal::backdrop {
+  background: rgb(47 29 18 / 45%);
+}
+
+.modal[open] {
+  animation: modal-in 0.18s ease-out;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal[open] {
+    animation: none;
+  }
+}
+
+.modal-body {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: -0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: var(--green-soft);
 }
 
 .calendar-events {
