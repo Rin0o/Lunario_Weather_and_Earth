@@ -66,6 +66,23 @@ describe('CropSheet', () => {
     // The strip marks the current fortnight (first half of November = 21).
     const now = document.querySelectorAll('.strip-row')[0]?.querySelectorAll('.strip-cell')[20];
     expect(now).toHaveClass('now');
+    // Months read as short names, the current one marked.
+    const months = [...document.querySelectorAll('.strip-months span')].map((s) => s.textContent);
+    expect(months).toEqual([
+      'jan',
+      'fev',
+      'mar',
+      'abr',
+      'mai',
+      'jun',
+      'jul',
+      'ago',
+      'set',
+      'out',
+      'nov',
+      'dez',
+    ]);
+    expect(document.querySelector('.now-month')).toHaveTextContent('nov');
   });
 
   it("uses the zone of the user's district, with its notes", () => {
