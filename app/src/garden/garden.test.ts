@@ -14,6 +14,7 @@ import {
   expectedHarvest,
   inSeason,
   sortPlantings,
+  sproutPlacement,
   stageOf,
   type Planting,
 } from './plantings.ts';
@@ -168,5 +169,21 @@ describe('useGarden', () => {
     await waitFor(() => expect(result.current.loading).toBe(false));
     await act(() => result.current.setStatus('missing', 'harvested'));
     expect(result.current.failed).toBe(true);
+  });
+});
+
+describe('sproutPlacement', () => {
+  it('gives each planting its own place and direction, always the same', () => {
+    const ids = ['a1', 'b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8'];
+    const places = ids.map(sproutPlacement);
+    expect(ids.map(sproutPlacement)).toEqual(places);
+    for (const { left, flip } of places) {
+      const percent = Number.parseInt(left, 10);
+      expect(percent).toBeGreaterThanOrEqual(8);
+      expect(percent).toBeLessThanOrEqual(62);
+      expect([1, -1]).toContain(flip);
+    }
+    expect(new Set(places.map((p) => p.left)).size).toBeGreaterThan(4);
+    expect(new Set(places.map((p) => p.flip)).size).toBe(2);
   });
 });
