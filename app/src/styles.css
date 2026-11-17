@@ -1,21 +1,52 @@
 /*
- * The look of an old farm notebook (art/): a paper page with a ring binding behind every
- * screen, colours taken from the logo. Light only: the paper is the identity.
+ * Lunário's look: an old farm notebook (art/), with a paper page and its ring binding behind
+ * every screen, and colours taken from the logo. Light only: the paper is the identity.
+ *
+ * Sections: 1 colours · 2 base · 3 app shell · 4 shared pieces · 5 opening cover ·
+ * 6 Hoje · 7 Céu · 8 Horta · 9 Culturas · 10 Definições
  */
+
+/* ================================================================================== */
+/* 1. Colours and sizes: change them here, everything else uses them.                 */
+/* ================================================================================== */
+
 :root {
+  /* Paper, leather and ink */
   --paper: #efe0bf;
   --leather: #4a2e1c;
   --leather-dark: #2f1d12;
   --ink: #2b2118;
   --ink-muted: #6b5843;
+
+  /* Night blue (headings, links), gold and green, from the logo */
   --accent: #1d3346;
   --accent-soft: #e9d49a;
   --gold: #c8932f;
+  --gold-light: #f3d58a;
   --green: #4f6b2f;
+
+  /* Green for what grows and for the actions (sow, save, turn on) */
+  --green-action: #5f7a3a;
+  --green-line: #9db07a;
+  --green-soft: rgb(95 122 58 / 12%);
+
+  /* Borders and cards: the last number of --card is its opacity (100% = solid) */
   --rule: #d6bf92;
-  --card: rgb(253 248 236 / 80%);
+  --card: rgb(253 248 236 / 55%);
+  --chip: var(--green-soft);
+
+  /* Frost */
   --frost: #1f5f8b;
   --frost-bg: rgb(230 240 247 / 92%);
+
+  /* Calendar actions: nursery, direct sowing, transplant, planting, harvest */
+  --action-SV: #8a6d3b;
+  --action-SD: #5f7a3a;
+  --action-TR: #3b6f7a;
+  --action-PL: #7a4f3b;
+  --action-CO: #b0563a;
+
+  /* Room for the ring binding on the left of the page */
   --binding: 2.6rem;
 
   color-scheme: light;
@@ -28,6 +59,10 @@
   line-height: 1.5;
 }
 
+/* ================================================================================== */
+/* 2. Base                                                                             */
+/* ================================================================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -39,7 +74,8 @@ body {
   color: var(--ink);
 }
 
-/* The notebook page, fixed behind the content and kept to the column width. */
+/* The notebook page, fixed behind the content and kept to the column width. A wash of
+   paper over the texture keeps stains and tears from fighting with the text. */
 body::before {
   content: '';
   position: fixed;
@@ -47,7 +83,6 @@ body::before {
   z-index: -1;
   width: min(100%, 42rem);
   margin: 0 auto;
-  /* A wash of paper over the texture, so stains and tears never fight with the text. */
   background:
     linear-gradient(rgb(244 232 205 / 55%), rgb(244 232 205 / 55%)),
     var(--paper) url('./assets/images/page-640.webp') left center / cover no-repeat;
@@ -67,12 +102,13 @@ body::before {
   /* Clear the ring binding on the left, and the fixed tab bar (and home indicator) below. */
   padding: 0.75rem 1.75rem calc(5.5rem + env(safe-area-inset-bottom)) var(--binding);
 }
+
 h1,
 h2 {
+  margin: 0;
   font-family: 'IM Fell English', Georgia, serif;
   font-weight: 400;
   color: var(--accent);
-  margin: 0;
 }
 
 h2 {
@@ -80,13 +116,52 @@ h2 {
   line-height: 1.2;
 }
 
+h3,
+h4 {
+  margin: 0 0 0.5rem;
+  color: var(--accent);
+}
+
+h3 > svg {
+  margin-right: 0.35rem;
+  vertical-align: -0.15em;
+}
+
+h4 {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+.hint {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ================================================================================== */
+/* 3. App shell: header, tab bar, footer                                              */
+/* ================================================================================== */
+
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding-bottom: 0.75rem;
   margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--rule);
 }
 
@@ -109,279 +184,24 @@ h2 {
 
 .tagline {
   margin: 0;
-  color: var(--ink-muted);
+  font-size: 0.85rem;
   font-style: italic;
-  font-size: 0.85rem;
-}
-
-.language-switcher select {
-  min-height: 2.25rem;
-  padding: 0.25rem 0.5rem;
-  font: inherit;
-  font-size: 0.9rem;
-  color: inherit;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  background: var(--card);
-}
-
-.today-date {
-  margin: 0.25rem 0 1rem;
   color: var(--ink-muted);
 }
 
-.today-date::first-letter {
-  text-transform: uppercase;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 1rem;
-  padding: 0.9rem 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
-}
-
-h3,
-h4 {
-  margin: 0 0 0.5rem;
-  color: var(--accent);
-}
-
-h4 {
-  margin-top: 0.75rem;
-  font-size: 0.95rem;
-}
-
-.moon-phase {
+/* The bell (Alertas) and the gear (Definições). */
+.header-tools {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  gap: 0.5rem;
 }
 
-.moon-icon {
-  width: 3.5rem;
-  height: 3.5rem;
-  flex: none;
+.header-link[aria-current='page'] {
+  border-color: var(--gold);
+  background: var(--accent-soft);
 }
 
-.inline-icon {
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 0.25rem;
-  vertical-align: middle;
-}
-
-.facts dt:has(.inline-icon) {
-  display: flex;
-  align-items: center;
-}
-
-.sky-summary-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-
-.sky-summary-row p {
-  margin: 0;
-}
-
-.more-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 2.75rem;
-  margin: 0.5rem -0.25rem -0.25rem;
-  padding: 0 0.25rem;
-  border-top: 1px solid var(--rule);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.facts {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.25rem 1rem;
-  margin: 0;
-}
-
-.facts dt {
-  color: var(--ink-muted);
-}
-
-.facts dd {
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.quarters {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.quarters li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.5rem;
-  padding: 0.2rem 0;
-}
-
-.quarter-date {
-  margin-left: auto;
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.location-picker {
-  margin: -0.5rem 0 1rem;
-}
-
-.location-picker summary {
-  cursor: pointer;
-  list-style: none;
-  min-height: 2.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.location-picker summary::-webkit-details-marker {
-  display: none;
-}
-
-.location-change {
-  color: var(--accent);
-  text-decoration: underline;
-  margin-left: 0.25rem;
-}
-
-.location-panel {
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.location-panel button,
-.location-panel select {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.75rem;
-  font: inherit;
-  color: inherit;
-  border-radius: 0.5rem;
-  border: 1px solid var(--rule);
-  background: var(--paper);
-}
-
-.location-panel button {
-  background: var(--accent);
-  color: var(--paper);
-  border: 0;
-  font-weight: 600;
-}
-
-.location-panel label {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.weather-today {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 0.5rem;
-}
-
-.weather-icon {
-  width: 4.5rem;
-  height: 4.5rem;
-  flex: none;
-}
-
-.temps {
-  font-variant-numeric: tabular-nums;
-}
-
-.forecast-strip {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.25rem;
-  text-align: center;
-}
-
-.forecast-strip li {
-  display: grid;
-  gap: 0.1rem;
-  padding: 0.25rem 0;
-}
-
-.strip-day {
-  color: var(--ink-muted);
-  font-size: 0.85rem;
-}
-
-.strip-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  justify-self: center;
-}
-
-.strip-rain {
-  color: var(--ink-muted);
-}
-
-.sowing-group {
-  margin-top: 0.75rem;
-}
-
-.sowing-group h4 {
-  margin-bottom: 0.25rem;
-}
-
-.crop-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.crop-list li {
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
-  background: rgb(239 224 191 / 55%);
-}
-
-.crop-mark {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.crop-ends {
-  margin-left: 0.35rem;
-  font-size: 0.8rem;
-  color: var(--ink-muted);
-}
-
-.crop-ends::before {
-  content: '· ';
-}
-
-/* --- Navigation: a tab bar fixed at the bottom, within thumb reach. --- */
+/* The tab bar, fixed at the bottom within thumb reach, in leather and gold. */
 .tab-bar {
   position: fixed;
   inset: auto 0 0;
@@ -392,10 +212,20 @@ h4 {
   margin: 0 auto;
   padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
   background: linear-gradient(var(--leather), var(--leather-dark));
-  border-top: 2px solid var(--gold);
   box-shadow: 0 -4px 16px rgb(0 0 0 / 25%);
 }
 
+/* Grass on soil along the top of the tab bar: the garden at the foot of every page.
+   Drawn by scripts/grass-strip.ts: change the settings there and paste its output here. */
+.tab-bar::before {
+  content: '';
+  position: absolute;
+  inset: -16px 0 auto;
+  height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='20' viewBox='0 0 120 20'%3E%3Crect y='14.5' width='120' height='5.5' fill='%233b2415'/%3E%3Crect y='14.5' width='120' height='1.2' fill='%235a3a22'/%3E%3Ccircle cx='115.4' cy='18.4' r='0.6' fill='%236b4a2e'/%3E%3Ccircle cx='96.3' cy='16.8' r='0.4' fill='%236b4a2e'/%3E%3Ccircle cx='87.2' cy='18.2' r='0.6' fill='%236b4a2e'/%3E%3Ccircle cx='65.4' cy='17.5' r='0.6' fill='%236b4a2e'/%3E%3Ccircle cx='14.6' cy='16.5' r='0.4' fill='%236b4a2e'/%3E%3Ccircle cx='42.5' cy='17.3' r='0.5' fill='%236b4a2e'/%3E%3Ccircle cx='76.8' cy='16.7' r='0.4' fill='%236b4a2e'/%3E%3Ccircle cx='0.2' cy='18.8' r='0.7' fill='%236b4a2e'/%3E%3Ccircle cx='5.3' cy='18.6' r='0.5' fill='%236b4a2e'/%3E%3Ccircle cx='48.3' cy='19' r='0.7' fill='%236b4a2e'/%3E%3Cpath d='M3.3 15Q2.8 8.9 1.2 4.8Q4 8.9 5.4 15Z' fill='%235f7a3a'/%3E%3Cpath d='M1.5 15Q1.9 7.2 3.3 2Q3.1 7.2 3.4 15Z' fill='%237d9a4c'/%3E%3Cpath d='M8 15Q8.4 9.1 9.5 5.2Q9.7 9.1 10.1 15Z' fill='%233f5a26'/%3E%3Cpath d='M9.4 15Q10.1 8 12.3 3.4Q11.5 8 11.6 15Z' fill='%233f5a26'/%3E%3Cpath d='M8.9 15Q9.2 5.7 10.2 -0.5Q10.4 5.7 10.9 15Z' fill='%235f7a3a'/%3E%3Cpath d='M10.1 15Q9.8 6.4 9.2 0.7Q10.8 6.4 11.7 15Z' fill='%238fae5a'/%3E%3Cpath d='M8.3 15Q8 9.9 6.9 6.5Q9 9.9 10.1 15Z' fill='%234f6b2f'/%3E%3Cpath d='M18.1 15Q17.4 7.2 15 2Q18.3 7.2 19.7 15Z' fill='%235f7a3a'/%3E%3Cpath d='M17.5 15Q16.9 7.9 15.3 3.2Q18.4 7.9 19.8 15Z' fill='%233f5a26'/%3E%3Cpath d='M17 15Q17.3 8.2 18.2 3.7Q18.8 8.2 19.4 15Z' fill='%235f7a3a'/%3E%3Cpath d='M16.4 15Q16.1 8.9 14.9 4.8Q17.1 8.9 18.1 15Z' fill='%235f7a3a'/%3E%3Cpath d='M22.8 15Q23.5 9.5 25.6 5.9Q24.6 9.5 24.6 15Z' fill='%238fae5a'/%3E%3Cpath d='M22.8 15Q22.9 7.2 23 1.9Q24 7.2 24.7 15Z' fill='%237d9a4c'/%3E%3Cpath d='M23.8 15Q24.1 8 25.2 3.4Q25 8 25.3 15Z' fill='%235f7a3a'/%3E%3Cpath d='M22 15Q21.8 9.2 21.2 5.3Q23.1 9.2 24.2 15Z' fill='%238fae5a'/%3E%3Cpath d='M24.8 15Q24.2 9 22.4 5Q25 9 26.1 15Z' fill='%238fae5a'/%3E%3Cpath d='M25.3 15Q24.6 7.4 22.8 2.4Q25.7 7.4 27.1 15Z' fill='%235f7a3a'/%3E%3Cpath d='M25 15Q25.7 5.7 27.7 -0.5Q27.1 5.7 27.4 15Z' fill='%238fae5a'/%3E%3Cpath d='M27.3 15Q26.9 7 25.8 1.6Q27.7 7 28.5 15Z' fill='%234f6b2f'/%3E%3Cpath d='M24.8 15Q25 10.4 25.6 7.4Q25.9 10.4 26.3 15Z' fill='%237d9a4c'/%3E%3Cpath d='M31.3 15Q30.8 7.2 29.4 2Q31.8 7.2 32.9 15Z' fill='%238fae5a'/%3E%3Cpath d='M30.9 15Q30 7.7 27.4 2.8Q31.5 7.7 33.3 15Z' fill='%237d9a4c'/%3E%3Cpath d='M33.3 15Q34 9.4 36.1 5.6Q34.9 9.4 34.7 15Z' fill='%238fae5a'/%3E%3Cpath d='M32.2 15Q31.8 7.9 30.6 3.2Q32.7 7.9 33.7 15Z' fill='%234f6b2f'/%3E%3Cpath d='M39.2 15Q39.6 7.4 40.7 2.3Q40.7 7.4 41.1 15Z' fill='%233f5a26'/%3E%3Cpath d='M37.3 15Q36.6 6.6 34.7 1Q37.9 6.6 39.3 15Z' fill='%238fae5a'/%3E%3Cpath d='M42.7 15Q43.5 6.9 45.9 1.4Q44.8 6.9 44.9 15Z' fill='%235f7a3a'/%3E%3Cpath d='M40.9 15Q41.6 7.1 43.6 1.8Q42.6 7.1 42.6 15Z' fill='%234f6b2f'/%3E%3Cpath d='M41.4 15Q41.5 5.8 41.8 -0.3Q42.5 5.8 43 15Z' fill='%237d9a4c'/%3E%3Cpath d='M42.4 15Q42.7 8.5 43.9 4.2Q43.8 8.5 44.1 15Z' fill='%233f5a26'/%3E%3Cpath d='M41.1 15Q41.9 6.9 44.5 1.5Q43.2 6.9 43.1 15Z' fill='%238fae5a'/%3E%3Cpath d='M50.6 15Q50.6 9.4 50.6 5.7Q51.7 9.4 52.5 15Z' fill='%237d9a4c'/%3E%3Cpath d='M51.5 15Q50.9 8.2 49.3 3.6Q52 8.2 53.3 15Z' fill='%233f5a26'/%3E%3Cpath d='M57.3 15Q57.8 8.5 59.1 4.2Q58.8 8.5 59 15Z' fill='%237d9a4c'/%3E%3Cpath d='M55.7 15Q55.8 8.4 56 4Q56.7 8.4 57.2 15Z' fill='%237d9a4c'/%3E%3Cpath d='M56.5 15Q56.8 8.6 57.6 4.3Q57.8 8.6 58.3 15Z' fill='%233f5a26'/%3E%3Cpath d='M58 15Q58.7 7.4 60.9 2.3Q60.1 7.4 60.3 15Z' fill='%237d9a4c'/%3E%3Cpath d='M66.7 15Q67.1 7.7 68.2 2.9Q68.5 7.7 69 15Z' fill='%233f5a26'/%3E%3Cpath d='M64.8 15Q64.1 9.6 62.1 6Q64.9 9.6 66.1 15Z' fill='%233f5a26'/%3E%3Cpath d='M71.6 15Q71.1 10 69.5 6.6Q72.3 10 73.7 15Z' fill='%234f6b2f'/%3E%3Cpath d='M72.4 15Q72.2 6.1 71.8 0.2Q73.5 6.1 74.5 15Z' fill='%237d9a4c'/%3E%3Cpath d='M72.2 15Q71.4 7.5 69.1 2.5Q72.3 7.5 73.7 15Z' fill='%238fae5a'/%3E%3Cpath d='M73.9 15Q74.7 9.2 76.9 5.3Q75.8 9.2 75.8 15Z' fill='%233f5a26'/%3E%3Cpath d='M71.6 15Q71.1 8.3 69.3 3.8Q71.8 8.3 72.9 15Z' fill='%234f6b2f'/%3E%3Cpath d='M79.3 15Q78.6 6.8 76.4 1.3Q79.6 6.8 81.1 15Z' fill='%234f6b2f'/%3E%3Cpath d='M77.9 15Q77.8 9.4 77.3 5.7Q78.5 9.4 79.2 15Z' fill='%234f6b2f'/%3E%3Cpath d='M80.7 15Q81.1 6.7 82.5 1.1Q82.2 6.7 82.4 15Z' fill='%238fae5a'/%3E%3Cpath d='M80.8 15Q81.1 7.5 81.9 2.4Q82.2 7.5 82.7 15Z' fill='%234f6b2f'/%3E%3Cpath d='M84.8 15Q85.2 8.2 86.4 3.6Q86.4 8.2 86.9 15Z' fill='%237d9a4c'/%3E%3Cpath d='M85.5 15Q86.1 5.8 87.9 -0.3Q87.6 5.8 88 15Z' fill='%235f7a3a'/%3E%3Cpath d='M84.8 15Q85.6 6.8 88.1 1.3Q86.6 6.8 86.5 15Z' fill='%233f5a26'/%3E%3Cpath d='M90.5 15Q91.3 7.8 93.7 3Q92.6 7.8 92.7 15Z' fill='%234f6b2f'/%3E%3Cpath d='M89.1 15Q88.4 6.8 86.3 1.4Q89.8 6.8 91.5 15Z' fill='%238fae5a'/%3E%3Cpath d='M90.3 15Q90.4 6.4 90.5 0.7Q91.4 6.4 92.1 15Z' fill='%238fae5a'/%3E%3Cpath d='M90.1 15Q89.7 6.6 88.5 1Q90.9 6.6 92.2 15Z' fill='%235f7a3a'/%3E%3Cpath d='M89.6 15Q89.7 9.8 90.2 6.3Q90.6 9.8 91.1 15Z' fill='%238fae5a'/%3E%3Cpath d='M98.4 15Q97.7 7 95.7 1.7Q98.7 7 100 15Z' fill='%238fae5a'/%3E%3Cpath d='M96.3 15Q96.1 8.5 95.6 4.2Q96.9 8.5 97.6 15Z' fill='%237d9a4c'/%3E%3Cpath d='M99 15Q98.5 9.6 97 6Q100 9.6 101.5 15Z' fill='%237d9a4c'/%3E%3Cpath d='M102.3 15Q102.8 9.8 104.4 6.4Q104 9.8 104.2 15Z' fill='%237d9a4c'/%3E%3Cpath d='M100.8 15Q101.1 8.7 102.3 4.5Q102.6 8.7 103.2 15Z' fill='%235f7a3a'/%3E%3Cpath d='M109 15Q109.2 7.8 109.7 3Q110 7.8 110.3 15Z' fill='%233f5a26'/%3E%3Cpath d='M108.7 15Q108.9 8.9 109.3 4.9Q109.8 8.9 110.3 15Z' fill='%234f6b2f'/%3E%3Cpath d='M108.8 15Q109.3 6.7 111 1.2Q110.2 6.7 110.3 15Z' fill='%238fae5a'/%3E%3Cpath d='M107.1 15Q106.9 7.2 106.4 2.1Q108.2 7.2 109.3 15Z' fill='%237d9a4c'/%3E%3Cpath d='M109.3 15Q110.1 10.1 112.3 6.8Q111.2 10.1 111.2 15Z' fill='%238fae5a'/%3E%3Cpath d='M114.8 15Q115.5 7.8 117.7 3Q116.9 7.8 117.1 15Z' fill='%233f5a26'/%3E%3Cpath d='M114.6 15Q114 9.2 112 5.3Q115.4 9.2 117 15Z' fill='%238fae5a'/%3E%3Cpath d='M112.6 15Q112.2 8.7 111 4.5Q113.7 8.7 115 15Z' fill='%238fae5a'/%3E%3Cpath d='M115.3 15Q114.8 8.7 113.2 4.5Q115.5 8.7 116.6 15Z' fill='%235f7a3a'/%3E%3Cpath d='M114.1 15Q113.8 9.9 112.9 6.6Q114.9 9.9 116 15Z' fill='%234f6b2f'/%3E%3Cpath d='M116.1 15Q116 7.6 115.8 2.7Q117.4 7.6 118.3 15Z' fill='%237d9a4c'/%3E%3Cpath d='M117.3 15Q117.1 7.4 116.5 2.3Q118.3 7.4 119.3 15Z' fill='%238fae5a'/%3E%3C/svg%3E")
+    repeat-x left bottom / 120px 20px;
+  pointer-events: none;
+}
 .tab-bar a {
   display: grid;
   justify-items: center;
@@ -415,24 +245,128 @@ h4 {
 }
 
 .tab-bar a[aria-current='page'] {
-  color: #f3d58a;
   font-weight: 600;
+  color: var(--gold-light);
 }
 
 .tab-bar a[aria-current='page'] svg {
   background: rgb(243 213 138 / 18%);
 }
 
-a {
+.app-footer {
+  margin-top: 2rem;
+  color: var(--ink-muted);
+}
+
+/* ================================================================================== */
+/* 4. Shared pieces                                                                    */
+/* ================================================================================== */
+
+.card {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 1rem;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+/* Label / value pairs (weather, moon, sun, crop facts). */
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--ink-muted);
+}
+
+.facts dt:has(.inline-icon) {
+  display: flex;
+  align-items: center;
+}
+
+.facts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A small icon in the text flow (sunrise, sunset, moon phases). */
+.inline-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+}
+
+/* A checkbox line at the bottom of a card (Moon mode, frost alerts). */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.toggle input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--green-action);
+}
+
+/* Round icon buttons: compact, but a 40 px target for thumbs. */
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
   color: var(--accent);
+  cursor: pointer;
 }
 
-.crop-list a {
-  color: inherit;
+.icon-button:hover,
+.icon-button[aria-expanded='true'] {
+  border-color: var(--gold);
+  background: var(--accent-soft);
+}
+
+.icon-button.danger {
+  color: var(--action-CO);
+}
+
+/* "‹ Hoje": back to the previous screen; stays in reach at the top while the page scrolls. */
+.back-button {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 2.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0 1rem 0 0.6rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: linear-gradient(var(--leather), var(--leather-dark));
+  color: var(--gold-light);
+  font-weight: 600;
   text-decoration: none;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
 }
 
-/* --- Garden --- */
+.back-button:active {
+  transform: translateY(1px);
+}
+
+/* Forms: the planting form, the calendar reminder and the settings share these fields. */
 .planting-form {
   display: grid;
   gap: 0.6rem;
@@ -445,21 +379,22 @@ a {
 
 .planting-form select,
 .planting-form input,
-.planting-actions button,
-.planting-form button {
+.planting-form button,
+.planting-actions button {
   min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
-  font: inherit;
-  color: inherit;
   border: 1px solid var(--rule);
   border-radius: 0.5rem;
   background: var(--paper);
+  font: inherit;
+  color: inherit;
 }
 
-.planting-form button[type='submit'] {
-  background: var(--accent);
-  color: var(--paper);
+.planting-form button[type='submit'],
+.planting-form button.primary {
   border: 0;
+  background: var(--green-action);
+  color: var(--paper);
   font-weight: 600;
 }
 
@@ -467,78 +402,12 @@ a {
   opacity: 0.5;
 }
 
-.plantings {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.planting p {
-  margin: 0.25rem 0;
-}
-
-.planting-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.stage {
-  font-size: 0.85rem;
-  padding: 0.1rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid var(--rule);
-  white-space: nowrap;
-}
-
-.stage-ready .stage {
-  background: var(--action-SD);
-  border-color: var(--action-SD);
-  color: #fff;
-}
-
-.stage-late .stage {
-  border-color: var(--action-CO);
-  color: var(--action-CO);
-}
-
-.stage-harvested {
-  opacity: 0.7;
-}
-
-.planting-notes {
-  font-style: italic;
-}
-
+/* A row of plain buttons (backup). */
 .planting-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.5rem;
-}
-
-.planting-actions .danger {
-  color: var(--action-CO);
-}
-
-.planting-form button.primary {
-  background: var(--accent);
-  color: var(--paper);
-  border: 0;
-  font-weight: 600;
-}
-
-.calendar-panel {
-  margin: 0.5rem 0;
-}
-
-.calendar-panel summary {
-  cursor: pointer;
-  color: var(--accent);
-  min-height: 2.5rem;
-  display: flex;
-  align-items: center;
 }
 
 a.button.primary {
@@ -547,65 +416,10 @@ a.button.primary {
   min-height: 2.75rem;
   padding: 0 1rem;
   border-radius: 0.5rem;
-  background: var(--accent);
+  background: var(--green-action);
   color: var(--paper);
   font-weight: 600;
   text-decoration: none;
-}
-
-.feed-url {
-  overflow-wrap: anywhere;
-  user-select: all;
-}
-
-.calendar-events {
-  margin: 0;
-  padding-left: 1.2rem;
-}
-
-.alarm-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  margin-top: 0.5rem;
-  border-top: 1px solid var(--rule);
-  padding-top: 0.5rem;
-}
-
-.toggle input {
-  width: 1.25rem;
-  height: 1.25rem;
-  accent-color: var(--accent);
-}
-
-.tradition ul {
-  margin: 0.25rem 0;
-  padding-left: 1.2rem;
-}
-
-.tradition h4 {
-  margin-top: 0.5rem;
-}
-
-.reminder {
-  border: 1px solid var(--accent);
-  border-left-width: 4px;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  background: var(--card);
-}
-
-.reminder p {
-  margin: 0;
-  font-weight: 600;
 }
 
 /* A file input styled as a button; the input stays focusable for keyboard and screen readers. */
@@ -632,11 +446,558 @@ a.button.primary {
   outline: 2px solid var(--accent);
 }
 
-/* --- Crops --- */
-.crops-index {
-  list-style: none;
+/* A nudge at the top of a page (monthly backup reminder). */
+.reminder {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--accent);
+  border-left-width: 4px;
+  border-radius: 0.75rem;
+  background: var(--card);
+}
+
+.reminder p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ================================================================================== */
+/* 5. Opening cover: the leather notebook, which opens onto Hoje at a tap.            */
+/* ================================================================================== */
+
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 1rem;
+  border: 0;
+  background: radial-gradient(circle at 50% 40%, var(--leather), var(--leather-dark) 75%);
+  cursor: pointer;
+  transition:
+    opacity 450ms ease,
+    transform 450ms ease;
+}
+
+.cover.opening {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover {
+    transition: none;
+  }
+}
+
+.cover > img,
+.cover-front {
+  grid-area: 1 / 1;
+}
+
+.cover-book {
+  width: min(90vw, 32.5rem, 60vh);
+  height: auto;
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 50%));
+}
+
+/* The logo and the hint together on the leather, a little right of centre (the spine). */
+.cover-front {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  translate: 3% 3%;
+}
+
+.cover-logo {
+  width: min(62vw, 22.5rem, 40vh);
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 45%));
+}
+
+.cover-hint {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-light);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 60%);
+}
+
+/* ================================================================================== */
+/* 6. Hoje                                                                             */
+/* ================================================================================== */
+
+/* The date under the page title, with the location next to it (Hoje and Céu). They share
+   a line when they fit; the location wraps whole when they don't. */
+.today-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+  margin: 0.15rem 0 1rem;
+  color: var(--ink-muted);
+}
+
+.today-date > span:first-child::first-letter {
+  text-transform: uppercase;
+}
+
+/* The location: a small link to the settings. */
+.location-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.location-inline svg:first-child,
+.location-choose {
+  color: var(--action-CO);
+}
+
+/* Weather */
+.weather-today {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem;
+}
+
+.weather-icon {
+  flex: none;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: -0.5rem -0.25rem -0.5rem -0.5rem;
+}
+
+.temps {
+  font-variant-numeric: tabular-nums;
+}
+
+.forecast-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
   margin: 0.75rem 0 0;
   padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.forecast-strip li {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.25rem 0;
+}
+
+.strip-day {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.strip-icon {
+  justify-self: center;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.strip-rain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  color: var(--ink-muted);
+}
+
+/* This fortnight: crops as chips, by action */
+.sowing-group {
+  margin-top: 0.75rem;
+}
+
+.sowing-group h4 {
+  margin-bottom: 0.25rem;
+  color: var(--green-action);
+}
+
+.crop-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crop-list li {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--green-line);
+  border-radius: 999px;
+  background: var(--chip);
+}
+
+.crop-list a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.crop-mark {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.crop-ends {
+  margin-left: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.crop-ends::before {
+  content: '· ';
+}
+
+/* Almanac: the saying of the day */
+.saying {
+  margin: 0.75rem 0 0;
+}
+
+.saying blockquote {
+  margin: 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+}
+
+.saying figcaption {
+  margin-top: 0.25rem;
+  padding-left: calc(0.75rem + 3px);
+  font-size: 0.9rem;
+}
+
+/* Moon and sun summary, with the link to Céu */
+.sky-summary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.sky-summary-row p {
+  margin: 0;
+}
+
+.more-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  margin: 0.5rem -0.25rem -0.25rem;
+  padding: 0 0.25rem;
+  border-top: 1px solid var(--rule);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.holiday-today {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Frost warning */
+.frost-card {
+  border-left: 4px solid var(--frost);
+  background: var(--frost-bg);
+}
+
+.frost-card h3 {
+  color: var(--frost);
+}
+
+.frost-days {
+  margin: 0 0 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.frost-crops {
+  font-weight: 600;
+}
+
+/* ================================================================================== */
+/* 7. Céu                                                                              */
+/* ================================================================================== */
+
+.moon-phase {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.moon-icon {
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+/* Meteocons' moon is pale: draw it on a small night-sky disc so it reads on paper. */
+.moon-disc {
+  padding: 0.15em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #34506a, var(--accent));
+}
+
+/* Next phases and holidays: the date stays on its line; a long name may wrap instead. */
+.quarters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quarters li {
+  display: flex;
+  align-items: center;
+  gap: 0 0.5rem;
+  padding: 0.2rem 0;
+}
+
+.quarter-date {
+  flex: none;
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Moon mode */
+.tradition ul {
+  margin: 0.25rem 0;
+  padding-left: 1.2rem;
+}
+
+.tradition h4 {
+  margin-top: 0.5rem;
+}
+
+/* ================================================================================== */
+/* 8. Horta                                                                            */
+/* ================================================================================== */
+
+/* "Registar plantio": a small pill on the right; the form opens below it as a card. */
+.add-planting {
+  margin-bottom: 0.75rem;
+}
+
+.add-planting summary {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: fit-content;
+  min-height: 2.25rem;
+  margin-left: auto;
+  padding: 0 0.85rem 0 0.6rem;
+  border: 1px solid var(--green-action);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+  cursor: pointer;
+}
+
+.add-planting summary::-webkit-details-marker {
+  display: none;
+}
+
+.add-planting[open] summary {
+  margin-bottom: 0.5rem;
+  background: var(--green-soft);
+}
+
+/* The plantings: compact cards with a coloured edge for the stage. */
+.plantings {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.card.planting {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 0.5rem;
+  margin: 0;
+  padding: 0.6rem 0.75rem 0.6rem 0.9rem;
+  border-left: 5px solid var(--stage-color, var(--green));
+}
+
+.stage-growing,
+.stage-perennial {
+  --stage-color: var(--green);
+}
+
+.stage-ready {
+  --stage-color: var(--gold);
+}
+
+.stage-late {
+  --stage-color: var(--action-CO);
+}
+
+.stage-harvested {
+  --stage-color: var(--rule);
+
+  opacity: 0.7;
+}
+
+.planting-head {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.planting-head a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* The stage badge ("A crescer", "Pronto a colher"…) */
+.stage {
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.stage-ready .stage {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.stage-growing .stage {
+  border-color: var(--green-line);
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.stage-late .stage {
+  border-color: var(--action-CO);
+  color: var(--action-CO);
+}
+
+/* Short dates with icons: sown, expected transplant, expected harvest */
+.planting-dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: center;
+  gap: 0.15rem 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.planting-dates li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.planting-dates svg {
+  color: var(--ink-muted);
+}
+
+.planting-notes {
+  grid-column: 1;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The icon buttons, on the right of the dates and the note, whatever their length. */
+.planting-tools {
+  display: flex;
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: center;
+  gap: 0.35rem;
+}
+
+.planting-tools .icon-button {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+/* "Adicionar ao calendário", opened inside a planting card; also the regional calendars
+   panel ("Receber no calendário") on Hoje. */
+.calendar-panel {
+  margin: 0.5rem 0;
+}
+
+.planting .calendar-panel {
+  grid-column: 1 / -1;
+  margin: 0.25rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.calendar-panel summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.calendar-events {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.alarm-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.feed-url {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.zone-note {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ================================================================================== */
+/* 9. Culturas                                                                         */
+/* ================================================================================== */
+
+.crops-index {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .crops-index a {
@@ -654,30 +1015,7 @@ a.button.primary {
   text-align: right;
 }
 
-.back-button {
-  /* Stays in reach at the top while the sheet scrolls. */
-  position: sticky;
-  top: 0.5rem;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-  min-height: 2.75rem;
-  margin-bottom: 0.75rem;
-  padding: 0 1rem 0 0.6rem;
-  border: 1px solid var(--gold);
-  border-radius: 999px;
-  background: linear-gradient(var(--leather), var(--leather-dark));
-  color: #f3d58a;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
-}
-
-.back-button:active {
-  transform: translateY(1px);
-}
-
+/* The crop sheet */
 .scientific-name {
   margin: 0.25rem 0 1rem;
   font-style: italic;
@@ -688,21 +1026,7 @@ a.button.primary {
   margin: 0.75rem 0 0;
 }
 
-.zone-note {
-  margin: 0 0 0.5rem;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-/* Calendar strip: one row per action, 24 fortnights. Colours are tokens so dark mode works. */
-:root {
-  --action-SV: #8a6d3b;
-  --action-SD: #5f7a3a;
-  --action-TR: #3b6f7a;
-  --action-PL: #7a4f3b;
-  --action-CO: #b0563a;
-}
-
+/* Calendar strip: one row per action, 24 fortnights. */
 .strip {
   display: grid;
   grid-template-columns: 4.5rem 1fr;
@@ -729,8 +1053,8 @@ a.button.primary {
 }
 
 .strip-label {
-  font-weight: 600;
   align-self: center;
+  font-weight: 600;
 }
 
 .strip-cell {
@@ -743,30 +1067,34 @@ a.button.primary {
   opacity: 1;
 }
 
+.strip-cell.now {
+  outline: 2px solid var(--ink);
+  outline-offset: -1px;
+}
+
 .strip-cell.on.action-SV,
 .legend.action-SV {
   background: var(--action-SV);
 }
+
 .strip-cell.on.action-SD,
 .legend.action-SD {
   background: var(--action-SD);
 }
+
 .strip-cell.on.action-TR,
 .legend.action-TR {
   background: var(--action-TR);
 }
+
 .strip-cell.on.action-PL,
 .legend.action-PL {
   background: var(--action-PL);
 }
+
 .strip-cell.on.action-CO,
 .legend.action-CO {
   background: var(--action-CO);
-}
-
-.strip-cell.now {
-  outline: 2px solid var(--ink);
-  outline-offset: -1px;
 }
 
 .calendar-list {
@@ -774,11 +1102,11 @@ a.button.primary {
 }
 
 .calendar-list dt {
-  font-weight: 600;
-  margin-top: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
 }
 
 .calendar-list dd {
@@ -792,376 +1120,16 @@ a.button.primary {
   border-radius: 2px;
 }
 
-.saying {
-  margin: 0.75rem 0 0;
-}
+/* ================================================================================== */
+/* 10. Definições                                                                      */
+/* ================================================================================== */
 
-.saying blockquote {
-  margin: 0;
-  padding-left: 0.75rem;
-  border-left: 3px solid var(--accent);
-  font-style: italic;
-}
-
-.saying figcaption {
-  margin-top: 0.25rem;
-  padding-left: calc(0.75rem + 3px);
-  font-size: 0.9rem;
-}
-
-.frost-card {
-  border-left: 4px solid var(--frost);
-  background: var(--frost-bg);
-}
-
-.frost-card h3 {
-  color: var(--frost);
-}
-
-.frost-days {
-  margin: 0 0 0.5rem;
-  padding-left: 1.2rem;
-}
-
-.frost-crops {
-  font-weight: 600;
-}
-
-.holiday-today {
-  margin: 0 0 0.5rem;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.hint {
-  color: var(--ink-muted);
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-}
-
-.app-footer {
-  margin-top: 2rem;
-  color: var(--ink-muted);
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-h3 > svg {
-  margin-right: 0.35rem;
-  vertical-align: -0.15em;
-}
-
-.strip-rain {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.15rem;
-}
-
-.page > h2 + .today-date {
-  margin-top: 0.15rem;
-}
-
-/* --- Opening screen: the leather cover, which opens onto the notebook. --- */
-.cover {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  width: 100%;
-  padding: 1rem;
-  border: 0;
-  background: radial-gradient(circle at 50% 40%, var(--leather), var(--leather-dark) 75%);
-  cursor: pointer;
-  transition:
-    opacity 450ms ease,
-    transform 450ms ease;
-}
-
-.cover > img,
-.cover-front {
-  grid-area: 1 / 1;
-}
-
-/* The logo and the hint together on the leather, a little right of centre (the spine). */
-.cover-front {
-  display: grid;
-  justify-items: center;
-  gap: 1.25rem;
-  translate: 3% 3%;
-}
-
-.cover-book {
-  width: min(90vw, 32.5rem, 60vh);
-  height: auto;
-  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 50%));
-}
-
-.cover-logo {
-  width: min(62vw, 22.5rem, 40vh);
-  height: auto;
-  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 45%));
-}
-
-.cover-hint {
-  color: #f3d58a;
-  font-family: 'IM Fell English', Georgia, serif;
-  font-size: 1.25rem;
-  letter-spacing: 0.04em;
-  text-shadow: 0 1px 3px rgb(0 0 0 / 60%);
-}
-
-.cover.opening {
-  opacity: 0;
-  transform: scale(1.04);
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cover {
-    transition: none;
-  }
-}
-
-/* Meteocons' moon is pale: draw it on a small night-sky disc so it reads on paper. */
-.moon-disc {
-  padding: 0.15em;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #34506a, var(--accent));
-}
-
-.weather-today .weather-icon {
-  width: 5.5rem;
-  height: 5.5rem;
-  margin: -0.5rem -0.25rem -0.5rem -0.5rem;
-}
-
-/* --- Icon buttons: compact, but a 40 px target for thumbs. --- */
-.icon-button {
-  display: inline-grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  background: var(--card);
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.icon-button:hover,
-.icon-button[aria-expanded='true'] {
-  border-color: var(--gold);
-  background: var(--accent-soft);
-}
-
-.icon-button.danger {
-  color: var(--action-CO);
-}
-
-.header-tools {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.header-link[aria-current='page'] {
-  border-color: var(--gold);
-  background: var(--accent-soft);
-}
-
-/* --- "A minha horta": a fold-out form and compact cards. --- */
-.add-planting summary {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2.5rem;
-  color: var(--accent);
-  font-weight: 600;
-  cursor: pointer;
-  list-style: none;
-}
-
-.add-planting summary::-webkit-details-marker {
-  display: none;
-}
-
-.add-planting[open] summary {
-  margin-bottom: 0.5rem;
-}
-
-.plantings {
-  display: grid;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-
-.card.planting {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.35rem 0.5rem;
-  margin: 0;
-  padding: 0.6rem 0.75rem 0.6rem 0.9rem;
-  border-left: 5px solid var(--stage-color, var(--green));
-}
-
-.planting .planting-head {
-  grid-column: 1 / -1;
-}
-
-.planting-head a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.planting-dates {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem 0.85rem;
-  align-self: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.planting-dates li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.planting-dates svg {
-  color: var(--ink-muted);
-}
-
-.planting .planting-notes {
-  grid-column: 1 / -1;
-  margin: 0;
-  overflow: hidden;
-  font-size: 0.85rem;
-  color: var(--ink-muted);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.planting-tools {
-  display: flex;
-  gap: 0.35rem;
-  align-self: end;
-}
-
-.planting .calendar-panel {
-  grid-column: 1 / -1;
-  margin: 0.25rem 0 0;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--rule);
-}
-
-.stage-growing,
-.stage-perennial {
-  --stage-color: var(--green);
-}
-
-.stage-ready {
-  --stage-color: var(--gold);
-}
-
-.stage-late {
-  --stage-color: var(--action-CO);
-}
-
-.stage-harvested {
-  --stage-color: var(--rule);
-}
-
-.planting .stage {
-  font-size: 0.75rem;
-  padding: 0.05rem 0.5rem;
-}
-
-/* The tools stay on the right of the dates and the note, whatever their length. */
-.planting .planting-notes {
-  grid-column: 1;
-}
-
-.planting-tools {
-  grid-column: 2;
-  grid-row: 2 / span 2;
-  align-self: center;
-}
-
-.planting-tools .icon-button {
-  width: 2.25rem;
-  height: 2.25rem;
-}
-
-.stage-ready .stage {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--ink);
-}
-
-/* "Registar plantio": a small pill on the right; the form opens below it as a card. */
-.add-planting {
-  margin-bottom: 0.75rem;
-}
-
-.add-planting summary {
-  display: flex;
-  width: fit-content;
-  min-height: 2.25rem;
-  margin-left: auto;
-  padding: 0 0.85rem 0 0.6rem;
-  gap: 0.25rem;
-  border: 1px solid var(--gold);
-  border-radius: 999px;
-  background: var(--card);
-  font-size: 0.9rem;
-}
-
-.add-planting[open] summary {
-  margin-bottom: 0.5rem;
-  background: var(--accent-soft);
-}
-
-/* Settings: full-width controls. */
-.page .language-switcher select {
-  width: 100%;
-  min-height: 2.75rem;
-  border-radius: 0.5rem;
-}
-
-/* --- The current location: a chip that stands out, opening the choices. --- */
-.location-picker {
-  margin: 0 0 1rem;
-}
-
-.location-picker summary {
-  min-height: 0;
-}
-
-.location-chip {
+/* Location: the current place, then the GPS button and the list. */
+.location-settings .location-chip {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin: 0;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--gold);
-  border-radius: 1rem;
-  background: var(--card);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
-  cursor: pointer;
+  margin: 0 0 0.75rem;
 }
 
 .location-pin {
@@ -1184,23 +1152,26 @@ h3 > svg {
   color: var(--ink-muted);
 }
 
-.location-chip .location-change {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-  margin-left: auto;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent);
-  text-decoration: none;
+.location-panel {
+  display: grid;
+  gap: 0.75rem;
 }
 
-.location-picker[open] .location-change svg {
-  rotate: 180deg;
+.location-panel label {
+  display: grid;
+  gap: 0.25rem;
 }
 
-.location-picker .location-panel {
-  margin-top: 0.5rem;
+.location-panel button,
+.location-panel select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: var(--paper);
+  font: inherit;
+  color: inherit;
 }
 
 .location-panel button {
@@ -1208,68 +1179,21 @@ h3 > svg {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-}
-
-/* In the settings the card is the frame: no second border. */
-.location-settings .location-chip {
-  margin-bottom: 0.75rem;
-  padding: 0;
   border: 0;
-  background: none;
-  box-shadow: none;
-  cursor: default;
-}
-
-.location-settings .location-panel {
-  padding: 0;
-  border: 0;
-  background: none;
-}
-
-/* Next phases and holidays: the date stays on the line; a long name may wrap instead. */
-.quarters li {
-  flex-wrap: nowrap;
-  align-items: center;
-}
-
-.quarter-date {
-  flex: none;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-/* The location, on the date line of Hoje and Céu: a small link to the settings. */
-.location-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  color: var(--accent);
+  background: var(--green-action);
+  color: var(--paper);
   font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
 }
 
-.location-inline svg:first-child {
-  color: var(--action-CO);
-}
-
-.location-choose {
-  color: var(--action-CO);
-}
-
-/* Date and location on one line when they fit; the location wraps whole when they don't. */
-.today-date {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 0.75rem;
-}
-
-.today-date .location-inline {
-  font-size: 0.95rem;
-}
-
-/* The flex line no longer takes ::first-letter; the date itself does. */
-.today-date > span:first-child::first-letter {
-  text-transform: uppercase;
+/* Language */
+.language-switcher select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  background: var(--card);
+  font: inherit;
+  font-size: 0.9rem;
+  color: inherit;
 }
