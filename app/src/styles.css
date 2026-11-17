@@ -638,15 +638,34 @@ a.button.primary {
 }
 
 .crop-list li {
-  padding: 0.15rem 0.6rem;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.1rem 0.6rem;
   border: 1px solid var(--green-line);
   border-radius: 999px;
   background: var(--chip);
 }
 
 .crop-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
   color: inherit;
   text-decoration: none;
+}
+
+/* The crop's plate, tiny, at the start of each chip. */
+.crop-list .crop-thumb,
+.crop-list .crop-thumb img {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.crop-list .crop-thumb {
+  margin-left: -0.3rem;
 }
 
 .crop-mark {
@@ -656,6 +675,7 @@ a.button.primary {
 
 .crop-ends {
   margin-left: 0.35rem;
+  white-space: nowrap;
   font-size: 0.8rem;
   color: var(--ink-muted);
 }
@@ -887,13 +907,23 @@ a.button.primary {
   display: flex;
   grid-column: 1 / -1;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
 }
 
+/* The crop's plate, small, beside its name. */
 .planting-head a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--accent);
   text-decoration: none;
+}
+
+.planting-head .crop-thumb,
+.planting-head .crop-thumb img {
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
 /* The stage badge ("A crescer", "Pronto a colher"…) */
