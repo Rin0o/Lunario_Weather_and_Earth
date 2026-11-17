@@ -56,3 +56,6 @@ npm-debug.log*
 # --- OS ---
 .DS_Store
 Thumbs.db
+# Generated from /art by `npm run images`
+app/src/assets/images/
+public/app-icon.png

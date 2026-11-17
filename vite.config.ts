@@ -109,17 +109,32 @@ export default defineConfig({
         short_name: 'Lunário',
         description: 'Um almanaque rural no bolso.',
         lang: 'pt-PT',
-        theme_color: '#2f3b2a',
-        background_color: '#f4ecd8',
+        theme_color: '#4a2e1c',
+        background_color: '#4a2e1c',
         display: 'standalone',
         start_url: base,
         scope: base,
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,json}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,json,webp}'],
         // The test page is not part of the offline app: don't precache it, and don't let the
-        // app shell answer navigations to it.
-        globIgnores: ['teste-calendario/**', 'assets/calendarTest-*'],
+        // app shell answer navigations to it. The large artwork (for wide screens) and the icon
+        // generator's source are not precached either; the phone sizes are.
+        globIgnores: [
+          'teste-calendario/**',
+          'assets/calendarTest-*',
+          'app-icon.png',
+          'assets/*-1024-*.webp',
+          'assets/*-960-*.webp',
+        ],
+        // The wide-screen artwork, cached once seen.
+        runtimeCaching: [
+          {
+            urlPattern: /\/assets\/.+\.webp$/,
+            handler: 'CacheFirst',
+            options: { cacheName: 'artwork', expiration: { maxEntries: 20 } },
+          },
+        ],
         navigateFallbackDenylist: [/^\/teste-calendario/],
         // Frost alert notifications (RF-14), from public/push-sw.js.
         importScripts: ['push-sw.js'],
