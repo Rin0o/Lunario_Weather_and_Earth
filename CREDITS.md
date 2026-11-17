@@ -33,4 +33,9 @@ lists in the holiday tests were checked against [Nager.Date](https://date.nager.
 | ---------- | -------- | ------ | ------- |
 | _none yet_ |          |        |         |
 
-The app icon (`public/icon.svg`) is original to this project.
+The logos, the app icon, the notebook page background and the leather cover (`art/`) are
+original to this project.
+
+Weather and moon icons: [Meteocons](https://github.com/basmilius/weather-icons) by Bas Milius,
+MIT licence (`app/src/assets/meteocons/LICENSE`). Interface icons:
+[Lucide](https://lucide.dev), ISC licence.
