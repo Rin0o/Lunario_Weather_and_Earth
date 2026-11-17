@@ -1070,17 +1070,55 @@ a.button.primary {
   color: var(--ink-muted);
 }
 
-/* The crop's plate, printed on the page under its name. */
+/* The name on the left, the plate beside it, like an entry in a field notebook. */
+.crop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.crop-head > div {
+  min-width: 0;
+}
+
+.crop-head .scientific-name {
+  margin-bottom: 0;
+}
+
+/* The plate, on a scrap of old paper glued onto the page, turned a little (--plate-tilt, set
+   by CropSheet, so each crop has its own). The shadow follows the torn edges. The paper sits
+   in ::before, so it can be lightened to match the page without fading the ink. */
 .crop-plate {
-  margin: 0 0 1rem;
-  text-align: center;
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  flex: none;
+  width: 10rem;
+  height: 10rem;
+  margin: 0.25rem 0.25rem 0 0;
+  padding: 1.4rem;
+  filter: drop-shadow(0 3px 4px rgb(60 40 20 / 35%));
+  transform: rotate(var(--plate-tilt, 2deg));
+}
+
+.crop-plate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('./assets/images/paper-square-480.webp') center / 100% 100% no-repeat;
+  filter: brightness(1.18) saturate(0.7);
 }
 
 .crop-plate img {
-  width: auto;
-  max-width: min(100%, 18rem);
-  height: auto;
-  max-height: 15rem;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
 }
 
 .crop-notes {

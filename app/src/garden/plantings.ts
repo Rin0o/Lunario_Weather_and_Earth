@@ -1,6 +1,7 @@
 import { inWindow } from '../catalog/catalog.ts';
 import type { CalendarWindow, Crop, Fortnight, ZoneId } from '../catalog/types.ts';
 import { addDays, type IsoDate } from '../calendar/dates.ts';
+import { stableHash } from '../lib/stableHash.ts';
 
 /** What the user did: sowed in trays, sowed directly, transplanted or planted (RF-10). */
 export const PLANTING_ACTIONS = ['SV', 'SD', 'TR', 'PL'] as const;
@@ -88,11 +89,6 @@ export function actionsForCrop(
  * place along the top (8–62 %) and direction, and keeps them.
  */
 export function sproutPlacement(id: string): { left: string; flip: 1 | -1 } {
-  let hash = 0;
-  for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  // Mix the bits, so ids that differ by one character land far apart.
-  hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b) >>> 0;
-  hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b) >>> 0;
-  hash = (hash ^ (hash >>> 16)) >>> 0;
+  const hash = stableHash(id);
   return { left: `${8 + (hash % 55)}%`, flip: (hash >> 8) % 2 === 0 ? 1 : -1 };
 }
