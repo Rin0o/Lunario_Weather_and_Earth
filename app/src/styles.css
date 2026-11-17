@@ -1256,8 +1256,8 @@ a.button.primary {
 /* Calendar strip: one row per action, 24 fortnights. */
 .strip {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  gap: 0.2rem 0.4rem;
+  grid-template-columns: 4rem 1fr;
+  gap: 0.2rem 0.3rem;
   margin: 0.5rem 0 0.75rem;
   font-size: 0.75rem;
 }
@@ -1294,9 +1294,54 @@ a.button.primary {
   opacity: 1;
 }
 
-.strip-cell.now {
-  outline: 2px solid var(--ink);
-  outline-offset: -1px;
+/* Month labels: short names, the current month in ink. */
+.strip {
+  position: relative;
+  --label: 4.3rem; /* label column + gap */
+  --col: calc((100% - var(--label)) / 24);
+}
+
+.strip-months span {
+  font-size: 0.62rem;
+  letter-spacing: -0.02em;
+}
+
+.strip-months span.now-month {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Alternate months in two tones, so each month reads as a band. */
+.strip-cell:nth-child(4n + 3),
+.strip-cell:nth-child(4n + 4) {
+  opacity: 0.75;
+}
+
+.strip-cell.on {
+  opacity: 1;
+}
+
+/* Room under the month names for the needle's head. */
+.strip-months {
+  margin-bottom: 0.7rem;
+}
+
+/* "Now": an ink needle through the rows, topped by a small engraved emblem. */
+.strip-now {
+  position: absolute;
+  top: 0.8rem;
+  bottom: -4px;
+  left: calc(var(--label) + var(--col) * (var(--now) - 0.5) - 7px);
+  width: 14px;
+  color: var(--ink);
+  background: linear-gradient(currentColor, currentColor) no-repeat 50% 12px / 2px 100%;
+  pointer-events: none;
+}
+
+.strip-now svg {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 .strip-cell.on.action-SV,

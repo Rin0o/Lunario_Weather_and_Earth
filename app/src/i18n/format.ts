@@ -63,11 +63,11 @@ export function formatDayMonthLong(moment: Date, language: string | undefined): 
   }).format(moment);
 }
 
-/** Month initial for calendar headers: `J`, `F`, `M`… */
-export function formatMonthInitial(month: number, language: string | undefined): string {
-  return new Intl.DateTimeFormat(intlLocale(language), { month: 'narrow', timeZone: 'UTC' }).format(
-    new Date(Date.UTC(2026, month - 1, 15)),
-  );
+/** Short month name for calendar headers, without the trailing dot: `jan`, `fev` / `Jan`, `Feb`. */
+export function formatMonthShort(month: number, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), { month: 'short', timeZone: 'UTC' })
+    .format(new Date(Date.UTC(2026, month - 1, 15)))
+    .replace(/\.$/, '');
 }
 
 /** Day and month: `15/11` / `15 Nov`. */
