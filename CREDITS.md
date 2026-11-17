@@ -39,7 +39,7 @@ lists in the holiday tests were checked against [Nager.Date](https://date.nager.
 Each plate, with its exact source page, is listed in [art/plates/SOURCES.md](art/plates/SOURCES.md);
 they were cropped (captions removed) and printed in brown ink for the app.
 
-The logos, the app icon, the notebook page background and the leather cover (`art/`) are
-original to this project.
+The logos, the app icon, the notebook page background, the scrap of paper behind the plates
+and the leather cover (`art/`) are original to this project.
 
 Interface icons: [Lucide](https://lucide.dev), ISC licence.

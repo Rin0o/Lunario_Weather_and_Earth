@@ -17,6 +17,8 @@ export const IMAGES: ImageSpec[] = [
   { name: 'logo-text', source: 'art/backgrounds/Logo_text.png', widths: [480, 960], quality: 85 },
   // The round mark in the header (shown at 40 px, so 2× and 3× screens).
   { name: 'logo-round', source: 'art/backgrounds/Logo_round.png', widths: [96, 144], quality: 85 },
+  // The scrap of old paper each plate is glued on, on the crop sheet (shown at about 10 rem).
+  { name: 'paper-square', source: 'art/backgrounds/page_square.png', widths: [480], quality: 72 },
 ];
 
 /**

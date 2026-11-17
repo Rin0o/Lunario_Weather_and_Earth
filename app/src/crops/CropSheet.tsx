@@ -1,5 +1,6 @@
+import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
-import { plateFor } from '../assets/plates.ts';
+import { plateFor, plateTilt } from '../assets/plates.ts';
 import { dateInZone } from '../astro/time.ts';
 import { catalog, fortnightOf, zoneForDistrict } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
@@ -43,18 +44,24 @@ export function CropSheet({ cropId, now, district, source = catalog }: CropSheet
   return (
     <section className="crop-sheet" aria-labelledby="crop-heading">
       <BackButton fallback={{ name: 'crops' }} source={source} />
-      <h2 id="crop-heading">{pick(crop.name)}</h2>
-      <p className="scientific-name">{crop.scientificName}</p>
-      {plate && (
-        <figure className="crop-plate">
-          <img
-            src={plate.sheet}
-            alt={t('crops.plateAlt', { crop: pick(crop.name) })}
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-      )}
+      <header className="crop-head">
+        <div>
+          <h2 id="crop-heading">{pick(crop.name)}</h2>
+          <p className="scientific-name">{crop.scientificName}</p>
+        </div>
+        {plate && (
+          <figure
+            className="crop-plate"
+            style={{ '--plate-tilt': `${plateTilt(crop.id)}deg` } as CSSProperties}
+          >
+            <img
+              src={plate.sheet}
+              alt={t('crops.plateAlt', { crop: pick(crop.name) })}
+              decoding="async"
+            />
+          </figure>
+        )}
+      </header>
 
       <article className="card">
         <dl className="facts">
