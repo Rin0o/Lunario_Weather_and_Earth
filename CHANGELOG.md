@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.0](https://github.com/Rin0o/Lunario_Weather_and_Earth/compare/v0.3.0...v0.4.0) (2026-11-17)
+
+
+### Features
+
+* **crops:** botanical engravings for every crop (RF-06) ([7fe079a](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/7fe079afcf9649cadc765d4f58e25187f8ab14b2))
+* **nav:** a back button that returns to the previous screen ([0944cf1](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/0944cf16bc5bebebd9ac2c87984177c75af0cefd))
+* **ui:** compact garden cards, and Alerts and Settings screens ([c69d17b](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/c69d17bf9091f3da7636fce4ae08dd6f5d00cc97))
+* **ui:** notebook look, bottom tab bar and a Sky page ([f55f67f](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/f55f67fcd849441229281116fee23a5c29fe9e50))
+
+
+### Bug Fixes
+
+* **i18n:** "Adicionar à horta" instead of "Registar plantio" ([daa24e6](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/daa24e685fa16c17e6b740f152bd5bb1a809918b))
+
 ## [0.3.0](https://github.com/Rin0o/Lunario_Weather_and_Earth/compare/v0.2.0...v0.3.0) (2026-11-16)
 
 
