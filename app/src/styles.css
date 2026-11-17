@@ -11,7 +11,8 @@
 /* ================================================================================== */
 
 :root {
-  /* Paper, leather and ink */
+  /* Paper, leather and ink; --desk is the background around the notebook on wide screens */
+  --desk: #f2e4c6;
   --paper: #efe0bf;
   --leather: #4a2e1c;
   --leather-dark: #2f1d12;
@@ -70,7 +71,7 @@
 body {
   margin: 0;
   /* The desk around the notebook on wide screens. */
-  background: var(--leather-dark);
+  background: var(--desk);
   color: var(--ink);
 }
 
@@ -208,7 +209,8 @@ a {
   z-index: 10;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  max-width: 40rem;
+  /* The same width as the notebook page (body::before, #root). */
+  max-width: 42rem;
   margin: 0 auto;
   padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
   background: linear-gradient(var(--leather), var(--leather-dark));
