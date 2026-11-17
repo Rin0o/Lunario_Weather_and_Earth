@@ -1,5 +1,5 @@
 /**
- * Vignettes beside screen titles: old public-domain engravings (art/vignettes,
+ * Vignettes beside screen titles and in empty states: old public-domain engravings (art/vignettes,
  * art/vignettes/SOURCES.md), printed in the plates' brown ink by `npm run images`.
  */
 const vignettes = import.meta.glob<string>('./images/vignettes/vignette-*-320.webp', {
