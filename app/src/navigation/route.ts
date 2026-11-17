@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 /**
  * Screens, addressed by the URL hash (`#/culturas`, `#/cultura/alface`). Hash routes need no
@@ -35,16 +35,56 @@ export const href = {
   crop: (id: string) => `#/cultura/${id}`,
 };
 
-/** The current route, following hash changes (links, back and forward buttons). */
-export function useRoute(): Route {
-  const [route, setRoute] = useState(() => parseRoute(window.location.hash));
+/** The hash of a route, the inverse of `parseRoute`. */
+export function hashOf(route: Route): string {
+  return route.name === 'crop' ? href.crop(route.id) : href[route.name];
+}
+
+/** The translation key of a route's name, for "back to …" labels. */
+export function routeLabelKey(route: Route): string {
+  return route.name === 'crop' ? 'nav.crops' : `nav.${route.name}`;
+}
+
+export interface Navigation {
+  route: Route;
+  /** The screen the user came from within the app, or null on a direct entry. */
+  previous: Route | null;
+}
+
+const currentHash = () => hashOf(parseRoute(window.location.hash));
+const MAX_TRAIL = 50;
+
+/**
+ * The current route and the trail of screens visited in the app, following hash changes
+ * (links, the back and forward buttons). Going to the screen before the last one counts as
+ * going back, so the trail matches the browser's history.
+ */
+export function useNavigation(): Navigation {
+  const [trail, setTrail] = useState<string[]>(() => [currentHash()]);
   useEffect(() => {
     const onChange = () => {
-      setRoute(parseRoute(window.location.hash));
+      const hash = currentHash();
+      setTrail((visited) => {
+        if (visited.at(-1) === hash) return visited;
+        if (visited.at(-2) === hash) return visited.slice(0, -1);
+        return [...visited, hash].slice(-MAX_TRAIL);
+      });
       window.scrollTo({ top: 0 });
     };
     window.addEventListener('hashchange', onChange);
     return () => window.removeEventListener('hashchange', onChange);
   }, []);
-  return route;
+  const before = trail.at(-2);
+  return {
+    route: parseRoute(trail.at(-1) ?? ''),
+    previous: before === undefined ? null : parseRoute(before),
+  };
 }
+
+/** The current route only. */
+export function useRoute(): Route {
+  return useNavigation().route;
+}
+
+/** The screen the user came from, for the back buttons (provided by App). */
+export const PreviousRouteContext = createContext<Route | null>(null);

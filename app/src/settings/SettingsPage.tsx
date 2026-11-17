@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BackButton } from '../navigation/BackButton.tsx';
 import { LanguageSwitcher } from '../components/LanguageSwitcher.tsx';
 
 interface SettingsPageProps {
@@ -12,6 +13,7 @@ export function SettingsPage({ locationControl }: SettingsPageProps) {
   const { t } = useTranslation();
   return (
     <section aria-labelledby="settings-heading" className="page">
+      <BackButton fallback={{ name: 'today' }} />
       <h2 id="settings-heading">{t('settings.title')}</h2>
       {locationControl && (
         <article className="card" aria-labelledby="location-heading">
