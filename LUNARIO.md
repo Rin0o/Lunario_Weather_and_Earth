@@ -252,6 +252,17 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 
 Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for personal use".
 
+### 10.1 Ideias visuais para rever
+
+Propostas durante o refresh visual (2026-11-17), ainda por decidir:
+
+| Ideia | Notas |
+|---|---|
+| Vinheta no ecrã **Céu** | Gravura antiga da Lua ou de um céu estrelado, em domínio público, no mesmo papel rasgado das fichas de cultura, ao lado do título. |
+| **Estados vazios** ilustrados | Por exemplo, a horta sem registos: uma gravura grande e esbatida (regador, enxada) com o texto "Ainda não há nada na horta". |
+| Página **Sobre** nas Definições | Créditos visíveis na app: gravuras (Vilmorin-Andrieux, American Cyclopædia), IPMA, Open-Meteo, Wikipedia/Wikiquote, ícones e tipografia, a partir de `CREDITS.md`. |
+| Trocar a gravura da **ervilha** e dos **coentros** | A ervilha só mostra duas vagens e fica fina em miniatura; os coentros vêm de outra obra. Procurar gravuras com a planta inteira e do mesmo traço (Biodiversity Heritage Library no Flickr, confirmando a licença de cada uma). |
+
 ## 11. Questões em aberto
 
 | # | Questão | Notas |
