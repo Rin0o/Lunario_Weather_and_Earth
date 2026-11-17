@@ -8,14 +8,20 @@ import {
   Wheat,
   type LucideIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Crop, Text } from '../catalog/types.ts';
 import { isoDateToNoonUtc, type IsoDate } from '../calendar/dates.ts';
 import { formatDayMonth, formatFullDate } from '../i18n/format.ts';
 import { href } from '../navigation/route.ts';
 import { CalendarPanel } from './CalendarPanel.tsx';
-import { expectedHarvest, stageOf, type Planting, type PlantingAction } from './plantings.ts';
+import {
+  expectedHarvest,
+  sproutPlacement,
+  stageOf,
+  type Planting,
+  type PlantingAction,
+} from './plantings.ts';
 import { expectedTransplant } from './reminders.ts';
 
 const ACTION_ICONS: Record<PlantingAction, LucideIcon> = {
@@ -55,9 +61,13 @@ export function PlantingCard({
   const transplant = planting.status === 'active' ? expectedTransplant(planting, crop) : null;
   const active = planting.status === 'active';
   const ActionIcon = ACTION_ICONS[planting.action];
+  const sprout = sproutPlacement(planting.id);
 
   return (
-    <li className={`card planting stage-${stage}`}>
+    <li
+      className={`card planting stage-${stage}`}
+      style={{ '--sprout-left': sprout.left, '--sprout-flip': sprout.flip } as CSSProperties}
+    >
       <div className="planting-head">
         <a href={href.crop(crop.id)}>
           <strong>{pick(crop.name)}</strong>

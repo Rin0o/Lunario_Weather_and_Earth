@@ -82,3 +82,17 @@ export function actionsForCrop(
 ): PlantingAction[] {
   return PLANTING_ACTIONS.filter((a) => windows.some((w) => w.cropId === cropId && w.action === a));
 }
+
+/**
+ * Where the seedlings on top of a card stand, from the planting's id: each card gets its own
+ * place along the top (8–62 %) and direction, and keeps them.
+ */
+export function sproutPlacement(id: string): { left: string; flip: 1 | -1 } {
+  let hash = 0;
+  for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  // Mix the bits, so ids that differ by one character land far apart.
+  hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b) >>> 0;
+  hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b) >>> 0;
+  hash = (hash ^ (hash >>> 16)) >>> 0;
+  return { left: `${8 + (hash % 55)}%`, flip: (hash >> 8) % 2 === 0 ? 1 : -1 };
+}
