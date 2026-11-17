@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 /**
  * Screens, addressed by the URL hash (`#/culturas`, `#/cultura/alface`). Hash routes need no
@@ -40,6 +41,51 @@ export function hashOf(route: Route): string {
   return route.name === 'crop' ? href.crop(route.id) : href[route.name];
 }
 
+/** The four main screens, in the order of the tab bar: the pages of the notebook. */
+export const TABS = ['today', 'sky', 'garden', 'crops'] as const;
+type Tab = (typeof TABS)[number];
+
+/** Where a tab sits in the notebook, or -1 for a secondary screen (settings, a crop sheet…). */
+export function tabIndex(route: Route): number {
+  return TABS.indexOf(route.name as Tab);
+}
+
+export type Turn = 'next' | 'previous';
+
+/** Which way the notebook turns between two screens: only between two different tabs. */
+export function turnBetween(from: Route, to: Route): Turn | null {
+  const a = tabIndex(from);
+  const b = tabIndex(to);
+  if (a < 0 || b < 0 || a === b) return null;
+  return b > a ? 'next' : 'previous';
+}
+
+/**
+ * True if the browser can turn the page itself (View Transitions) and the user has not asked
+ * for less motion. Otherwise the new page just slides in (see `usePageTurn`).
+ */
+export function canTurnPages(): boolean {
+  return (
+    typeof document.startViewTransition === 'function' &&
+    !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
+/**
+ * Shows a new screen. Between two tabs, where the browser can, the old page turns over on
+ * its binding like a notebook's (styles.css, "Turning the notebook's pages").
+ */
+function showScreen(turn: Turn | null, update: () => void): void {
+  if (!turn || !canTurnPages()) {
+    update();
+    return;
+  }
+  const html = document.documentElement;
+  html.dataset.turn = turn;
+  const transition = document.startViewTransition(() => flushSync(update));
+  void transition.finished.finally(() => delete html.dataset.turn);
+}
+
 /** The translation key of a route's name, for "back to …" labels. */
 export function routeLabelKey(route: Route): string {
   return route.name === 'crop' ? 'nav.crops' : `nav.${route.name}`;
@@ -61,15 +107,20 @@ const MAX_TRAIL = 50;
  */
 export function useNavigation(): Navigation {
   const [trail, setTrail] = useState<string[]>(() => [currentHash()]);
+  const shown = useRef(trail.at(-1) ?? '');
   useEffect(() => {
     const onChange = () => {
       const hash = currentHash();
-      setTrail((visited) => {
-        if (visited.at(-1) === hash) return visited;
-        if (visited.at(-2) === hash) return visited.slice(0, -1);
-        return [...visited, hash].slice(-MAX_TRAIL);
+      const turn = turnBetween(parseRoute(shown.current), parseRoute(hash));
+      shown.current = hash;
+      showScreen(turn, () => {
+        setTrail((visited) => {
+          if (visited.at(-1) === hash) return visited;
+          if (visited.at(-2) === hash) return visited.slice(0, -1);
+          return [...visited, hash].slice(-MAX_TRAIL);
+        });
+        window.scrollTo({ top: 0 });
       });
-      window.scrollTo({ top: 0 });
     };
     window.addEventListener('hashchange', onChange);
     return () => window.removeEventListener('hashchange', onChange);

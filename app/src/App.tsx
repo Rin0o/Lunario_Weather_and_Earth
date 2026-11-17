@@ -7,7 +7,7 @@ import {
   Sprout,
   type LucideIcon,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertsPage } from './alerts/AlertsPage.tsx';
 import { artwork } from './assets/artwork.ts';
@@ -24,7 +24,8 @@ import { LocationChip } from './location/LocationChip.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
-import { PreviousRouteContext, href, useNavigation } from './navigation/route.ts';
+import { PreviousRouteContext, hashOf, href, useNavigation } from './navigation/route.ts';
+import { usePageTurn, useSwipeTabs } from './navigation/swipe.ts';
 import { SettingsPage } from './settings/SettingsPage.tsx';
 import { SkyPage } from './sky/SkyPage.tsx';
 import { SowingCard } from './today/SowingCard.tsx';
@@ -37,6 +38,9 @@ export function App() {
   const now = useNow();
   const [location, setLocation] = useUserLocation();
   const { route, previous } = useNavigation();
+  const mainRef = useRef<HTMLElement>(null);
+  useSwipeTabs(mainRef, route);
+  const turn = usePageTurn(route);
   const district = DISTRICTS[location.district] ?? '';
   const resolved = i18n.resolvedLanguage ?? '';
   const language = isSupportedLanguage(resolved) ? resolved : DEFAULT_LANGUAGE;
@@ -93,34 +97,36 @@ export function App() {
           </a>
         </div>
       </header>
-      <main>
+      <main ref={mainRef}>
         <PreviousRouteContext.Provider value={previous}>
-          {route.name === 'today' && (
-            <Today
-              now={now}
-              location={location}
-              locationControl={locationControl}
-              frost={<FrostCard now={now} location={location} />}
-              weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
-              sowing={<SowingCard now={now} district={district} />}
-            />
-          )}
-          {route.name === 'settings' && (
-            <SettingsPage
-              locationControl={<LocationPicker location={location} onChange={setLocation} />}
-            />
-          )}
-          {route.name === 'alerts' && (
-            <AlertsPage>
-              <FrostAlertsCard location={location} />
-            </AlertsPage>
-          )}
-          {route.name === 'sky' && (
-            <SkyPage now={now} location={location} locationControl={locationControl} />
-          )}
-          {route.name === 'garden' && <GardenPage now={now} district={district} />}
-          {route.name === 'crops' && <CropsList />}
-          {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
+          <div key={hashOf(route)} className={turn ? `page-turn turn-${turn}` : undefined}>
+            {route.name === 'today' && (
+              <Today
+                now={now}
+                location={location}
+                locationControl={locationControl}
+                frost={<FrostCard now={now} location={location} />}
+                weather={<WeatherCard now={now} ipmaId={location.ipmaId} />}
+                sowing={<SowingCard now={now} district={district} />}
+              />
+            )}
+            {route.name === 'settings' && (
+              <SettingsPage
+                locationControl={<LocationPicker location={location} onChange={setLocation} />}
+              />
+            )}
+            {route.name === 'alerts' && (
+              <AlertsPage>
+                <FrostAlertsCard location={location} />
+              </AlertsPage>
+            )}
+            {route.name === 'sky' && (
+              <SkyPage now={now} location={location} locationControl={locationControl} />
+            )}
+            {route.name === 'garden' && <GardenPage now={now} district={district} />}
+            {route.name === 'crops' && <CropsList />}
+            {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
+          </div>
         </PreviousRouteContext.Provider>
       </main>
       <footer className="app-footer">
