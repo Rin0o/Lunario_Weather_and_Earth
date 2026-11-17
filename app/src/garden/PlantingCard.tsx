@@ -11,6 +11,7 @@ import {
 import { useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Crop, Text } from '../catalog/types.ts';
+import { CropThumb } from '../crops/CropThumb.tsx';
 import { isoDateToNoonUtc, type IsoDate } from '../calendar/dates.ts';
 import { formatDayMonth, formatFullDate } from '../i18n/format.ts';
 import { href } from '../navigation/route.ts';
@@ -70,6 +71,7 @@ export function PlantingCard({
     >
       <div className="planting-head">
         <a href={href.crop(crop.id)}>
+          <CropThumb cropId={crop.id} />
           <strong>{pick(crop.name)}</strong>
         </a>
         <span className="stage">{t(`garden.stages.${stage}`)}</span>

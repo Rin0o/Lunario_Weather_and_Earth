@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { plateFor } from '../assets/plates.ts';
 import { catalog } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { intlLocale } from '../i18n/format.ts';
 import { href } from '../navigation/route.ts';
+import { CropThumb } from './CropThumb.tsx';
 
 /** All crops, alphabetically in the current language, each with its plate and a link to its sheet. */
 export function CropsList({ source = catalog }: { source?: Catalog }) {
@@ -17,22 +17,17 @@ export function CropsList({ source = catalog }: { source?: Catalog }) {
     <section aria-labelledby="crops-heading" className="page">
       <h2 id="crops-heading">{t('crops.title')}</h2>
       <ul className="crops-index">
-        {crops.map((crop) => {
-          const plate = plateFor(crop.id);
-          return (
-            <li key={crop.id}>
-              <a href={href.crop(crop.id)}>
-                <span className="crop-thumb" aria-hidden="true">
-                  {plate && <img src={plate.thumb} alt="" loading="lazy" decoding="async" />}
-                </span>
-                <span className="crop-names">
-                  <span>{pick(crop.name)}</span>
-                  <span className="hint">{crop.scientificName}</span>
-                </span>
-              </a>
-            </li>
-          );
-        })}
+        {crops.map((crop) => (
+          <li key={crop.id}>
+            <a href={href.crop(crop.id)}>
+              <CropThumb cropId={crop.id} />
+              <span className="crop-names">
+                <span>{pick(crop.name)}</span>
+                <span className="hint">{crop.scientificName}</span>
+              </span>
+            </a>
+          </li>
+        ))}
       </ul>
     </section>
   );
