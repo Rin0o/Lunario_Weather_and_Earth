@@ -103,14 +103,16 @@ export const WARNINGS_JSON = [
 /** A fetch answering every sea request from the fixtures. */
 export function fakeSeaFetch(): typeof fetch {
   return ((input: RequestInfo | URL) => {
-    const url = String(input);
-    const json = url.includes('marine-api')
-      ? MARINE_JSON
-      : url.includes('api.open-meteo.com')
-        ? WIND_JSON
-        : url.includes('warnings')
-          ? WARNINGS_JSON
-          : IPMA_SEA_DAYS_JSON[Number(/day(\d)/.exec(url)?.[1] ?? 0)];
+    // Matched on the parsed host and path, never on a substring of the whole URL.
+    const { hostname, pathname } = new URL(String(input));
+    const json =
+      hostname === 'marine-api.open-meteo.com'
+        ? MARINE_JSON
+        : hostname === 'api.open-meteo.com'
+          ? WIND_JSON
+          : pathname.endsWith('/warnings_www.json')
+            ? WARNINGS_JSON
+            : IPMA_SEA_DAYS_JSON[Number(/day(\d)\.json$/.exec(pathname)?.[1] ?? 0)];
     return Promise.resolve(new Response(JSON.stringify(json), { status: 200 }));
   }) as typeof fetch;
 }

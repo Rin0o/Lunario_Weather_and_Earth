@@ -89,7 +89,7 @@ describe('sea days', () => {
     const json = await requestSeaJson(40.14, -8.88, fakeSeaFetch());
     expect(json.ipma).toHaveLength(3);
     const failing = ((input: RequestInfo | URL) =>
-      String(input).includes('marine-api')
+      new URL(String(input)).hostname === 'marine-api.open-meteo.com'
         ? fakeSeaFetch()(input)
         : Promise.resolve(new Response('', { status: 500 }))) as typeof fetch;
     const partial = await requestSeaJson(40.14, -8.88, failing);
