@@ -62,7 +62,8 @@ describe('CropSheet', () => {
     ).toBeInTheDocument();
     expect(calendarEntries()).toEqual([
       { action: 'Semear em viveiro', ranges: ['16 de janeiro – 30 de setembro'] },
-      { action: 'Transplantar', ranges: ['1 de março – 31 de outubro'] },
+      { action: 'Semear diretamente', ranges: ['1 de março – 31 de agosto'] },
+      { action: 'Transplantar / plantar pés', ranges: ['1 de março – 31 de outubro'] },
       { action: 'Colher', ranges: ['16 de março – 31 de dezembro · calculada pelo ciclo'] },
     ]);
     // The strip marks the current fortnight (first half of November = 21).

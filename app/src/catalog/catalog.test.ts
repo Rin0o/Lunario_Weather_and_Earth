@@ -54,7 +54,7 @@ describe('catalog', () => {
     expect(names(groups, 'SV')).toEqual(['cebola']);
     expect(names(groups, 'SD')).toEqual(['ervilha', 'espinafre', 'fava', 'nabo']);
     expect(names(groups, 'TR')).toEqual(['couve_coracao', 'couve_galega']);
-    expect(names(groups, 'PL')).toEqual(['alho', 'morango']);
+    expect(names(groups, 'PL')).toEqual(['alho', 'cebola', 'morango']);
     const spinach = groups
       .find((g) => g.action === 'SD')
       ?.activities.find((a) => a.crop.id === 'espinafre');

@@ -75,7 +75,7 @@ describe('GardenPage', () => {
     const actions = within(screen.getByRole('combobox', { name: 'O que fez' }))
       .getAllByRole('option')
       .map((o) => o.textContent);
-    expect(actions).toEqual(['Semear em viveiro', 'Transplantar']);
+    expect(actions).toEqual(['Semear em viveiro', 'Transplantar / plantar pés']);
     expect(screen.getByRole('note')).toHaveTextContent(
       'Fora da época recomendada para semear em viveiro em Litoral Centro.',
     );
@@ -110,7 +110,7 @@ describe('GardenPage', () => {
     await screen.findByText('Ainda não tem nada na horta.');
     await logPlanting('Morango');
     await screen.findByText('Registado.');
-    await logPlanting('Couve-galega', 'Transplantar', '2026-11-01');
+    await logPlanting('Couve-galega', 'Transplantar / plantar pés', '2026-11-01');
     await waitFor(() => expect(entries()).toHaveLength(2));
     unmount();
 

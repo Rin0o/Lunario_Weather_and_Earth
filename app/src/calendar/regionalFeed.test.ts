@@ -64,7 +64,7 @@ describe('regional feeds', () => {
     expect(nov).toContain(
       'Semear diretamente: Ervilha, Espinafre – última quinzena, Fava, Nabo / nabiça / grelos.',
     );
-    expect(nov).toContain('Plantar: Alho, Morango.');
+    expect(nov).toContain('Plantar: Alho, Cebola (1), Morango.');
     expect(nov).toContain('Mais em https://lunario.example/');
   });
 
@@ -79,7 +79,9 @@ describe('regional feeds', () => {
     const ics = feed('LC', 'en');
     // en-GB puts thin spaces around the dash.
     expect(ics).toMatch(/SUMMARY:🌱 In the garden: 1\s?–\s?15 November/);
-    expect(event(ics, 'zona-lc-2026-21@lunario')).toContain('Plant: Garlic, Strawberry.');
+    expect(event(ics, 'zona-lc-2026-21@lunario')).toContain(
+      'Plant: Garlic, Onion (1), Strawberry.',
+    );
   });
 
   it('rejects an unknown zone', () => {

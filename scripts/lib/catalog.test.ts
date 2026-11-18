@@ -28,26 +28,29 @@ describe('the real /data', () => {
   it('builds with the expected contents', () => {
     expect(catalog.crops).toHaveLength(35);
     expect(catalog.zones.map((z) => z.id)).toEqual(['LN', 'LC', 'IN', 'SU']);
-    expect(catalog.windows.filter((w) => w.origin === 'base')).toHaveLength(69);
+    expect(catalog.windows.filter((w) => w.origin === 'base')).toHaveLength(80);
     expect(catalog.lunarRules).toHaveLength(8);
   });
 
   it('derives exactly the windows of the v0.1 spreadsheet for LN, IN and SU (D-08)', () => {
-    const sheet = readTable(
+    const rows = readTable(
       'janelas-folha-v0.1.csv',
       readFileSync(new URL('scripts/__fixtures__/janelas-folha-v0.1.csv', root), 'utf8'),
       ['cultura', 'zona', 'acao', 'inicio', 'fim'],
-    ).rows.map(({ values: v }) =>
-      key({
-        cropId: v.cultura ?? '',
-        zoneId: v.zona ?? '',
-        action: v.acao ?? '',
-        start: parseFortnight(v.inicio ?? ''),
-        end: parseFortnight(v.fim ?? ''),
-      }),
-    );
+    ).rows.map(({ values: v }) => ({
+      cropId: v.cultura ?? '',
+      zoneId: v.zona ?? '',
+      action: v.acao ?? '',
+      start: parseFortnight(v.inicio ?? ''),
+      end: parseFortnight(v.fim ?? ''),
+    }));
+    const sheet = rows.map(key);
+    // Actions added to a crop after v0.1 (e.g. lettuce sown directly) are not in the sheet.
+    const inSheet = new Set(rows.map((r) => `${r.cropId} ${r.action}`));
     // The rules alone, before the manual windows of janelas-zona.csv replace some (Q-10).
-    const base = catalog.windows.filter((w) => w.origin === 'base');
+    const base = catalog.windows.filter(
+      (w) => w.origin === 'base' && inSheet.has(`${w.cropId} ${w.action}`),
+    );
     const derived = deriveWindows(base, catalog.crops, catalog.rules).map(key);
     expect(derived.sort()).toEqual(sheet.sort());
   });
@@ -103,6 +106,7 @@ describe('the real /data', () => {
       'brocolo IN TR Jul Q1–Set Q1',
     ]);
     expect(windows('cebola', 'SU')).toEqual([
+      expect.stringMatching(/^cebola SU PL /),
       'cebola SU SV Out Q1–Jan Q2',
       expect.stringMatching(/^cebola SU TR /),
     ]);
