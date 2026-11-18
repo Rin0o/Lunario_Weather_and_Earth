@@ -7,7 +7,7 @@ export function fold(text: string): string {
 }
 
 /** Folded, with the sayings' "S. Martinho" read as "São Martinho", as people type it. */
-function searchable(text: string): string {
+export function searchable(text: string): string {
   return fold(text).replace(/(^|[^\p{L}])s\.\s*/gu, '$1sao ');
 }
 

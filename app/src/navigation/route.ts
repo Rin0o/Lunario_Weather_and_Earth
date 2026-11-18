@@ -15,7 +15,9 @@ export type Route =
   | { name: 'garden' }
   | { name: 'crops' }
   | { name: 'crop'; id: string }
-  | { name: 'sayings' };
+  | { name: 'sayings' }
+  | { name: 'saints' }
+  | { name: 'holidays' };
 
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
@@ -28,6 +30,8 @@ export function parseRoute(hash: string): Route {
   // The library opens on its first shelf, the crops.
   if (path === 'culturas' || path === 'biblioteca') return { name: 'crops' };
   if (path === 'ditados') return { name: 'sayings' };
+  if (path === 'santos') return { name: 'saints' };
+  if (path === 'feriados') return { name: 'holidays' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
   if (crop?.[1]) return { name: 'crop', id: crop[1] };
   return { name: 'today' };
@@ -44,6 +48,8 @@ export const href = {
   crops: '#/culturas',
   crop: (id: string) => `#/cultura/${id}`,
   sayings: '#/ditados',
+  saints: '#/santos',
+  holidays: '#/feriados',
 };
 
 /** The hash of a route, the inverse of `parseRoute`. */
@@ -53,17 +59,24 @@ export function hashOf(route: Route): string {
 
 /**
  * The five main screens, in the order of the tab bar: the pages of the notebook. The last is
- * the library, which opens on the crops; its other shelves (the sayings) count as the same tab.
+ * the library, which opens on the crops; its other shelves (sayings, saints…) count as the same tab.
  */
 export const TABS = ['today', 'sky', 'sea', 'garden', 'crops'] as const;
 
 /** The library's shelves, in the order of its switcher (LibraryNav). */
-export const LIBRARY_SHELVES = ['crops', 'sayings'] as const;
+export const LIBRARY_SHELVES = ['crops', 'sayings', 'saints', 'holidays'] as const;
 type Tab = (typeof TABS)[number];
+
+const isShelf = (route: Route) => (LIBRARY_SHELVES as readonly string[]).includes(route.name);
+
+/** True for any screen of the library: one of its shelves, or a crop sheet. */
+export function inLibrary(route: Route): boolean {
+  return route.name === 'crop' || isShelf(route);
+}
 
 /** Where a tab sits in the notebook, or -1 for a secondary screen (settings, a crop sheet…). */
 export function tabIndex(route: Route): number {
-  return TABS.indexOf((route.name === 'sayings' ? 'crops' : route.name) as Tab);
+  return TABS.indexOf((isShelf(route) ? 'crops' : route.name) as Tab);
 }
 
 export type Turn = 'next' | 'previous';

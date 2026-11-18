@@ -63,7 +63,9 @@
     "crops": "Crops",
     "about": "About",
     "library": "Library",
-    "sayings": "Sayings"
+    "sayings": "Sayings",
+    "saints": "Saints",
+    "holidays": "Holidays"
   },
   "sky": {
     "title": "Sky",
@@ -461,6 +463,18 @@
     "today": "Today is a holiday: {{name}}",
     "next": "Upcoming holidays",
     "optional": "optional",
+    "moveable": "moveable",
+    "count_one": "1 holiday",
+    "count_other": "{{count}} holidays",
+    "onWeekends_one": "1 on a weekend",
+    "onWeekends_other": "{{count}} on a weekend",
+    "previousYear": "Previous year",
+    "nextYear": "Next year",
+    "backToThisYear": "Back to {{year}}",
+    "todayMark": "Today",
+    "nextMark": "The next one, {{when}}",
+    "easterNote": "In {{year}}, Easter falls on {{date}}; Carnival, Good Friday and Corpus Christi are counted from it.",
+    "municipalNote": "Municipal holidays are not included.",
     "names": {
       "new-year": "New Year's Day",
       "carnival": "Carnival",
@@ -516,6 +530,22 @@
       "vinha": "Vines and wine",
       "animais": "Animals",
       "festas": "Saints and feasts"
+    }
+  },
+  "saints": {
+    "title": "Saints",
+    "search": "Search",
+    "searchPlaceholder": "Search the saints",
+    "originsLabel": "Origin",
+    "allOrigins": "All",
+    "count_one": "1 saint or feast",
+    "count_other": "{{count}} saints and feasts",
+    "none": "No saints found.",
+    "today": "Today's saints",
+    "origins": {
+      "geral": "General calendar",
+      "portugal": "Portuguese",
+      "popular": "Popular saints"
     }
   }
 }

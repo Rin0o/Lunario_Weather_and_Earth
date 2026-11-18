@@ -63,7 +63,9 @@
     "crops": "Culturas",
     "about": "Sobre",
     "library": "Biblioteca",
-    "sayings": "Ditados"
+    "sayings": "Ditados",
+    "saints": "Santos",
+    "holidays": "Feriados"
   },
   "sky": {
     "title": "Céu",
@@ -461,6 +463,18 @@
     "today": "Hoje é feriado: {{name}}",
     "next": "Próximos feriados",
     "optional": "facultativo",
+    "moveable": "móvel",
+    "count_one": "1 feriado",
+    "count_other": "{{count}} feriados",
+    "onWeekends_one": "1 ao fim de semana",
+    "onWeekends_other": "{{count}} ao fim de semana",
+    "previousYear": "Ano anterior",
+    "nextYear": "Ano seguinte",
+    "backToThisYear": "Voltar a {{year}}",
+    "todayMark": "Hoje",
+    "nextMark": "O próximo, {{when}}",
+    "easterNote": "Em {{year}}, a Páscoa é a {{date}}; o Carnaval, a Sexta-feira Santa e o Corpo de Deus contam-se a partir dela.",
+    "municipalNote": "Os feriados municipais não estão incluídos.",
     "names": {
       "new-year": "Ano Novo",
       "carnival": "Carnaval",
@@ -516,6 +530,22 @@
       "vinha": "Vinha e vinho",
       "animais": "Animais",
       "festas": "Santos e festas"
+    }
+  },
+  "saints": {
+    "title": "Santos",
+    "search": "Procurar",
+    "searchPlaceholder": "Procurar um santo",
+    "originsLabel": "Origem",
+    "allOrigins": "Todos",
+    "count_one": "1 santo ou festa",
+    "count_other": "{{count}} santos e festas",
+    "none": "Nenhum santo encontrado.",
+    "today": "Santos de hoje",
+    "origins": {
+      "geral": "Calendário geral",
+      "portugal": "De Portugal",
+      "popular": "Santos populares"
     }
   }
 }
