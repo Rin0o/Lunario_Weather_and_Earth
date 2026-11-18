@@ -8,10 +8,12 @@ import { LanguageSwitcher } from '../components/LanguageSwitcher.tsx';
 interface SettingsPageProps {
   /** The location picker, always open (D-23). */
   locationControl?: ReactNode;
+  /** The port of the Sea screen (D-35). */
+  portControl?: ReactNode;
 }
 
 /** "Definições": the app's preferences (location, language), each saved on the device, and the way to "Sobre". */
-export function SettingsPage({ locationControl }: SettingsPageProps) {
+export function SettingsPage({ locationControl, portControl }: SettingsPageProps) {
   const { t } = useTranslation();
   return (
     <section aria-labelledby="settings-heading" className="page">
@@ -21,6 +23,12 @@ export function SettingsPage({ locationControl }: SettingsPageProps) {
         <article className="card" aria-labelledby="location-heading">
           <h3 id="location-heading">{t('location.title')}</h3>
           {locationControl}
+        </article>
+      )}
+      {portControl && (
+        <article className="card" aria-labelledby="port-heading">
+          <h3 id="port-heading">{t('sea.port.title')}</h3>
+          {portControl}
         </article>
       )}
       <article className="card" aria-labelledby="language-heading">

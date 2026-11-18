@@ -9,9 +9,11 @@ const stroke = (startX: number, endX: number, dy = 0) =>
   readStroke({ startX, startY: 300, endX, endY: 300 + dy, width: W });
 
 describe('turnTarget', () => {
-  it('goes through the four tabs in the order of the tab bar', () => {
+  it('goes through the five tabs in the order of the tab bar', () => {
     expect(turnTarget({ name: 'today' }, 'next')).toEqual({ name: 'sky' });
-    expect(turnTarget({ name: 'sky' }, 'next')).toEqual({ name: 'garden' });
+    expect(turnTarget({ name: 'sky' }, 'next')).toEqual({ name: 'sea' });
+    expect(turnTarget({ name: 'sea' }, 'next')).toEqual({ name: 'garden' });
+    expect(turnTarget({ name: 'garden' }, 'previous')).toEqual({ name: 'sea' });
     expect(turnTarget({ name: 'garden' }, 'next')).toEqual({ name: 'crops' });
     expect(turnTarget({ name: 'crops' }, 'previous')).toEqual({ name: 'garden' });
     expect(turnTarget({ name: 'sky' }, 'previous')).toEqual({ name: 'today' });
@@ -83,7 +85,7 @@ describe('useSwipeTabs', () => {
     window.location.hash = '#/horta';
     const { getByText } = render(<Area route={{ name: 'garden' }} />);
     swipe(getByText('page'), 100, 250);
-    expect(parseRoute(window.location.hash)).toEqual({ name: 'sky' });
+    expect(parseRoute(window.location.hash)).toEqual({ name: 'sea' });
   });
 
   it('ignores swipes on a text field', () => {

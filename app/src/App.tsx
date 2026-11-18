@@ -3,6 +3,7 @@ import {
   CalendarDays,
   Carrot,
   MoonStar,
+  Waves,
   Settings,
   Sprout,
   type LucideIcon,
@@ -27,6 +28,9 @@ import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
 import { PreviousRouteContext, hashOf, href, useNavigation } from './navigation/route.ts';
 import { usePageTurn, useSwipeTabs } from './navigation/swipe.ts';
+import { PortPicker } from './coast/PortPicker.tsx';
+import { useSeaPort } from './coast/useSeaPort.ts';
+import { SeaPage } from './sea/SeaPage.tsx';
 import { SettingsPage } from './settings/SettingsPage.tsx';
 import { SkyPage } from './sky/SkyPage.tsx';
 import { SowingCard } from './today/SowingCard.tsx';
@@ -38,6 +42,7 @@ export function App() {
   const { t, i18n } = useTranslation();
   const now = useNow();
   const [location, setLocation] = useUserLocation();
+  const [seaPort, setSeaPort] = useSeaPort(location);
   const { route, previous } = useNavigation();
   const mainRef = useRef<HTMLElement>(null);
   useSwipeTabs(mainRef, route);
@@ -114,6 +119,9 @@ export function App() {
             {route.name === 'settings' && (
               <SettingsPage
                 locationControl={<LocationPicker location={location} onChange={setLocation} />}
+                portControl={
+                  <PortPicker location={location} seaPort={seaPort} onChange={setSeaPort} />
+                }
               />
             )}
             {route.name === 'about' && <AboutPage />}
@@ -125,6 +133,7 @@ export function App() {
             {route.name === 'sky' && (
               <SkyPage now={now} location={location} locationControl={locationControl} />
             )}
+            {route.name === 'sea' && <SeaPage now={now} seaPort={seaPort} />}
             {route.name === 'garden' && <GardenPage now={now} district={district} />}
             {route.name === 'crops' && <CropsList />}
             {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
@@ -138,6 +147,7 @@ export function App() {
       <nav className="tab-bar" aria-label={t('nav.label')}>
         {navLink(href.today, t('nav.today'), CalendarDays, route.name === 'today')}
         {navLink(href.sky, t('nav.sky'), MoonStar, route.name === 'sky')}
+        {navLink(href.sea, t('nav.sea'), Waves, route.name === 'sea')}
         {navLink(href.garden, t('nav.garden'), Sprout, route.name === 'garden')}
         {navLink(
           href.crops,

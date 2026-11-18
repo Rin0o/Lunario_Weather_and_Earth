@@ -3,7 +3,7 @@
  * every screen, and colours taken from the logo. Light only: the paper is the identity.
  *
  * Sections: 1 colours · 2 base · 3 app shell · 4 shared pieces · 5 opening cover ·
- * 6 Hoje · 7 Céu · 8 Horta · 9 Culturas · 10 Definições
+ * 6 Hoje · 7 Céu · 8 Horta · 9 Culturas · 10 Definições · 11 Mar
  */
 
 /* ================================================================================== */
@@ -39,6 +39,13 @@
   /* Frost */
   --frost: #1f5f8b;
   --frost-bg: rgb(230 240 247 / 92%);
+
+  /* Sea: the tide curve's ink and water, and the IPMA warning colours */
+  --sea: #2c5a6e;
+  --sea-water: rgb(44 90 110 / 14%);
+  --warning-yellow: #b8860b;
+  --warning-orange: #c15a1d;
+  --warning-red: #a3262a;
 
   /* Calendar actions: nursery, direct sowing, transplant, planting, harvest */
   --action-SV: #8a6d3b;
@@ -225,7 +232,7 @@ a {
   inset: auto 0 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   /* The same width as the notebook page (body::before, #root). */
   max-width: 42rem;
   margin: 0 auto;
@@ -1677,4 +1684,214 @@ a.button.primary {
   font: inherit;
   font-size: 0.9rem;
   color: inherit;
+}
+
+/* ================================================================================== */
+/* 11. Mar                                                                             */
+/* ================================================================================== */
+
+/* Tides: the day's curve drawn in ink over a pale wash of water. */
+.tide-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin: 0 0 0.25rem;
+}
+
+.tide-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tide-curve {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.25rem 0 0.5rem;
+  overflow: visible;
+}
+
+.tide-water {
+  fill: var(--sea-water);
+}
+
+.tide-line {
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+}
+
+.tide-dot {
+  fill: var(--paper);
+  stroke: var(--sea);
+  stroke-width: 1.5;
+}
+
+.tide-dot.high {
+  fill: var(--sea);
+}
+
+.tide-now {
+  stroke: var(--gold);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 2;
+}
+
+.tide-hour line {
+  stroke: var(--rule);
+}
+
+.tide-hour text {
+  fill: var(--ink-muted);
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.tide-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tide-list li {
+  display: grid;
+  padding: 0.35rem 0.5rem;
+  border-left: 3px solid var(--sea);
+  background: var(--sea-water);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.tide-list li.low {
+  border-left-color: var(--rule);
+  background: transparent;
+}
+
+.tide-list li[data-past] {
+  opacity: 0.55;
+}
+
+.tide-kind {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.tide-time {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.tide-height {
+  font-size: 0.9rem;
+}
+
+/* Waves and wind: the direction arrows sit in the line of text. */
+.with-arrow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.direction-arrow {
+  flex: none;
+  color: var(--sea);
+}
+
+.beaufort {
+  color: var(--ink-muted);
+}
+
+/* Next days: one compact row per day. */
+.sea-days {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.sea-days th,
+.sea-days td {
+  padding: 0.3rem 0.25rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.sea-days thead th {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.sea-days tbody th {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.sea-days tr:last-child > * {
+  border-bottom: 0;
+}
+
+.sea-highs {
+  font-size: 0.9rem;
+}
+
+/* IPMA warnings, coloured by level. */
+.sea-warnings h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--warning-orange);
+}
+
+.sea-warnings ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sea-warnings li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.6rem;
+  border-left: 4px solid var(--warning-yellow);
+}
+
+.sea-warnings li.warning-orange {
+  border-left-color: var(--warning-orange);
+}
+
+.sea-warnings li.warning-red {
+  border-left-color: var(--warning-red);
+}
+
+.sea-warnings li p {
+  margin: 0.15rem 0 0;
+}
+
+.sea-highs span {
+  display: block;
+}
+
+.sea-days .with-arrow {
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+}
+
+/* Mar: Hollar's triton shell beside the title; wide, so sized by its width. */
+.sea-vignette {
+  flex: none;
+  width: 7rem;
+  height: auto;
+  margin: 0 0.5rem 0.75rem 0;
+  opacity: 0.85;
 }
