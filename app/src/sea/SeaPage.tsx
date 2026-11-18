@@ -1,4 +1,4 @@
-import { ChevronRight, MapPin, TriangleAlert } from 'lucide-react';
+import { ChevronDown, ChevronRight, MapPin, TriangleAlert } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { vignetteFor } from '../assets/vignettes.ts';
@@ -191,6 +191,8 @@ export function SeaPage({ now, seaPort, fetchImpl = fetch }: SeaPageProps) {
   );
 }
 
+const WARNING_ORDER = ['yellow', 'orange', 'red'];
+
 function SeaWarnings({ warnings }: { warnings: SeaWarning[] }) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
@@ -200,22 +202,42 @@ function SeaWarnings({ warnings }: { warnings: SeaWarning[] }) {
     const [h = 0, m = 0] = stamp.slice(11, 16).split(':').map(Number);
     return new Date(start.getTime() + (h * 60 + m) * 60_000);
   };
-  const span = (w: SeaWarning) =>
-    `${formatWeekday(at(w.start), lang)} ${formatTime(at(w.start), lang)} – ${formatWeekday(at(w.end), lang)} ${formatTime(at(w.end), lang)}`;
+  const moment = (stamp: string) =>
+    `${formatWeekday(at(stamp), lang)} ${formatTime(at(stamp), lang)}`;
+  const span = (w: SeaWarning) => `${moment(w.start)} – ${moment(w.end)}`;
+  // Closed, it says only the highest level and when the last warning ends.
+  const highest = warnings.reduce((top, w) =>
+    WARNING_ORDER.indexOf(w.level) > WARNING_ORDER.indexOf(top.level) ? w : top,
+  );
+  const lastEnd = warnings.reduce((end, w) => (w.end > end ? w.end : end), '');
   return (
-    <article className="card sea-warnings" aria-labelledby="sea-warnings-heading">
-      <h3 id="sea-warnings-heading">
-        <TriangleAlert aria-hidden="true" size={18} /> {t('sea.warnings.title')}
-      </h3>
-      <ul>
-        {warnings.map((w) => (
-          <li key={`${w.start}-${w.level}`} className={`warning-${w.level}`}>
-            <strong>{t(`sea.warnings.levels.${w.level}`)}</strong> <small>{span(w)}</small>
-            {w.text && <p>{w.text}</p>}
-          </li>
-        ))}
-      </ul>
-      <p className="hint">{t('sea.warnings.source')}</p>
+    <article
+      className={`card sea-warnings warning-${highest.level}`}
+      aria-labelledby="sea-warnings-heading"
+    >
+      <details>
+        <summary>
+          <TriangleAlert aria-hidden="true" size={18} />
+          <span id="sea-warnings-heading" className="warnings-summary">
+            <strong>
+              {t('sea.warnings.summary', {
+                level: t(`sea.warnings.levels.${highest.level}`).toLocaleLowerCase(lang),
+              })}
+            </strong>
+            <small>{t('sea.warnings.until', { time: moment(lastEnd) })}</small>
+          </span>
+          <ChevronDown className="warnings-chevron" aria-hidden="true" size={18} />
+        </summary>
+        <ul>
+          {warnings.map((w) => (
+            <li key={`${w.start}-${w.level}`} className={`warning-${w.level}`}>
+              <strong>{t(`sea.warnings.levels.${w.level}`)}</strong> <small>{span(w)}</small>
+              {w.text && <p>{w.text}</p>}
+            </li>
+          ))}
+        </ul>
+        <p className="source-note">{t('sea.warnings.source')}</p>
+      </details>
     </article>
   );
 }

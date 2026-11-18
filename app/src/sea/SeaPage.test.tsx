@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { seaPortFor } from '../coast/useSeaPort.ts';
 import { initI18n } from '../i18n/index.ts';
@@ -46,7 +46,13 @@ describe('SeaPage', () => {
     const days = screen.getByRole('table');
     expect(within(days).getAllByRole('row')).toHaveLength(3); // header + 2 days
 
-    const warnings = screen.getByRole('article', { name: /Aviso de agitação marítima/ });
+    // Closed, the warnings take one line: the highest level and when the last one ends.
+    const warnings = screen.getByRole('article', { name: /^Agitação marítima · aviso laranja/ });
+    const details = warnings.querySelector('details');
+    expect(details?.open).toBe(false);
+    expect(within(warnings).getByText(/^até sexta 00:00/)).toBeInTheDocument();
+    fireEvent.click(within(warnings).getByText(/^Agitação marítima/));
+    expect(details?.open).toBe(true);
     expect(within(warnings).getByText('Laranja')).toBeInTheDocument();
     expect(within(warnings).getByText('Amarelo')).toBeInTheDocument();
     expect(

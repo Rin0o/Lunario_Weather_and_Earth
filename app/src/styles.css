@@ -1847,13 +1847,6 @@ a.button.primary {
 }
 
 /* IPMA warnings, coloured by level. */
-.sea-warnings h3 {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--warning-orange);
-}
-
 .sea-warnings ul {
   margin: 0;
   padding: 0;
@@ -1894,4 +1887,77 @@ a.button.primary {
   height: auto;
   margin: 0 0.5rem 0.75rem 0;
   opacity: 0.85;
+}
+
+/* Two kinds of text under the tides: almanac information in the ink of the page, and the
+   fine print on how the numbers were made, smaller and set off by a rule. */
+.tide-note {
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.source-note {
+  margin: 0.5rem 0 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+/* Sea warnings: closed by default, one line with the highest level. */
+.sea-warnings {
+  border-left: 5px solid var(--warning-yellow);
+}
+
+.sea-warnings.warning-orange {
+  border-left-color: var(--warning-orange);
+}
+
+.sea-warnings.warning-red {
+  border-left-color: var(--warning-red);
+}
+
+.sea-warnings summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--warning-orange);
+}
+
+.sea-warnings summary::-webkit-details-marker {
+  display: none;
+}
+
+.sea-warnings.warning-yellow summary {
+  color: var(--warning-yellow);
+}
+
+.sea-warnings.warning-red summary {
+  color: var(--warning-red);
+}
+
+.warnings-summary {
+  display: grid;
+  flex: 1;
+}
+
+.warnings-summary small {
+  color: var(--ink-muted);
+}
+
+.warnings-chevron {
+  flex: none;
+  transition: transform 0.2s;
+}
+
+.sea-warnings details[open] .warnings-chevron {
+  transform: rotate(180deg);
+}
+
+.sea-warnings details[open] ul {
+  margin-top: 0.6rem;
 }
