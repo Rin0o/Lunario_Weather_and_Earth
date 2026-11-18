@@ -30,20 +30,22 @@ export function PortPicker({ location, seaPort, onChange }: PortPickerProps) {
           </small>
         </span>
       </p>
-      <label>
-        {t('sea.port.choose')}
-        <select
-          value={seaPort.automatic ? AUTO : seaPort.port.id}
-          onChange={(event) => onChange(event.target.value === AUTO ? null : event.target.value)}
-        >
-          <option value={AUTO}>{t('sea.port.nearest', { name: nearest.name })}</option>
-          {PORTS.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="location-panel">
+        <label>
+          {t('sea.port.choose')}
+          <select
+            value={seaPort.automatic ? AUTO : seaPort.port.id}
+            onChange={(event) => onChange(event.target.value === AUTO ? null : event.target.value)}
+          >
+            <option value={AUTO}>{t('sea.port.nearest', { name: nearest.name })}</option>
+            {PORTS.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
     </div>
   );
 }
