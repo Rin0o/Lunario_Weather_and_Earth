@@ -197,19 +197,24 @@ a {
 }
 
 .brand img {
-  width: 2.75rem;
-  height: 2.75rem;
-  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 30%));
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: none;
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 35%));
 }
 
+/* The app's name, the first thing on every page: in the headings' face, thickened like the
+   screen titles, and close to their size so it is not lost above them. */
 .brand h1 {
-  font-size: 1.6rem;
-  line-height: 1.1;
+  font-size: 2.1rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  -webkit-text-stroke: 0.5px currentcolor;
 }
 
 .tagline {
-  margin: 0;
-  font-size: 0.85rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
   font-style: italic;
   color: var(--ink-muted);
 }
