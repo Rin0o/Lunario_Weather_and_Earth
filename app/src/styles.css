@@ -1650,8 +1650,10 @@ a.button.primary {
   gap: 0.25rem;
 }
 
+/* The location, port and language selects share one look. */
 .location-panel button,
-.location-panel select {
+.location-panel select,
+.language-switcher select {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
@@ -1671,19 +1673,6 @@ a.button.primary {
   background: var(--green-action);
   color: var(--paper);
   font-weight: 600;
-}
-
-/* Language */
-.language-switcher select {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--rule);
-  border-radius: 0.5rem;
-  background: var(--card);
-  font: inherit;
-  font-size: 0.9rem;
-  color: inherit;
 }
 
 /* ================================================================================== */
