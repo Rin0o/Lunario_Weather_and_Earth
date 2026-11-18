@@ -1,26 +1,28 @@
 /**
- * Lunário frost alerts Worker (RF-14, RF-17, D-33).
- *   POST   /subscriptions  turn alerts on, or update location and crops
- *   DELETE /subscriptions  turn alerts off (deletes the row)
+ * Lunário alerts Worker: frost (RF-14, RF-17, D-33) and sea agitation (RF-21, D-37).
+ *   POST   /subscriptions  turn alerts on, or update what they are for
+ *   DELETE /subscriptions  turn all alerts off (deletes the row)
  *   POST   /subscriptions/test  send a test notification to that subscription
- *   cron                   check tonight's frost for every subscriber and notify
+ *   cron 0 18 * * *        check tonight's frost for every frost subscriber
+ *   cron 0 7,8,11,…        check IPMA's sea warnings at 08, 12, 16 and 20 h in Portugal
+ *   queue lunario-push     send the notifications the crons queued, a few per invocation
  */
-import { encryptNotification, vapidHeaders } from '@block65/webcrypto-web-push';
-import { runAlerts, testAlert, type AlertMessage, type Sender } from './alerts.ts';
+import { runFrostAlerts } from './frost.ts';
+import { deliver, pushSender, testJob, type PushEnv, type PushJob, type Sender } from './push.ts';
+import { runSeaAlerts, seaCheckDue } from './sea.ts';
 import { D1Store, MAX_SUBSCRIPTIONS } from './store.ts';
-import { parseEndpoint, parseSubscription, type Subscription } from './subscription.ts';
+import { parseEndpoint, parseSubscription } from './subscription.ts';
 
-export interface Env {
+export interface Env extends PushEnv {
   DB: D1Database;
-  /** VAPID public key (base64url); the app subscribes with the same one. Not secret. */
-  VAPID_PUBLIC_KEY: string;
-  /** VAPID private key (base64url). A secret: set with `wrangler secret put`. */
-  VAPID_PRIVATE_KEY: string;
+  /** The notifications to send, in batches (push.ts). */
+  PUSH_QUEUE: Queue<PushJob[]>;
   /** Comma-separated origins allowed to subscribe; `https://*.example.dev` matches previews. */
   ALLOWED_ORIGINS: string;
-  /** Contact the push services can use (a URL, not a personal address). */
-  ADMIN_CONTACT: string;
 }
+
+/** The cron of the frost check (wrangler.jsonc); any other cron is the sea check. */
+export const FROST_CRON = '0 18 * * *';
 
 const MAX_BODY_BYTES = 4096;
 
@@ -96,7 +98,7 @@ export async function handleRequest(
     if (!endpoint) return json(400, { error: 'endpoint is missing' }, cors);
     const sub = await store.get(endpoint);
     if (!sub) return json(404, { error: 'subscription not found' }, cors);
-    const status = await sender.send(sub, testAlert(sub.language)).catch(() => 0);
+    const status = await sender.send(testJob(sub)).catch(() => 0);
     if (status === 404 || status === 410) {
       await store.remove(endpoint);
       return json(410, { error: 'subscription expired' }, cors);
@@ -130,60 +132,30 @@ export async function handleRequest(
   return json(405, { error: 'method not allowed' }, cors);
 }
 
-const PAD_BLOCK = 256;
-
-/** JSON with trailing spaces up to a multiple of `block` bytes (JSON.parse ignores them). */
-export function padJson(value: unknown, block: number): string {
-  const text = JSON.stringify(value);
-  const bytes = new TextEncoder().encode(text).length;
-  return text + ' '.repeat(Math.ceil(bytes / block) * block - bytes);
+export async function handleScheduled(cron: string, env: Env, now: Date): Promise<void> {
+  const store = new D1Store(env.DB);
+  // Counts only: never log endpoints or locations.
+  if (cron === FROST_CRON) {
+    const result = await runFrostAlerts(store, env.PUSH_QUEUE, now, fetch);
+    console.log(JSON.stringify({ job: 'frost-alerts', ...result }));
+  } else if (seaCheckDue(now)) {
+    const result = await runSeaAlerts(store, env.PUSH_QUEUE, now, fetch);
+    console.log(JSON.stringify({ job: 'sea-alerts', ...result }));
+  }
 }
 
-/** Sends through the subscriber's push service, encrypted and signed with VAPID. */
-export function pushSender(env: Env, fetchImpl: typeof fetch = fetch): Sender {
-  return {
-    async send(sub: Subscription, message: AlertMessage) {
-      // RFC 8291 (aes128gcm) and RFC 8292 (VAPID), which every push service accepts, Apple's too.
-      const subscription = {
-        endpoint: sub.endpoint,
-        expirationTime: null,
-        keys: { p256dh: sub.p256dh, auth: sub.auth },
-      };
-      const { headers } = await vapidHeaders(subscription, {
-        subject: env.ADMIN_CONTACT,
-        publicKey: env.VAPID_PUBLIC_KEY,
-        privateKey: env.VAPID_PRIVATE_KEY,
-      });
-      // Not the library's padding to 4 KB: Firefox for Android relays messages base64-encoded
-      // with a 4 KB limit and refuses them (413). Padding to a multiple of 256 bytes still
-      // hides the exact length.
-      const body = await encryptNotification(
-        subscription,
-        new TextEncoder().encode(padJson({ ...message, url: '/' }, PAD_BLOCK)),
-        { pad: false },
-      );
-      const response = await fetchImpl(sub.endpoint, {
-        method: 'POST',
-        headers: {
-          ...headers,
-          // Useless after the night: expire in 12 hours; a newer alert replaces an older one.
-          TTL: String(12 * 60 * 60),
-          Urgency: 'high',
-          Topic: 'frost',
-          'Content-Encoding': 'aes128gcm',
-          'Content-Type': 'application/octet-stream',
-        },
-        body,
-      });
-      if (!response.ok) {
-        // The push service's short reason (e.g. Mozilla's errno, Apple's "BadJwtToken"),
-        // never the endpoint.
-        const reason = (await response.text().catch(() => '')).slice(0, 200);
-        console.log(JSON.stringify({ job: 'push', status: response.status, reason }));
-      }
-      return response.status;
-    },
-  };
+export async function handleQueue(
+  batch: MessageBatch<PushJob[]>,
+  env: Env,
+  sender: Sender = pushSender(env),
+): Promise<void> {
+  const store = new D1Store(env.DB);
+  for (const message of batch.messages) {
+    const result = await deliver(message.body, sender, store);
+    // Acknowledged whatever happened: a retry would send the same alert twice.
+    message.ack();
+    console.log(JSON.stringify({ job: 'push-batch', ...result }));
+  }
 }
 
 export default {
@@ -191,14 +163,11 @@ export default {
     return handleRequest(request, env);
   },
 
-  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
-    const result = await runAlerts(
-      new D1Store(env.DB),
-      pushSender(env),
-      new Date(controller.scheduledTime),
-      fetch,
-    );
-    // Counts only: never log endpoints or locations.
-    console.log(JSON.stringify({ job: 'frost-alerts', ...result }));
+  scheduled(controller: ScheduledController, env: Env): Promise<void> {
+    return handleScheduled(controller.cron, env, new Date(controller.scheduledTime));
   },
-} satisfies ExportedHandler<Env>;
+
+  queue(batch: MessageBatch<PushJob[]>, env: Env): Promise<void> {
+    return handleQueue(batch, env);
+  },
+} satisfies ExportedHandler<Env, PushJob[]>;

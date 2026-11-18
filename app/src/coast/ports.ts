@@ -60,6 +60,21 @@ export const PORTS: readonly Port[] = [
   port('vrsa', 'Vila Real de Santo António', 37.16, -7.4, S.faro, 'FAR'),
 ];
 
+/** The coastal districts of the ports, by IPMA warning area, with their names. */
+export const WARNING_AREAS: Readonly<Record<string, string>> = {
+  VCT: 'Viana do Castelo',
+  PTO: 'Porto',
+  AVR: 'Aveiro',
+  CBR: 'Coimbra',
+  LRA: 'Leiria',
+  LSB: 'Lisboa',
+  STB: 'Setúbal',
+  FAR: 'Faro',
+};
+
+export const isWarningArea = (area: unknown): area is string =>
+  typeof area === 'string' && Object.hasOwn(WARNING_AREAS, area);
+
 const EARTH_KM = 6371;
 
 /** Great-circle distance in km. */

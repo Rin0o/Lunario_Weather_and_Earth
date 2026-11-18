@@ -1,12 +1,21 @@
-// Cloudflare Worker for the frost alerts (D-33). Deployed by .github/workflows/deploy.yml.
+// Cloudflare Worker for the frost and sea alerts (D-33, D-37). Deployed by .github/workflows/deploy.yml.
 // The VAPID private key is a secret: `npx wrangler secret put VAPID_PRIVATE_KEY`.
+// The queue must exist before the first deploy: `npx wrangler queues create lunario-push`.
 {
   "name": "lunario-alerts",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "observability": { "enabled": true },
-  // Every day at 18:00 UTC (18:00 in winter, 19:00 in summer in Portugal).
-  "triggers": { "crons": ["0 18 * * *"] },
+  "triggers": {
+    "crons": [
+      // Frost: every day at 18:00 UTC (18:00 in winter, 19:00 in summer in Portugal).
+      // src/index.ts tells the two crons apart by this exact text (FROST_CRON).
+      "0 18 * * *",
+      // Sea: 08, 12, 16 and 20 h in Portugal. Both UTC hours of each run; src/sea.ts keeps
+      // the one that is the right local hour (winter UTC+0, summer UTC+1).
+      "0 7,8,11,12,15,16,19,20 * * *",
+    ],
+  },
   "vars": {
     "ALLOWED_ORIGINS": "https://lunario-4w2.pages.dev,https://*.lunario-4w2.pages.dev",
     "ADMIN_CONTACT": "https://lunario-4w2.pages.dev",
@@ -22,4 +31,11 @@
       "migrations_dir": "migrations",
     },
   ],
+  // The notifications, a few per message (src/push.ts): each message is sent by its own
+  // invocation, so each stays within the free plan's CPU and subrequest limits. No retries:
+  // a retried batch would notify some phones twice.
+  "queues": {
+    "producers": [{ "binding": "PUSH_QUEUE", "queue": "lunario-push" }],
+    "consumers": [{ "queue": "lunario-push", "max_batch_size": 1, "max_retries": 0 }],
+  },
 }

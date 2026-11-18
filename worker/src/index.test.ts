@@ -1,15 +1,23 @@
 // @vitest-environment node
-import { describe, expect, it, vi } from 'vitest';
-import { generateVapidKeys } from '../../scripts/lib/vapid.ts';
-import worker, { handleRequest, originAllowed, padJson, pushSender, type Env } from './index.ts';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import worker, {
+  FROST_CRON,
+  handleQueue,
+  handleRequest,
+  handleScheduled,
+  originAllowed,
+  type Env,
+} from './index.ts';
+import { pushJob, type PushJob } from './push.ts';
 import { D1Store } from './store.ts';
-import { BODY } from './subscription.test.ts';
+import { BODY, BOTH_BODY } from './subscription.test.ts';
 import { fakeD1 } from './test/fakeD1.ts';
-import { decryptAes128gcm } from './test/webPushDecrypt.ts';
+import { fakeQueue } from './test/fakes.ts';
 
 const ORIGIN = 'https://lunario-4w2.pages.dev';
-const env = (): Env => ({
+const env = (queue = fakeQueue().queue): Env => ({
   DB: fakeD1(),
+  PUSH_QUEUE: queue as unknown as Env['PUSH_QUEUE'],
   VAPID_PUBLIC_KEY: '',
   VAPID_PRIVATE_KEY: '',
   ALLOWED_ORIGINS: `${ORIGIN},https://*.lunario-4w2.pages.dev`,
@@ -22,6 +30,10 @@ const request = (method: string, body?: unknown, origin = ORIGIN, path = '/subsc
     headers: { Origin: origin, 'Content-Type': 'application/json' },
     ...(body === undefined ? {} : { body: typeof body === 'string' ? body : JSON.stringify(body) }),
   });
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('originAllowed', () => {
   const allowed = 'https://lunario-4w2.pages.dev,https://*.lunario-4w2.pages.dev';
@@ -46,14 +58,29 @@ describe('subscriptions API', () => {
     expect(created.headers.get('Access-Control-Allow-Origin')).toBe(ORIGIN);
     expect(await store.list()).toEqual([
       expect.objectContaining({
-        latitude: 40.54,
-        longitude: -7.27,
-        crops: ['Tomate', 'Feijão-verde'],
+        frost: { latitude: 40.54, longitude: -7.27, crops: ['Tomate', 'Feijão-verde'] },
+        sea: null,
       }),
     ]);
 
-    await handleRequest(request('POST', { ...BODY, crops: [], language: 'en' }), e, now);
-    expect(await store.list()).toEqual([expect.objectContaining({ crops: [], language: 'en' })]);
+    // Sea alerts added, then frost alerts turned off: the location is gone from the server.
+    await handleRequest(request('POST', BOTH_BODY), e, now);
+    expect(await store.list()).toEqual([
+      expect.objectContaining({ sea: { area: 'AVR', yellow: false } }),
+    ]);
+    await handleRequest(
+      request('POST', {
+        ...BOTH_BODY,
+        frost: null,
+        sea: { area: 'AVR', yellow: true },
+        language: 'en',
+      }),
+      e,
+      now,
+    );
+    expect(await store.list()).toEqual([
+      expect.objectContaining({ frost: null, sea: { area: 'AVR', yellow: true }, language: 'en' }),
+    ]);
     expect(await store.count()).toBe(1);
 
     const deleted = await handleRequest(
@@ -95,7 +122,6 @@ describe('subscriptions API', () => {
     };
     expect((await handleRequest(request('POST', other), e)).status).toBe(503);
     expect((await handleRequest(request('POST', BODY), e)).status).toBe(204);
-    vi.restoreAllMocks();
   });
 });
 
@@ -118,8 +144,10 @@ describe('test notification', () => {
     expect(res.status).toBe(204);
     expect(res.headers.get('Access-Control-Allow-Origin')).toBe(ORIGIN);
     expect(ok.send).toHaveBeenCalledWith(
-      expect.objectContaining({ endpoint }),
-      expect.objectContaining({ title: '🧪 Frost alerts test', tag: 'frost-test' }),
+      expect.objectContaining({
+        endpoint,
+        message: expect.objectContaining({ title: '🧪 Alerts test', tag: 'alerts-test' }),
+      }),
     );
   });
 
@@ -144,141 +172,87 @@ describe('test notification', () => {
     expect(await refused.json()).toEqual({ error: 'push service refused', status: 401 });
     expect(log).toHaveBeenCalledWith(JSON.stringify({ job: 'test-alert', status: 401 }));
     expect((await test(e, sender(new Error('network')))).status).toBe(502);
-    log.mockRestore();
     expect(await store.count()).toBe(1);
     expect((await test(e, sender(410))).status).toBe(410);
     expect(await store.count()).toBe(0);
   });
 });
 
-describe('push sending', () => {
-  it('posts a message the browser can decrypt (RFC 8291), signed with VAPID (RFC 8292)', async () => {
-    const vapid = await generateVapidKeys();
-    // The subscriber's key pair and auth secret, as a browser creates them.
-    const browser = (await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, [
-      'deriveBits',
-    ])) as CryptoKeyPair;
-    const raw = new Uint8Array(
-      (await crypto.subtle.exportKey('raw', browser.publicKey)) as ArrayBuffer,
-    );
-    const authSecret = crypto.getRandomValues(new Uint8Array(16));
-    const b64url = (bytes: Uint8Array) =>
-      btoa(String.fromCharCode(...bytes))
-        .replaceAll('+', '-')
-        .replaceAll('/', '_')
-        .replace(/=+$/, '');
-
-    const fetchImpl = vi.fn<(url: string, init: RequestInit) => Promise<Response>>(() =>
-      Promise.resolve(new Response(null, { status: 201 })),
-    );
-    const sender = pushSender(
-      { ...env(), VAPID_PUBLIC_KEY: vapid.publicKey, VAPID_PRIVATE_KEY: vapid.privateKey },
-      fetchImpl as unknown as typeof fetch,
-    );
-    const message = { title: '❄️ Risco de geada esta noite', body: 'Proteja: Tomate.', tag: 't' };
-    const status = await sender.send(
-      {
-        endpoint: 'https://push.example/send/1',
-        p256dh: b64url(raw),
-        auth: b64url(authSecret),
-        latitude: 40.54,
-        longitude: -7.27,
-        crops: [],
-        language: 'pt-PT',
-      },
-      message,
-    );
-
-    expect(status).toBe(201);
-    const [url, init] = fetchImpl.mock.calls[0] ?? [];
-    expect(url).toBe('https://push.example/send/1');
-    const headers = new Headers(init?.headers);
-    expect(headers.get('Content-Encoding')).toBe('aes128gcm');
-    expect(headers.get('Authorization')).toMatch(
-      new RegExp(String.raw`^vapid t=[\w-]+\.[\w-]+\.[\w-]+, k=${vapid.publicKey}$`),
-    );
-    expect(headers.get('TTL')).toBe('43200');
-    expect(headers.get('Urgency')).toBe('high');
-    expect(headers.get('Topic')).toBe('frost');
-
-    const plaintext = await decryptAes128gcm(
-      new Uint8Array(init?.body as Uint8Array),
-      browser.privateKey,
-      raw,
-      authSecret,
-    );
-    expect(JSON.parse(plaintext)).toEqual({ ...message, url: '/' });
-    // Padded to 256 bytes, not to 4 KB: Firefox for Android refuses big messages (413).
-    expect(new TextEncoder().encode(plaintext).length).toBe(256);
-    expect((init?.body as Uint8Array).byteLength).toBeLessThan(512);
-  });
-
-  it('pads JSON to whole blocks, counting bytes not characters', () => {
-    expect(padJson({ a: 1 }, 16)).toBe('{"a":1}         ');
-    const accented = padJson({ t: 'geada ❄️' }, 32);
-    expect(new TextEncoder().encode(accented).length).toBe(32);
-    expect(JSON.parse(accented)).toEqual({ t: 'geada ❄️' });
-    const exact = JSON.stringify({ a: 'xxxxxxxx' }); // 16 bytes
-    expect(padJson({ a: 'xxxxxxxx' }, 16)).toBe(exact);
-  });
-});
-
-describe('push refusals', () => {
-  it('logs the status and the short reason, not the endpoint', async () => {
-    const vapid = await generateVapidKeys();
-    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    const fetchImpl = vi.fn(() =>
-      Promise.resolve(new Response('{"errno":109,"message":"Invalid VAPID"}', { status: 401 })),
-    );
-    const browser = (await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, [
-      'deriveBits',
-    ])) as CryptoKeyPair;
-    const raw = new Uint8Array(
-      (await crypto.subtle.exportKey('raw', browser.publicKey)) as ArrayBuffer,
-    );
-    const b64url = (bytes: Uint8Array) =>
-      btoa(String.fromCharCode(...bytes))
-        .replaceAll('+', '-')
-        .replaceAll('/', '_')
-        .replace(/=+$/, '');
-    const sender = pushSender(
-      { ...env(), VAPID_PUBLIC_KEY: vapid.publicKey, VAPID_PRIVATE_KEY: vapid.privateKey },
-      fetchImpl as unknown as typeof fetch,
-    );
-    const status = await sender.send(
-      {
-        endpoint: 'https://push.example/secret-endpoint',
-        p256dh: b64url(raw),
-        auth: b64url(crypto.getRandomValues(new Uint8Array(16))),
-        latitude: 40.54,
-        longitude: -7.27,
-        crops: [],
-        language: 'pt-PT',
-      },
-      { title: 't', body: 'b', tag: 'x' },
-    );
-    expect(status).toBe(401);
-    const line = String(log.mock.calls[0]?.[0]);
-    expect(JSON.parse(line)).toEqual({
-      job: 'push',
-      status: 401,
-      reason: '{"errno":109,"message":"Invalid VAPID"}',
-    });
-    expect(line).not.toContain('secret-endpoint');
-    log.mockRestore();
-  });
-});
-
 describe('scheduled', () => {
-  it('runs the alerts and logs counts only', async () => {
+  const run = (cron: string, iso: string, e = env()) =>
+    worker.scheduled({ scheduledTime: Date.parse(iso), cron, noRetry: vi.fn() }, e);
+
+  it('runs the frost check on its cron and logs counts only', async () => {
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    await worker.scheduled(
-      { scheduledTime: Date.parse('2026-11-17T18:00:00Z'), cron: '0 18 * * *', noRetry: vi.fn() },
-      env(),
-    );
+    await run(FROST_CRON, '2026-11-17T18:00:00Z');
     expect(log).toHaveBeenCalledWith(
-      JSON.stringify({ job: 'frost-alerts', places: 0, sent: 0, removed: 0, failed: 0 }),
+      JSON.stringify({ job: 'frost-alerts', places: 0, alerts: 0, messages: 0 }),
     );
-    log.mockRestore();
+  });
+
+  it('runs the sea check on the other cron, only at the right local hour', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const sea = '0 7,8,11,12,15,16,19,20 * * *';
+    await run(sea, '2026-11-18T07:00:00Z'); // 07:00 in winter: the summer slot, skipped
+    expect(log).not.toHaveBeenCalled();
+    await run(sea, '2026-11-18T08:00:00Z');
+    expect(log).toHaveBeenCalledWith(
+      JSON.stringify({ job: 'sea-alerts', areas: 0, warnings: 0, alerts: 0, messages: 0 }),
+    );
+  });
+
+  it('queues the sea alerts of the subscribers', async () => {
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const { queue, jobs } = fakeQueue();
+    const e = env(queue);
+    await handleRequest(request('POST', BOTH_BODY), e);
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(
+        JSON.stringify([
+          {
+            text: '',
+            awarenessTypeName: 'Agitação Marítima',
+            idAreaAviso: 'AVR',
+            startTime: '2026-11-18T12:00:00',
+            awarenessLevelID: 'red',
+            endTime: '2026-11-19T00:00:00',
+          },
+        ]),
+      ),
+    );
+    await handleScheduled('0 7,8,11,12,15,16,19,20 * * *', e, new Date('2026-11-18T08:00:00Z'));
+    expect(jobs().map((j) => j.message.title)).toEqual(['🔴 Aviso vermelho de agitação marítima']);
+  });
+});
+
+describe('queue', () => {
+  it('sends each batch, acknowledges it whatever happened, and drops dead subscriptions', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const e = env();
+    const store = new D1Store(e.DB);
+    await handleRequest(request('POST', BODY), e);
+    const message = { title: 't', body: 'b', tag: 'x', url: '/' };
+    const body: PushJob[] = [
+      pushJob(
+        { endpoint: 'https://push.example/other', p256dh: 'p', auth: 'a' },
+        message,
+        'sea',
+        60,
+      ),
+      pushJob({ endpoint: BODY.subscription.endpoint, p256dh: 'p', auth: 'a' }, message, 'sea', 60),
+    ];
+    const ack = vi.fn();
+    const send = vi.fn((job: PushJob) =>
+      Promise.resolve(job.endpoint === BODY.subscription.endpoint ? 410 : 201),
+    );
+    await handleQueue({ messages: [{ body, ack }] } as unknown as MessageBatch<PushJob[]>, e, {
+      send,
+    });
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(ack).toHaveBeenCalledTimes(1);
+    expect(await store.count()).toBe(0);
+    expect(log).toHaveBeenCalledWith(
+      JSON.stringify({ job: 'push-batch', sent: 1, removed: 1, failed: 0 }),
+    );
   });
 });

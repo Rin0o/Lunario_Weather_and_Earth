@@ -41,6 +41,16 @@ export function dateInZone(moment: Date, timeZone = TIME_ZONE): string {
   return `${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
 }
 
+/**
+ * `moment` as a local wall-clock time without a zone (`2026-11-18T14:05`), to compare with
+ * the zone-less times IPMA gives.
+ */
+export function localStamp(moment: Date, timeZone = TIME_ZONE): string {
+  const p = zonedParts(moment, timeZone);
+  const two = (n: number) => String(n).padStart(2, '0');
+  return `${dateInZone(moment, timeZone)}T${two(p.hour)}:${two(p.minute)}`;
+}
+
 /** The instant of local midnight at the start of `date` (`YYYY-MM-DD`) in `timeZone`. */
 export function startOfDayInZone(date: string, timeZone = TIME_ZONE): Date {
   const [y, m, d] = date.split('-').map(Number);

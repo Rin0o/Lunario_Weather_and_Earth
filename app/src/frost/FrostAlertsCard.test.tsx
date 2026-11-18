@@ -19,7 +19,9 @@ describe('FrostAlertsCard', () => {
   it('says what is sent, and turns alerts on and off', async () => {
     const { platform } = fakePlatform();
     const fetchImpl = ok();
-    render(<FrostAlertsCard location={GUARDA} platform={platform} fetchImpl={fetchImpl} />);
+    render(
+      <FrostAlertsCard location={GUARDA} seaArea="AVR" platform={platform} fetchImpl={fetchImpl} />,
+    );
     expect(screen.getByText(/localização arredondada a cerca de 1 km/)).toBeInTheDocument();
 
     const toggle = await screen.findByRole('checkbox', { name: 'Avisar-me de geada' });
@@ -36,9 +38,19 @@ describe('FrostAlertsCard', () => {
     expect(screen.getByRole('status')).toHaveTextContent('');
   });
 
+  it('keeps the explanation folded until it is tapped', async () => {
+    render(<FrostAlertsCard location={GUARDA} seaArea="AVR" platform={fakePlatform().platform} />);
+    const summary = screen.getByText('Como funciona e o que é enviado');
+    const details = summary.closest('details');
+    expect(details).not.toHaveAttribute('open');
+    await userEvent.click(summary);
+    expect(details).toHaveAttribute('open');
+    expect(screen.getByText(/O aviso chega por volta das 18h/)).toBeVisible();
+  });
+
   it('explains when the phone cannot receive alerts', async () => {
     const platform = { ...fakePlatform().platform, supported: () => false };
-    render(<FrostAlertsCard location={GUARDA} platform={platform} />);
+    render(<FrostAlertsCard location={GUARDA} seaArea="AVR" platform={platform} />);
     expect(
       await screen.findByText(/No iPhone, adicione o Lunário ao ecrã principal/),
     ).toBeVisible();
@@ -46,7 +58,13 @@ describe('FrostAlertsCard', () => {
   });
 
   it('explains when notifications are blocked', async () => {
-    render(<FrostAlertsCard location={GUARDA} platform={fakePlatform('denied').platform} />);
+    render(
+      <FrostAlertsCard
+        location={GUARDA}
+        seaArea="AVR"
+        platform={fakePlatform('denied').platform}
+      />,
+    );
     const toggle = await screen.findByRole('checkbox');
     await waitFor(() => expect(toggle).toBeEnabled());
     await userEvent.click(toggle);
@@ -57,7 +75,12 @@ describe('FrostAlertsCard', () => {
   it('stays off and says so when the server fails', async () => {
     const failing = vi.fn(() => Promise.resolve(new Response(null, { status: 503 })));
     render(
-      <FrostAlertsCard location={GUARDA} platform={fakePlatform().platform} fetchImpl={failing} />,
+      <FrostAlertsCard
+        location={GUARDA}
+        seaArea="AVR"
+        platform={fakePlatform().platform}
+        fetchImpl={failing}
+      />,
     );
     const toggle = await screen.findByRole('checkbox');
     await waitFor(() => expect(toggle).toBeEnabled());

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { dateInZone } from '../astro/time.ts';
+import { dateInZone, localStamp } from '../astro/time.ts';
 import type { Port } from '../coast/ports.ts';
 import {
   parseSea,
@@ -62,15 +62,6 @@ const initialState = (portId: string): State => ({
   offline: false,
   completed: null,
 });
-
-/** `2026-11-18T14:05`, local time in Portugal, to compare with IPMA's zone-less times. */
-const localStamp = (now: Date) =>
-  `${dateInZone(now)}T${new Intl.DateTimeFormat('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-    timeZone: 'Europe/Lisbon',
-  }).format(now)}`;
 
 /**
  * The sea forecast for a port: the saved one at once, then a refresh from the network (on

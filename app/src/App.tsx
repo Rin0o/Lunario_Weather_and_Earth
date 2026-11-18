@@ -17,7 +17,7 @@ import { catalog } from './catalog/catalog.ts';
 import { Cover } from './components/Cover.tsx';
 import { CropSheet } from './crops/CropSheet.tsx';
 import { CropsList } from './crops/CropsList.tsx';
-import { syncFrostAlerts } from './frost/alerts.ts';
+import { syncAlerts } from './alerts/push.ts';
 import { FrostAlertsCard } from './frost/FrostAlertsCard.tsx';
 import { FrostCard } from './frost/FrostCard.tsx';
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
@@ -40,6 +40,7 @@ import {
 import { usePageTurn, useSwipeTabs } from './navigation/swipe.ts';
 import { PortPicker } from './coast/PortPicker.tsx';
 import { useSeaPort } from './coast/useSeaPort.ts';
+import { SeaAlertsCard } from './sea/SeaAlertsCard.tsx';
 import { SeaPage } from './sea/SeaPage.tsx';
 import { SettingsPage } from './settings/SettingsPage.tsx';
 import { SkyPage } from './sky/SkyPage.tsx';
@@ -61,11 +62,13 @@ export function App() {
   const resolved = i18n.resolvedLanguage ?? '';
   const language = isSupportedLanguage(resolved) ? resolved : DEFAULT_LANGUAGE;
 
-  // RF-14: keep the frost alerts in step with the location, language and garden. Runs on
-  // start and on every page change (so garden edits count); sends nothing if nothing changed.
+  // RF-14, RF-21: keep the alerts in step with the location, sea port, language and garden.
+  // Runs on start and on every page change (so garden edits count); sends nothing if nothing
+  // changed.
+  const seaArea = seaPort.port.warningArea;
   useEffect(() => {
-    void syncFrostAlerts({ location, language, source: catalog }).catch(() => undefined);
-  }, [location, language, route.name]);
+    void syncAlerts({ location, seaArea, language, source: catalog }).catch(() => undefined);
+  }, [location, seaArea, language, route.name]);
 
   const navLink = (to: string, label: string, Icon: LucideIcon, active: boolean) => (
     <a href={to} aria-current={active ? 'page' : undefined}>
@@ -137,7 +140,8 @@ export function App() {
             {route.name === 'about' && <AboutPage />}
             {route.name === 'alerts' && (
               <AlertsPage>
-                <FrostAlertsCard location={location} />
+                <FrostAlertsCard location={location} seaArea={seaArea} />
+                <SeaAlertsCard location={location} port={seaPort.port} />
               </AlertsPage>
             )}
             {route.name === 'sky' && (

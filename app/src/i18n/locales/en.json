@@ -45,7 +45,11 @@
   },
   "alerts": {
     "title": "Alerts",
-    "intro": "Warnings sent to your phone, even with the app closed."
+    "intro": "Warnings sent to your phone, even with the app closed.",
+    "details": "How it works and what is sent",
+    "unsupported": "This browser cannot receive notifications. On iPhone, add Lunário to your Home Screen (Share → Add to Home Screen) and turn alerts on from there.",
+    "blocked": "Notifications are blocked for Lunário. Allow them in your browser or phone settings and try again.",
+    "failed": "Could not change the alerts. Check your internet connection and try again."
   },
   "cover": {
     "open": "Open Lunário",
@@ -374,10 +378,17 @@
     "intro": "Get a notification in the early evening when frost is likely that night, even with the app closed.",
     "privacy": "While they are on, Lunário sends the alerts server your location rounded to about 1 km, the names of the frost-sensitive crops in your garden and your language. Nothing else. Turning them off deletes this data.",
     "toggle": "Warn me about frost",
-    "on": "On for {{place}}. The alert arrives around 6 pm (7 pm in summer), only when there is a risk.",
-    "unsupported": "This browser cannot receive notifications. On iPhone, add Lunário to your Home Screen (Share → Add to Home Screen) and turn alerts on from there.",
-    "blocked": "Notifications are blocked for Lunário. Allow them in your browser or phone settings and try again.",
-    "failed": "Could not change the alerts. Check your internet connection and try again."
+    "on": "On for {{place}}.",
+    "when": "The alert arrives around 6 pm (7 pm in summer), only when there is a risk."
+  },
+  "seaAlerts": {
+    "title": "Rough seas",
+    "intro": "Get a notification when IPMA issues an orange or red rough sea warning for your port's district, even with the app closed.",
+    "privacy": "While they are on, Lunário sends the alerts server the port's district and your language. Your location is not sent. Turning them off deletes this data.",
+    "toggle": "Warn me about rough seas",
+    "yellow": "Include yellow warnings (frequent in winter)",
+    "on": "On for {{port}} ({{district}} district).",
+    "when": "IPMA's warnings are checked at 8 am, noon, 4 pm and 8 pm, never at night, and each warning arrives only once. Change the port in Settings."
   },
   "moon": {
     "title": "Moon",
