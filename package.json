@@ -31,7 +31,8 @@
     "test:coverage": "vitest run --coverage",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage",
     "prepare": "husky",
-    "vapid-keys": "node scripts/vapid-keys.ts"
+    "vapid-keys": "node scripts/vapid-keys.ts",
+    "tides": "node scripts/fit-tides.ts"
   },
   "dependencies": {
     "@block65/webcrypto-web-push": "2.0.0",
