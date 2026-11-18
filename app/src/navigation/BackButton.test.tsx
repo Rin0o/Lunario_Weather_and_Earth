@@ -74,4 +74,26 @@ describe('useNavigation', () => {
     goTo('#/horta');
     expect(result.current.previous).toEqual({ name: 'today' });
   });
+
+  it('finds the crops list where it was left on coming back from a crop sheet', () => {
+    window.location.hash = '#/culturas';
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+    const scrolledTo = (y: number) =>
+      Object.defineProperty(window, 'scrollY', { value: y, configurable: true });
+    renderHook(() => useNavigation());
+
+    scrolledTo(1200);
+    goTo('#/cultura/fava');
+    expect(scrollTo).toHaveBeenLastCalledWith({ top: 0 });
+
+    scrolledTo(300);
+    goTo('#/culturas');
+    expect(scrollTo).toHaveBeenLastCalledWith({ top: 1200 });
+
+    // Going forward to a screen seen before still opens it at the top.
+    goTo('#/cultura/fava');
+    expect(scrollTo).toHaveBeenLastCalledWith({ top: 0 });
+    scrolledTo(0);
+    scrollTo.mockRestore();
+  });
 });

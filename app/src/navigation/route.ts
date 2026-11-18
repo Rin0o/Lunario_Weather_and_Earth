@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
 /**
@@ -137,18 +137,40 @@ const MAX_TRAIL = 50;
 export function useNavigation(): Navigation {
   const [trail, setTrail] = useState<string[]>(() => [currentHash()]);
   const shown = useRef(trail.at(-1) ?? '');
+  const trailRef = useRef(trail);
+  /** How far down each screen was when the user left it. */
+  const scrolls = useRef(new Map<string, number>());
+  /** Where to scroll once the new screen is drawn. */
+  const pendingScroll = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    trailRef.current = trail;
+    if (pendingScroll.current === null) return;
+    window.scrollTo({ top: pendingScroll.current });
+    pendingScroll.current = null;
+  }, [trail]);
+
   useEffect(() => {
     const onChange = () => {
       const hash = currentHash();
+      const visited = trailRef.current;
       const turn = turnBetween(parseRoute(shown.current), parseRoute(hash));
+      // The old screen is still drawn: note how far down it was.
+      scrolls.current.set(shown.current, window.scrollY);
       shown.current = hash;
-      showScreen(turn, () => {
-        setTrail((visited) => {
-          if (visited.at(-1) === hash) return visited;
-          if (visited.at(-2) === hash) return visited.slice(0, -1);
-          return [...visited, hash].slice(-MAX_TRAIL);
-        });
+      if (visited.at(-1) === hash) {
         window.scrollTo({ top: 0 });
+        return;
+      }
+      // Going back finds the screen where it was left (the crops list after a crop sheet);
+      // any other screen opens at the top.
+      const back = visited.at(-2) === hash;
+      pendingScroll.current = back ? (scrolls.current.get(hash) ?? 0) : 0;
+      showScreen(turn, () => {
+        setTrail((current) => {
+          if (current.at(-2) === hash) return current.slice(0, -1);
+          return [...current, hash].slice(-MAX_TRAIL);
+        });
       });
     };
     window.addEventListener('hashchange', onChange);
