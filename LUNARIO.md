@@ -61,6 +61,7 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 | RF-16 | Ao abrir a app, avisar se há risco de geada nos próximos dias para as culturas sensíveis que o utilizador tem na horta | 3 |
 | RF-17 | Notificações push (opcionais) de risco de geada para as culturas que o utilizador tem na horta (ver D-21) | 3 |
 | RF-18 | Ecrã **Mar**, entre o Céu e a Horta: **marés** do dia (preia-mar e baixa-mar, curva, vivas ou mortas) calculadas no dispositivo; **ondulação**, mar total, ondulação de fundo e **temperatura da água**; **vento** na costa; **próximos dias**; **avisos de agitação marítima** do IPMA. Para o **porto mais próximo** do local do utilizador, ou o escolhido nas Definições (ver D-34, D-35) | 4 |
+| RF-19 | No ecrã **Céu**, as **estações**: a estação atual (desde quando e quanto já passou), o **próximo solstício ou equinócio** (data, hora, dias que faltam e duração do dia nesse dia, comparada com hoje) e os **quatro do ano**. Calculado no dispositivo com o `astronomy-engine` (D-22) | 4 |
 
 ## 4. Requisitos não funcionais
 
@@ -199,10 +200,9 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | **2** | A minha horta, modo Lua, calendários `.ics` regionais e pessoais, cópia de segurança (RF-15) | Nenhum |
 | **3** | Aviso de geada ao abrir (RF-16) e alertas Web Push para o local de cada utilizador, com as culturas da horta (RF-14, RF-17, D-33) | Worker agendado + D1 mínima (subscrições push) |
 | Futuro | Cópia da horta por código, se for preciso | Cloudflare Worker + D1 (ver D-16) |
-| **4** | Ecrã **Mar** (RF-18): marés calculadas no dispositivo, ondulação, vento, temperatura da água e avisos, para o porto mais próximo (D-34, D-35) | Nenhum |
+| **4** | Estações no ecrã Céu (RF-19). Ecrã **Mar** (RF-18): marés calculadas no dispositivo, ondulação, vento, temperatura da água e avisos, para o porto mais próximo (D-34, D-35) | Nenhum |
 | Futuro (ideia) | **Alertas de agitação marítima** por Web Push, como os da geada (RF-14): o Worker lê os avisos do IPMA para o distrito do porto de cada utilizador e avisa quando surge um aviso amarelo, laranja ou vermelho, uma vez por aviso. A avaliar: que níveis notificar por omissão, a hora de envio e a relação com o interruptor do ecrã Alertas | Worker agendado + D1 (as subscrições que já existem, com o porto) |
 | Futuro (ideia) | **Contas de utilizador** para guardar a horta e as definições e passá-las entre dispositivos. A avaliar: forma de entrar (e-mail com link, Google), privacidade/RGPD e relação com a cópia por código | Worker + D1 + autenticação |
-| Futuro (ideia) | **Solstícios e equinócios**: a estação atual, a data e hora do próximo (e dos quatro do ano), dias que faltam, duração do dia nesse momento. Calculado no dispositivo com o motor astronómico que já existe | Nenhum |
 | Futuro (ideia) | **Biblioteca de ditados**: consultar todos os ditados (`data/ditados.csv`) como já se consulta a lista de culturas, com pesquisa e filtro por mês ou tema. Rever que outras listas merecem o mesmo tratamento (santos, feriados, fases da Lua do ano, …) | Nenhum |
 | Futuro (ideia) | **Versão desktop/web larga**: a mesma app, mas em ecrã largo mostra o livro aberto em duas páginas lado a lado (p. ex. Hoje à esquerda, detalhe à direita). A rever: aspeto visual para desktop, pontos de quebra, navegação entre páginas | Nenhum |
 
