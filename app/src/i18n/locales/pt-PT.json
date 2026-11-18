@@ -416,6 +416,44 @@
     "dayLength": "Duração do dia",
     "duration": "{{hours}} h {{minutes}} min"
   },
+  "seasons": {
+    "title": "Estações",
+    "names": {
+      "spring": "Primavera",
+      "summer": "Verão",
+      "autumn": "Outono",
+      "winter": "Inverno"
+    },
+    "since": "desde {{date}}",
+    "progress": "Quanto já passou do {{season}}",
+    "today": "hoje",
+    "events": {
+      "march-equinox": "Equinócio da primavera",
+      "june-solstice": "Solstício de verão",
+      "september-equinox": "Equinócio do outono",
+      "december-solstice": "Solstício de inverno"
+    },
+    "daylight": {
+      "march-equinox": "Dia e noite quase iguais: {{length}} de sol.",
+      "june-solstice": "O dia mais longo do ano: {{length}} de sol.",
+      "september-equinox": "Dia e noite quase iguais: {{length}} de sol.",
+      "december-solstice": "O dia mais curto do ano: {{length}} de sol."
+    },
+    "longer": "({{length}} mais do que hoje)",
+    "shorter": "({{length}} menos do que hoje)",
+    "minutes": "{{minutes}} min",
+    "year": "Em {{year}}",
+    "starts": {
+      "spring": "início da primavera",
+      "summer": "início do verão",
+      "autumn": "início do outono",
+      "winter": "início do inverno"
+    },
+    "marks": {
+      "current": "atual",
+      "next": "o próximo"
+    }
+  },
   "holidays": {
     "title": "Feriados",
     "today": "Hoje é feriado: {{name}}",

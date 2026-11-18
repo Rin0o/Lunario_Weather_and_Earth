@@ -5,6 +5,7 @@ import type { Location } from '../astro/location.ts';
 import { moonDay, nextMoonQuarters } from '../astro/moon.ts';
 import { sunDay } from '../astro/sun.ts';
 import { formatLongDate, formatPercent, formatShortDate, formatTime } from '../i18n/format.ts';
+import { SeasonsCard } from './SeasonsCard.tsx';
 import { HolidaysCard } from '../today/HolidaysCard.tsx';
 import { MoonTradition } from '../today/MoonTradition.tsx';
 import { useMoonMode } from '../today/useMoonMode.ts';
@@ -17,7 +18,10 @@ interface SkyPageProps {
   locationControl?: ReactNode;
 }
 
-/** "Céu": the Moon (with the optional Moon mode), the Sun and the holidays (RF-02, RF-07, RF-09). */
+/**
+ * "Céu": the Moon (with the optional Moon mode), the Sun, the seasons and the holidays
+ * (RF-02, RF-07, RF-09, RF-19).
+ */
 export function SkyPage({ now, location, locationControl }: SkyPageProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.resolvedLanguage;
@@ -109,6 +113,8 @@ export function SkyPage({ now, location, locationControl }: SkyPageProps) {
           </dd>
         </dl>
       </article>
+
+      <SeasonsCard now={now} location={location} />
 
       <HolidaysCard now={now} />
 
