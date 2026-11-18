@@ -22,12 +22,20 @@ import { FrostAlertsCard } from './frost/FrostAlertsCard.tsx';
 import { FrostCard } from './frost/FrostCard.tsx';
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
 import { GardenPage } from './garden/GardenPage.tsx';
+import { HolidaysLibrary } from './library/HolidaysLibrary.tsx';
+import { SaintsLibrary } from './library/SaintsLibrary.tsx';
 import { SayingsLibrary } from './library/SayingsLibrary.tsx';
 import { LocationChip } from './location/LocationChip.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
 import { useUserLocation } from './location/userLocation.ts';
-import { PreviousRouteContext, hashOf, href, useNavigation } from './navigation/route.ts';
+import {
+  PreviousRouteContext,
+  hashOf,
+  href,
+  inLibrary,
+  useNavigation,
+} from './navigation/route.ts';
 import { usePageTurn, useSwipeTabs } from './navigation/swipe.ts';
 import { PortPicker } from './coast/PortPicker.tsx';
 import { useSeaPort } from './coast/useSeaPort.ts';
@@ -139,6 +147,8 @@ export function App() {
             {route.name === 'crops' && <CropsList />}
             {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
             {route.name === 'sayings' && <SayingsLibrary now={now} />}
+            {route.name === 'saints' && <SaintsLibrary now={now} />}
+            {route.name === 'holidays' && <HolidaysLibrary now={now} />}
           </div>
         </PreviousRouteContext.Provider>
       </main>
@@ -151,12 +161,7 @@ export function App() {
         {navLink(href.sky, t('nav.sky'), MoonStar, route.name === 'sky')}
         {navLink(href.sea, t('nav.sea'), Waves, route.name === 'sea')}
         {navLink(href.garden, t('nav.garden'), Sprout, route.name === 'garden')}
-        {navLink(
-          href.crops,
-          t('nav.library'),
-          LibraryBig,
-          route.name === 'crops' || route.name === 'crop' || route.name === 'sayings',
-        )}
+        {navLink(href.crops, t('nav.library'), LibraryBig, inLibrary(route))}
       </nav>
     </>
   );

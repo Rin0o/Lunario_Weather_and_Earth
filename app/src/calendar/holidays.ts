@@ -49,6 +49,11 @@ const MOVEABLE: readonly [HolidayId, number][] = [
   ['corpus-christi', 60],
 ];
 
+/** True for the holidays counted from Easter, whose date changes every year. */
+export function isMoveable(id: HolidayId): boolean {
+  return MOVEABLE.some(([moveable]) => moveable === id);
+}
+
 /** Gregorian Easter Sunday (anonymous Gregorian algorithm, Meeus/Jones/Butcher). */
 export function easterSunday(year: number): IsoDate {
   if (!Number.isInteger(year) || year < 1583) throw new Error(`Unsupported year: ${year}`);
