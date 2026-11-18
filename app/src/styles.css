@@ -2050,18 +2050,22 @@ a.button.primary {
  * notebook. The stroke is an SVG: a firm, slightly wavering graphite line with a fainter
  * second pass beside it, roughened by a noise filter like pencil grain on paper, and stretched
  * to the row (non-scaling stroke keeps its weight). Each row tilts
- * a little differently, so the strokes do not look stamped.
+ * a little differently, so the strokes do not look stamped. The library's holidays and Moon
+ * phases are crossed out the same way.
  */
-.season-year li[data-past] {
+.season-year li[data-past],
+.holiday-list li[data-mark='past'] {
   position: relative;
   color: var(--ink-muted);
 }
 
-.season-year li[data-past] > * {
+.season-year li[data-past] > *,
+.holiday-list li[data-mark='past'] > * {
   opacity: 0.7;
 }
 
-.season-year li[data-past]::after {
+.season-year li[data-past]::after,
+.holiday-list li[data-mark='past']::after {
   content: '';
   position: absolute;
   inset: calc(50% - 0.35rem) -0.15rem auto;
@@ -2072,11 +2076,13 @@ a.button.primary {
   pointer-events: none;
 }
 
-.season-year li[data-past]:nth-child(2n)::after {
+.season-year li[data-past]:nth-child(2n)::after,
+.holiday-list li[data-mark='past']:nth-child(2n)::after {
   transform: rotate(0.4deg) scaleX(-1);
 }
 
-.season-year li[data-past]:nth-child(3n)::after {
+.season-year li[data-past]:nth-child(3n)::after,
+.holiday-list li[data-mark='past']:nth-child(3n)::after {
   transform: rotate(-0.2deg) translateY(1px);
 }
 
@@ -2109,13 +2115,17 @@ a.button.primary {
   margin-bottom: 0.6rem;
 }
 
+/* The tab's own name, a running head over the shelves: in the headings' face and inked, but
+   smaller than each shelf's title so the two do not compete. */
 .library-title {
-  margin: 0 0 0.35rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  margin: 0 0 0.45rem;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-muted);
+  color: var(--ink);
+  -webkit-text-stroke: 0.3px currentcolor;
 }
 
 /* Like the tabs of an index: one pill per shelf, the open one inked. On a narrow phone the
@@ -2398,10 +2408,6 @@ a.button.primary {
   border-top: 1px dashed var(--rule);
 }
 
-.holiday-list li[data-mark='past'] {
-  opacity: 0.55;
-}
-
 .holiday-list li[data-mark='today'],
 .holiday-list li[data-mark='next'] {
   padding: 0.6rem 0.75rem;
@@ -2436,4 +2442,33 @@ a.button.primary {
 
 .holiday-note {
   margin: 0 0.75rem 0.75rem;
+}
+
+/* The Moon shelf: the holidays' list, month by month, with the phase's disc beside the date. */
+.moon-month h3 {
+  margin: 0.9rem 0.25rem 0.3rem;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: normal;
+  text-transform: capitalize;
+  color: var(--ink-muted);
+}
+
+.moon-phase-list li {
+  grid-template-columns: 3rem 2rem 1fr;
+}
+
+.moon-phase-disc {
+  width: 2rem;
+  height: 2rem;
+}
+
+.moon-phase-list li[data-phase='full'] .holiday-name,
+.moon-phase-list li[data-phase='new'] .holiday-name {
+  color: var(--accent);
+}
+
+.moon-tags {
+  font-weight: 600;
+  color: var(--gold);
 }

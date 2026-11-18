@@ -2,13 +2,15 @@ import {
   Body,
   Illumination,
   MoonPhase,
+  NextLunarEclipse,
   NextMoonQuarter,
   Observer,
+  SearchLunarEclipse,
   SearchMoonQuarter,
   SearchRiseSet,
 } from 'astronomy-engine';
 import type { Location } from './location.ts';
-import { localDayBounds, TIME_ZONE } from './time.ts';
+import { dateInZone, localDayBounds, TIME_ZONE } from './time.ts';
 
 export const PRINCIPAL_PHASES = ['new', 'first-quarter', 'full', 'last-quarter'] as const;
 export type PrincipalPhase = (typeof PRINCIPAL_PHASES)[number];
@@ -49,6 +51,52 @@ export function nextMoonQuarters(from: Date, count: number): QuarterEvent[] {
     quarter = NextMoonQuarter(quarter);
   }
   return events;
+}
+
+export type LunarEclipseKind = 'penumbral' | 'partial' | 'total';
+
+export interface YearPhase extends QuarterEvent {
+  /** Local calendar date (`YYYY-MM-DD`, Portugal time). */
+  date: string;
+  /** The second full moon in one calendar month, the popular "lua azul". */
+  blueMoon: boolean;
+  /** The kind of lunar eclipse at this full moon, if any (seen from somewhere on Earth). */
+  eclipse: LunarEclipseKind | null;
+}
+
+/**
+ * Every principal phase whose local date falls in `year`, in order, with the blue moons and
+ * the lunar eclipses marked. All computed on the device.
+ */
+export function moonPhasesOfYear(year: number, timeZone = TIME_ZONE): YearPhase[] {
+  const prefix = String(year);
+  // Starting two days early covers a phase just after midnight on 1 January in Lisbon.
+  const from = new Date(Date.UTC(year - 1, 11, 30));
+  const events = nextMoonQuarters(from, 54)
+    .map((q) => ({ ...q, date: dateInZone(q.time, timeZone) }))
+    .filter((q) => q.date.startsWith(prefix));
+
+  const eclipses: { time: Date; kind: LunarEclipseKind }[] = [];
+  for (let e = SearchLunarEclipse(from); e.peak.date.getUTCFullYear() <= year;) {
+    eclipses.push({ time: e.peak.date, kind: e.kind as LunarEclipseKind });
+    e = NextLunarEclipse(e.peak);
+  }
+
+  const fullsByMonth = new Map<string, number>();
+  return events.map((q) => {
+    let blueMoon = false;
+    let eclipse: LunarEclipseKind | null = null;
+    if (q.phase === 'full') {
+      const month = q.date.slice(0, 7);
+      const seen = (fullsByMonth.get(month) ?? 0) + 1;
+      fullsByMonth.set(month, seen);
+      blueMoon = seen === 2;
+      eclipse =
+        eclipses.find((e) => Math.abs(e.time.getTime() - q.time.getTime()) < 86_400_000)?.kind ??
+        null;
+    }
+    return { ...q, blueMoon, eclipse };
+  });
 }
 
 function intermediatePhase(angle: number): MoonPhaseName {

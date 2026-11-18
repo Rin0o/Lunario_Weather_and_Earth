@@ -23,6 +23,7 @@ import { FrostCard } from './frost/FrostCard.tsx';
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
 import { GardenPage } from './garden/GardenPage.tsx';
 import { HolidaysLibrary } from './library/HolidaysLibrary.tsx';
+import { MoonLibrary } from './library/MoonLibrary.tsx';
 import { SaintsLibrary } from './library/SaintsLibrary.tsx';
 import { SayingsLibrary } from './library/SayingsLibrary.tsx';
 import { LocationChip } from './location/LocationChip.tsx';
@@ -149,6 +150,7 @@ export function App() {
             {route.name === 'sayings' && <SayingsLibrary now={now} />}
             {route.name === 'saints' && <SaintsLibrary now={now} />}
             {route.name === 'holidays' && <HolidaysLibrary now={now} />}
+            {route.name === 'moon' && <MoonLibrary now={now} />}
           </div>
         </PreviousRouteContext.Provider>
       </main>

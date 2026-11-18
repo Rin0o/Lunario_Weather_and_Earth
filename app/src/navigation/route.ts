@@ -17,7 +17,8 @@ export type Route =
   | { name: 'crop'; id: string }
   | { name: 'sayings' }
   | { name: 'saints' }
-  | { name: 'holidays' };
+  | { name: 'holidays' }
+  | { name: 'moon' };
 
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
@@ -32,6 +33,7 @@ export function parseRoute(hash: string): Route {
   if (path === 'ditados') return { name: 'sayings' };
   if (path === 'santos') return { name: 'saints' };
   if (path === 'feriados') return { name: 'holidays' };
+  if (path === 'luas') return { name: 'moon' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
   if (crop?.[1]) return { name: 'crop', id: crop[1] };
   return { name: 'today' };
@@ -50,6 +52,7 @@ export const href = {
   sayings: '#/ditados',
   saints: '#/santos',
   holidays: '#/feriados',
+  moon: '#/luas',
 };
 
 /** The hash of a route, the inverse of `parseRoute`. */
@@ -64,7 +67,7 @@ export function hashOf(route: Route): string {
 export const TABS = ['today', 'sky', 'sea', 'garden', 'crops'] as const;
 
 /** The library's shelves, in the order of its switcher (LibraryNav). */
-export const LIBRARY_SHELVES = ['crops', 'sayings', 'saints', 'holidays'] as const;
+export const LIBRARY_SHELVES = ['crops', 'sayings', 'saints', 'holidays', 'moon'] as const;
 type Tab = (typeof TABS)[number];
 
 const isShelf = (route: Route) => (LIBRARY_SHELVES as readonly string[]).includes(route.name);
