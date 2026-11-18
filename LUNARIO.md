@@ -200,6 +200,9 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | Futuro | Cópia da horta por código, se for preciso | Cloudflare Worker + D1 (ver D-16) |
 | Futuro (ideia) | Ecrã **Mar**: marés, vento, ondulação (altura, período, direção), temperatura da água. A avaliar: fontes (IPMA, Open-Meteo Marine, harmónicas por porto) e escolha do porto mais próximo | A definir |
 | Futuro (ideia) | **Contas de utilizador** para guardar a horta e as definições e passá-las entre dispositivos. A avaliar: forma de entrar (e-mail com link, Google), privacidade/RGPD e relação com a cópia por código | Worker + D1 + autenticação |
+| Futuro (ideia) | **Solstícios e equinócios**: a estação atual, a data e hora do próximo (e dos quatro do ano), dias que faltam, duração do dia nesse momento. Calculado no dispositivo com o motor astronómico que já existe | Nenhum |
+| Futuro (ideia) | **Biblioteca de ditados**: consultar todos os ditados (`data/ditados.csv`) como já se consulta a lista de culturas, com pesquisa e filtro por mês ou tema. Rever que outras listas merecem o mesmo tratamento (santos, feriados, fases da Lua do ano, …) | Nenhum |
+| Futuro (ideia) | **Versão desktop/web larga**: a mesma app, mas em ecrã largo mostra o livro aberto em duas páginas lado a lado (p. ex. Hoje à esquerda, detalhe à direita). A rever: aspeto visual para desktop, pontos de quebra, navegação entre páginas | Nenhum |
 
 ## 9. Registo de decisões
 
