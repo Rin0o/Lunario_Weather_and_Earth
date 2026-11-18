@@ -267,7 +267,7 @@
     "actions": {
       "SV": "Semear em viveiro",
       "SD": "Semear diretamente",
-      "TR": "Transplantar",
+      "TR": "Transplantar / plantar pés",
       "PL": "Plantar",
       "CO": "Colher"
     }

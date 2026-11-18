@@ -267,7 +267,7 @@
     "actions": {
       "SV": "Sow in trays",
       "SD": "Sow directly",
-      "TR": "Transplant",
+      "TR": "Transplant / plant out seedlings",
       "PL": "Plant",
       "CO": "Harvest"
     }

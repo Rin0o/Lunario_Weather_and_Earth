@@ -28,7 +28,8 @@ describe('SowingCard', () => {
       'Fava',
       'Nabo / nabiça / grelos',
     ]);
-    expect(group('Plantar')).toEqual(['Alho', 'Morango']);
+    // Onion sets carry a note, shown as a mark.
+    expect(group('Plantar')).toEqual(['Alho', 'Cebola*', 'Morango']);
     expect(screen.getByRole('region', { name: 'Colher' })).toBeInTheDocument();
   });
 
