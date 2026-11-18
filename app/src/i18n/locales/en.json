@@ -19,6 +19,7 @@
     "mit": "MIT licence",
     "publicDomain": "Public domain",
     "attribution": "Free use, crediting IPMA",
+    "nonCommercial": "Non-commercial use, citing the source",
     "groups": {
       "engravings": "Engravings",
       "data": "Data",
@@ -28,9 +29,11 @@
       "crops": "Crops",
       "coriander": "Coriander",
       "moon": "Moon",
+      "shell": "Sea",
       "wateringCan": "Watering can",
       "weather": "Weather forecast",
-      "frost": "Frost",
+      "frost": "Frost, sea and wind",
+      "tides": "Tides",
       "saints": "Saints of the day",
       "sayings": "Sayings",
       "astronomy": "Moon and Sun",
@@ -55,6 +58,7 @@
     "alerts": "Alerts",
     "today": "Today",
     "sky": "Sky",
+    "sea": "Sea",
     "garden": "Garden",
     "crops": "Crops",
     "about": "About"
@@ -63,6 +67,77 @@
     "title": "Sky",
     "summary": "Moon and sun",
     "more": "Moon, sun and holidays"
+  },
+  "sea": {
+    "title": "Sea",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "kmh": "{{value}} km/h",
+    "kmhRange": "{{min}}–{{max}} km/h",
+    "loading": "Loading the sea forecast…",
+    "unavailable": "Sea forecast unavailable. Try again when you are online.",
+    "offline": "Offline, saved forecast",
+    "source": "Sources: IPMA and Open-Meteo (CC BY 4.0) · updated at {{time}}",
+    "sourceDated": "Sources: IPMA and Open-Meteo (CC BY 4.0) · updated on {{date}} at {{time}}",
+    "sourceOnly": "Sources: IPMA and Open-Meteo (CC BY 4.0)",
+    "port": {
+      "title": "Sea port",
+      "change": "Change the port in Settings",
+      "distance": "{{km}} km away",
+      "automatic": "The nearest to your location ({{km}} km)",
+      "chosen": "Chosen from the list",
+      "choose": "Tides and sea for",
+      "nearest": "The nearest ({{name}})"
+    },
+    "tides": {
+      "title": "Tides",
+      "high": "High water",
+      "low": "Low water",
+      "rising": "Rising · {{height}} now",
+      "falling": "Falling · {{height}} now",
+      "range": "range {{height}}",
+      "strength": {
+        "spring": "Spring tides",
+        "neap": "Neap tides",
+        "mean": "Mean tides"
+      },
+      "nextSpring": "Spring tides around the {{phase}} ({{date}}).",
+      "sourceGauge": "Computed on the phone for {{port}}, from the tide gauge (IOC/VLIZ). Heights above chart datum. Not for navigation.",
+      "sourceModel": "Computed on the phone for {{port}}, from the Open-Meteo model corrected by the tide gauges. Heights above chart datum. Not for navigation."
+    },
+    "state": {
+      "title": "Waves",
+      "waves": "Waves",
+      "period": "Period",
+      "totalSea": "Total sea",
+      "swell": "Swell",
+      "water": "Water temperature"
+    },
+    "wind": {
+      "title": "Wind on the coast",
+      "now": "Now",
+      "today": "Today",
+      "gusts": "Gusts",
+      "upTo": "up to {{value}}",
+      "beaufort": "force {{force}}"
+    },
+    "days": {
+      "title": "Next days",
+      "day": "Day",
+      "waves": "Waves",
+      "wind": "Wind",
+      "highs": "High water",
+      "units": "Waves in metres, top wind in km/h. Arrows show where they are heading."
+    },
+    "warnings": {
+      "title": "Rough sea warning",
+      "levels": {
+        "yellow": "Yellow",
+        "orange": "Orange",
+        "red": "Red"
+      },
+      "source": "Source: IPMA"
+    }
   },
   "garden": {
     "title": "My garden",

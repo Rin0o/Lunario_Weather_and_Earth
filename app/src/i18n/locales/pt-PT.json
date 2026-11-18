@@ -19,6 +19,7 @@
     "mit": "licença MIT",
     "publicDomain": "Domínio público",
     "attribution": "Uso livre, citando o IPMA",
+    "nonCommercial": "Uso não comercial, citando a fonte",
     "groups": {
       "engravings": "Gravuras",
       "data": "Dados",
@@ -28,9 +29,11 @@
       "crops": "Culturas",
       "coriander": "Coentros",
       "moon": "Lua",
+      "shell": "Mar",
       "wateringCan": "Regador",
       "weather": "Previsão do tempo",
-      "frost": "Geada",
+      "frost": "Geada, mar e vento",
+      "tides": "Marés",
       "saints": "Santos do dia",
       "sayings": "Ditados",
       "astronomy": "Lua e Sol",
@@ -55,6 +58,7 @@
     "alerts": "Alertas",
     "today": "Hoje",
     "sky": "Céu",
+    "sea": "Mar",
     "garden": "Horta",
     "crops": "Culturas",
     "about": "Sobre"
@@ -63,6 +67,77 @@
     "title": "Céu",
     "summary": "Lua e sol",
     "more": "Lua, sol e feriados"
+  },
+  "sea": {
+    "title": "Mar",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "kmh": "{{value}} km/h",
+    "kmhRange": "{{min}}–{{max}} km/h",
+    "loading": "A carregar a previsão do mar…",
+    "unavailable": "Previsão do mar indisponível. Volte a tentar quando tiver rede.",
+    "offline": "Sem rede, previsão guardada",
+    "source": "Fontes: IPMA e Open-Meteo (CC BY 4.0) · atualizado às {{time}}",
+    "sourceDated": "Fontes: IPMA e Open-Meteo (CC BY 4.0) · atualizado a {{date}} às {{time}}",
+    "sourceOnly": "Fontes: IPMA e Open-Meteo (CC BY 4.0)",
+    "port": {
+      "title": "Porto do mar",
+      "change": "Mudar o porto nas Definições",
+      "distance": "a {{km}} km",
+      "automatic": "O mais perto da sua localização ({{km}} km)",
+      "chosen": "Escolhido da lista",
+      "choose": "Marés e mar de",
+      "nearest": "O mais perto ({{name}})"
+    },
+    "tides": {
+      "title": "Marés",
+      "high": "Preia-mar",
+      "low": "Baixa-mar",
+      "rising": "A encher · {{height}} agora",
+      "falling": "A vazar · {{height}} agora",
+      "range": "amplitude {{height}}",
+      "strength": {
+        "spring": "Marés vivas",
+        "neap": "Marés mortas",
+        "mean": "Marés médias"
+      },
+      "nextSpring": "Marés vivas por volta da {{phase}} ({{date}}).",
+      "sourceGauge": "Calculadas no telemóvel para {{port}}, a partir do marégrafo (IOC/VLIZ). Alturas acima do zero hidrográfico. Não servem para navegação.",
+      "sourceModel": "Calculadas no telemóvel para {{port}}, a partir do modelo do Open-Meteo corrigido pelos marégrafos. Alturas acima do zero hidrográfico. Não servem para navegação."
+    },
+    "state": {
+      "title": "Ondulação",
+      "waves": "Ondas",
+      "period": "Período",
+      "totalSea": "Mar total",
+      "swell": "Ondulação de fundo",
+      "water": "Temperatura da água"
+    },
+    "wind": {
+      "title": "Vento na costa",
+      "now": "Agora",
+      "today": "Hoje",
+      "gusts": "Rajadas",
+      "upTo": "até {{value}}",
+      "beaufort": "força {{force}}"
+    },
+    "days": {
+      "title": "Próximos dias",
+      "day": "Dia",
+      "waves": "Ondas",
+      "wind": "Vento",
+      "highs": "Preia-mar",
+      "units": "Ondas em metros, vento máximo em km/h. As setas mostram para onde vão."
+    },
+    "warnings": {
+      "title": "Aviso de agitação marítima",
+      "levels": {
+        "yellow": "Amarelo",
+        "orange": "Laranja",
+        "red": "Vermelho"
+      },
+      "source": "Fonte: IPMA"
+    }
   },
   "garden": {
     "title": "A minha horta",

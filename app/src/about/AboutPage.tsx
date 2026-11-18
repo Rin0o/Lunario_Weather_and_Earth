@@ -55,6 +55,14 @@ const GROUPS: { key: string; credits: Credit[] }[] = [
         ...CC0,
       },
       {
+        use: 'shell',
+        title: 'Charonia tritonis',
+        work: true,
+        by: 'Wenceslaus Hollar, c. 1650',
+        via: 'Rijksmuseum',
+        ...CC0,
+      },
+      {
         use: 'wateringCan',
         title: 'Watering can',
         work: true,
@@ -75,6 +83,13 @@ const GROUPS: { key: string; credits: Credit[] }[] = [
         url: 'https://api.ipma.pt',
       },
       { use: 'frost', title: 'Open-Meteo', url: 'https://open-meteo.com', ...CC_BY },
+      {
+        use: 'tides',
+        title: 'Sea Level Station Monitoring Facility',
+        by: 'IOC / VLIZ',
+        url: 'https://www.ioc-sealevelmonitoring.org',
+        licence: 'about.nonCommercial',
+      },
       {
         use: 'saints',
         title: 'Wikipédia',

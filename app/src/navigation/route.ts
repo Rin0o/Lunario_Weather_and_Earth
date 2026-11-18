@@ -8,6 +8,7 @@ import { flushSync } from 'react-dom';
 export type Route =
   | { name: 'today' }
   | { name: 'sky' }
+  | { name: 'sea' }
   | { name: 'alerts' }
   | { name: 'settings' }
   | { name: 'about' }
@@ -18,6 +19,7 @@ export type Route =
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
   if (path === 'ceu') return { name: 'sky' };
+  if (path === 'mar') return { name: 'sea' };
   if (path === 'alertas') return { name: 'alerts' };
   if (path === 'definicoes') return { name: 'settings' };
   if (path === 'sobre') return { name: 'about' };
@@ -31,6 +33,7 @@ export function parseRoute(hash: string): Route {
 export const href = {
   today: '#/',
   sky: '#/ceu',
+  sea: '#/mar',
   alerts: '#/alertas',
   settings: '#/definicoes',
   about: '#/sobre',
@@ -44,8 +47,8 @@ export function hashOf(route: Route): string {
   return route.name === 'crop' ? href.crop(route.id) : href[route.name];
 }
 
-/** The four main screens, in the order of the tab bar: the pages of the notebook. */
-export const TABS = ['today', 'sky', 'garden', 'crops'] as const;
+/** The five main screens, in the order of the tab bar: the pages of the notebook. */
+export const TABS = ['today', 'sky', 'sea', 'garden', 'crops'] as const;
 type Tab = (typeof TABS)[number];
 
 /** Where a tab sits in the notebook, or -1 for a secondary screen (settings, a crop sheet…). */
