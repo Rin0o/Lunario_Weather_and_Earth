@@ -4,6 +4,8 @@ dist/
 dev-dist/
 coverage/
 *.tsbuildinfo
+# Downloads cached by `npm run tides`
+.cache/
 # Generated from /data by `npm run catalog`
 app/src/catalog/catalog.json
 
