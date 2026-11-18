@@ -25,7 +25,7 @@ describe('CropsList', () => {
 
   it('lists all 35 crops alphabetically, linking to their sheets', () => {
     render(<CropsList />);
-    const links = screen.getAllByRole('link');
+    const links = within(screen.getByRole('list')).getAllByRole('link');
     expect(links).toHaveLength(35);
     expect(links[0]).toHaveTextContent(/^AbóboraCucurbita/);
     expect(links[0]).toHaveAttribute('href', '#/cultura/abobora');
@@ -35,7 +35,9 @@ describe('CropsList', () => {
   it('sorts by the English names in English', async () => {
     render(<CropsList />);
     await act(() => i18n.changeLanguage('en'));
-    expect(screen.getAllByRole('link')[0]).toHaveTextContent(/^Aubergine/);
+    expect(within(screen.getByRole('list')).getAllByRole('link')[0]).toHaveTextContent(
+      /^Aubergine/,
+    );
   });
 });
 

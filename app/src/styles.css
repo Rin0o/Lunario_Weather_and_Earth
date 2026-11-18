@@ -3,7 +3,7 @@
  * every screen, and colours taken from the logo. Light only: the paper is the identity.
  *
  * Sections: 1 colours · 2 base · 3 app shell · 4 shared pieces · 5 opening cover ·
- * 6 Hoje · 7 Céu · 8 Horta · 9 Culturas · 10 Definições · 11 Mar
+ * 6 Hoje · 7 Céu · 8 Horta · 9 Culturas · 10 Definições · 11 Mar · 12 Biblioteca
  */
 
 /* ================================================================================== */
@@ -2110,4 +2110,195 @@ a.button.primary {
 
 .season-year li[data-mark='current'] .season-event strong {
   color: var(--ink);
+}
+
+/* ================================================================================== */
+/* 12. Biblioteca: the switcher between its shelves, and the sayings                   */
+/* ================================================================================== */
+
+.library-header {
+  margin-bottom: 0.6rem;
+}
+
+.library-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Like the tabs of an index: one pill per shelf, the open one inked. */
+.library-nav {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--card);
+}
+
+.library-nav a {
+  min-height: 2.25rem;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink-muted);
+}
+
+.library-nav a[aria-current='page'] {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* Kept clear of the page's edges, the ring binding and the paper's border. */
+.sayings-filters {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.75rem 0.75rem 0.5rem;
+}
+
+/* What is typed reads as handwriting in the notebook, in the headings' old face. */
+.sayings-search {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.35rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: rgb(253 248 236 / 85%);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.sayings-search::placeholder {
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.sayings-search:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.theme-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.theme-chip {
+  min-height: 2rem;
+  padding: 0.15rem 0.75rem;
+  border: 1px solid var(--green-line);
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.theme-chip[aria-pressed='true'] {
+  border-color: var(--green-action);
+  background: var(--green-action);
+  color: var(--paper);
+}
+
+.sayings-count {
+  margin: 0 0.75rem 0.5rem;
+}
+
+/* One fold per month, like the months of a printed almanac. */
+.sayings-month {
+  border-top: 1px solid var(--rule);
+}
+
+.sayings-month:last-of-type {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* The month's name, how many sayings it holds, and a chevron that turns when it opens. */
+.sayings-month summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 1.35rem;
+  color: var(--accent);
+}
+
+.sayings-month summary::-webkit-details-marker {
+  display: none;
+}
+
+.sayings-month summary > span:first-child {
+  flex: 1;
+}
+
+.sayings-month .month-count {
+  margin: 0;
+  padding: 0 0.6rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+}
+
+.month-chevron {
+  flex: none;
+  transition: transform 0.2s;
+}
+
+.sayings-month[open] .month-chevron {
+  transform: rotate(180deg);
+}
+
+.sayings-month summary:hover,
+.sayings-month summary:focus-visible {
+  background: rgb(29 51 70 / 6%);
+}
+
+.sayings-list {
+  margin: 0 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.sayings-list li {
+  padding: 0.6rem 0.25rem;
+}
+
+.sayings-list li + li {
+  border-top: 1px dashed var(--rule);
+}
+
+.sayings-list .saying {
+  margin: 0;
+}
+
+.sayings-list li.today {
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.6rem;
+  background: rgb(200 147 47 / 14%);
+}
+
+.saying-today {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.saying-meta {
+  margin: 0.2rem 0 0;
+  padding-left: calc(0.75rem + 3px);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
 }

@@ -4,6 +4,7 @@ import {
   EDIBLE_PARTS,
   LUNAR_PERIODS,
   SAINT_ORIGINS,
+  SAYING_THEMES,
   ZONE_IDS,
   type Action,
   type CalendarWindow,
@@ -446,7 +447,7 @@ export const MIN_SAYINGS_PER_MONTH = 5;
 
 function parseSayings(text: string, problems: string[]): Saying[] {
   const file = DATA_FILE_NAMES.ditados;
-  const table = readTable(file, text, ['mes', 'dia', 'ditado', 'sentido_en']);
+  const table = readTable(file, text, ['mes', 'dia', 'ditado', 'sentido_en', 'temas']);
   const c = new Checker(file);
   const seen = new Set<string>();
   const sayings = table.rows.map((row): Saying => {
@@ -458,7 +459,11 @@ function parseSayings(text: string, problems: string[]): Saying[] {
     if (!meaning) c.fail(row, '"sentido_en" is empty (every saying needs its meaning, D-13)');
     if (seen.has(saying)) c.fail(row, `"${saying}" is listed twice`);
     seen.add(saying);
-    return { month, day, text: saying, meaning };
+    const themes = c.list(row, 'temas', SAYING_THEMES);
+    if (new Set(themes).size !== themes.length || themes.length > 2) {
+      c.fail(row, '"temas" needs one or two different themes');
+    }
+    return { month, day, text: saying, meaning, themes };
   });
   for (let month = 1; month <= 12; month++) {
     const n = sayings.filter((s) => s.month === month && s.day === null).length;

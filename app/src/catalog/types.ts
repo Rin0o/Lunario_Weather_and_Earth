@@ -118,7 +118,20 @@ export interface Saying {
   day: number | null;
   text: string;
   meaning: string;
+  /** What the saying is about, for the library's filter: one or two themes. */
+  themes: SayingTheme[];
 }
+
+export const SAYING_THEMES = [
+  'tempo',
+  'ceu',
+  'horta',
+  'searas',
+  'vinha',
+  'animais',
+  'festas',
+] as const;
+export type SayingTheme = (typeof SAYING_THEMES)[number];
 
 export interface Catalog {
   zones: Zone[];

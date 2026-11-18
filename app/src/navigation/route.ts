@@ -14,7 +14,8 @@ export type Route =
   | { name: 'about' }
   | { name: 'garden' }
   | { name: 'crops' }
-  | { name: 'crop'; id: string };
+  | { name: 'crop'; id: string }
+  | { name: 'sayings' };
 
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').replace(/\/$/, '');
@@ -24,7 +25,9 @@ export function parseRoute(hash: string): Route {
   if (path === 'definicoes') return { name: 'settings' };
   if (path === 'sobre') return { name: 'about' };
   if (path === 'horta') return { name: 'garden' };
-  if (path === 'culturas') return { name: 'crops' };
+  // The library opens on its first shelf, the crops.
+  if (path === 'culturas' || path === 'biblioteca') return { name: 'crops' };
+  if (path === 'ditados') return { name: 'sayings' };
   const crop = /^cultura\/([a-z_]+)$/.exec(path);
   if (crop?.[1]) return { name: 'crop', id: crop[1] };
   return { name: 'today' };
@@ -40,6 +43,7 @@ export const href = {
   garden: '#/horta',
   crops: '#/culturas',
   crop: (id: string) => `#/cultura/${id}`,
+  sayings: '#/ditados',
 };
 
 /** The hash of a route, the inverse of `parseRoute`. */
@@ -47,13 +51,19 @@ export function hashOf(route: Route): string {
   return route.name === 'crop' ? href.crop(route.id) : href[route.name];
 }
 
-/** The five main screens, in the order of the tab bar: the pages of the notebook. */
+/**
+ * The five main screens, in the order of the tab bar: the pages of the notebook. The last is
+ * the library, which opens on the crops; its other shelves (the sayings) count as the same tab.
+ */
 export const TABS = ['today', 'sky', 'sea', 'garden', 'crops'] as const;
+
+/** The library's shelves, in the order of its switcher (LibraryNav). */
+export const LIBRARY_SHELVES = ['crops', 'sayings'] as const;
 type Tab = (typeof TABS)[number];
 
 /** Where a tab sits in the notebook, or -1 for a secondary screen (settings, a crop sheet…). */
 export function tabIndex(route: Route): number {
-  return TABS.indexOf(route.name as Tab);
+  return TABS.indexOf((route.name === 'sayings' ? 'crops' : route.name) as Tab);
 }
 
 export type Turn = 'next' | 'previous';

@@ -22,6 +22,9 @@ describe('turnTarget', () => {
   it('stops at either end of the notebook', () => {
     expect(turnTarget({ name: 'today' }, 'previous')).toBeNull();
     expect(turnTarget({ name: 'crops' }, 'next')).toBeNull();
+    // The sayings are a shelf of the library, the last tab.
+    expect(turnTarget({ name: 'sayings' }, 'previous')).toEqual({ name: 'garden' });
+    expect(turnTarget({ name: 'sayings' }, 'next')).toBeNull();
   });
 
   it('does nothing on secondary screens', () => {
@@ -108,6 +111,7 @@ describe('turnBetween', () => {
     expect(turnBetween({ name: 'today' }, { name: 'garden' })).toBe('next');
     expect(turnBetween({ name: 'crops' }, { name: 'sky' })).toBe('previous');
     expect(turnBetween({ name: 'crops' }, { name: 'crop', id: 'alface' })).toBeNull();
+    expect(turnBetween({ name: 'crops' }, { name: 'sayings' })).toBeNull();
     expect(turnBetween({ name: 'settings' }, { name: 'today' })).toBeNull();
   });
 });

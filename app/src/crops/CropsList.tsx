@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { catalog } from '../catalog/catalog.ts';
 import type { Catalog, Text } from '../catalog/types.ts';
 import { intlLocale } from '../i18n/format.ts';
+import { LibraryNav } from '../library/LibraryNav.tsx';
 import { href } from '../navigation/route.ts';
 import { CropThumb } from './CropThumb.tsx';
 
@@ -15,6 +16,7 @@ export function CropsList({ source = catalog }: { source?: Catalog }) {
 
   return (
     <section aria-labelledby="crops-heading" className="page">
+      <LibraryNav current="crops" />
       <h2 id="crops-heading">{t('crops.title')}</h2>
       <ul className="crops-index">
         {crops.map((crop) => (
