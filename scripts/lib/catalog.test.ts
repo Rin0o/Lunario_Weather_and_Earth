@@ -215,16 +215,28 @@ describe('validation', () => {
   });
 
   it('validates sayings: meaning, duplicates and enough per month (RF-08)', () => {
-    const ditados = `${realFiles.ditados}5,,Um ditado sem sentido.,\n1,,A água de janeiro vale dinheiro.,Again\n`;
+    const ditados = `${realFiles.ditados}5,,Um ditado sem sentido.,,tempo\n1,,A água de janeiro vale dinheiro.,Again,tempo\n`;
     expect(problems({ ditados })).toEqual([
       expect.stringContaining('"sentido_en" is empty'),
       expect.stringContaining('is listed twice'),
     ]);
-    const onlyJanuaryDay = 'mes,dia,ditado,sentido_en\n1,22,Um.,One.\n';
+    const onlyJanuaryDay = 'mes,dia,ditado,sentido_en,temas\n1,22,Um.,One.,tempo\n';
     expect(problems({ ditados: onlyJanuaryDay })).toHaveLength(12);
     expect(problems({ ditados: onlyJanuaryDay })[0]).toContain(
       'month 1 has 0 sayings without a day; at least 5 are needed',
     );
+  });
+
+  it('validates the themes of the sayings: known, one or two, not repeated', () => {
+    const ditados =
+      `${realFiles.ditados}5,,Um.,One.,\n5,,Dois.,Two.,praia\n` +
+      `5,,Três.,Three.,tempo;tempo\n5,,Quatro.,Four.,tempo;vinha;ceu\n`;
+    expect(problems({ ditados })).toEqual([
+      expect.stringContaining('"temas" contains ""'),
+      expect.stringContaining('"temas" contains "praia"'),
+      expect.stringContaining('"temas" needs one or two different themes'),
+      expect.stringContaining('"temas" needs one or two different themes'),
+    ]);
   });
 
   it('rejects stored harvests for non-perennial crops (D-19)', () => {

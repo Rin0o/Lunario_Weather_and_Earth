@@ -9,6 +9,8 @@ describe('parseRoute', () => {
     ['#/horta', { name: 'garden' }],
     ['#/culturas', { name: 'crops' }],
     ['#/culturas/', { name: 'crops' }],
+    ['#/biblioteca', { name: 'crops' }],
+    ['#/ditados', { name: 'sayings' }],
     ['#/cultura/alface', { name: 'crop', id: 'alface' }],
     ['#/cultura/couve_flor', { name: 'crop', id: 'couve_flor' }],
     ['#/cultura/../../x', { name: 'today' }],
@@ -20,6 +22,7 @@ describe('parseRoute', () => {
   it('builds links that parse back', () => {
     expect(parseRoute(href.crop('tomate'))).toEqual({ name: 'crop', id: 'tomate' });
     expect(parseRoute(href.crops)).toEqual({ name: 'crops' });
+    expect(parseRoute(href.sayings)).toEqual({ name: 'sayings' });
     expect(parseRoute(href.garden)).toEqual({ name: 'garden' });
     expect(parseRoute(href.sky)).toEqual({ name: 'sky' });
     expect(parseRoute(href.alerts)).toEqual({ name: 'alerts' });

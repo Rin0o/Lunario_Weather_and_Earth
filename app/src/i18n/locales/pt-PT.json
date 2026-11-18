@@ -61,7 +61,9 @@
     "sea": "Mar",
     "garden": "Horta",
     "crops": "Culturas",
-    "about": "Sobre"
+    "about": "Sobre",
+    "library": "Biblioteca",
+    "sayings": "Ditados"
   },
   "sky": {
     "title": "Céu",
@@ -479,7 +481,8 @@
   "almanac": {
     "title": "Almanaque",
     "saint": "Santo do dia",
-    "sources": "Santos e ditados:"
+    "sources": "Santos e ditados:",
+    "allSayings": "Todos os ditados"
   },
   "language": {
     "label": "Idioma",
@@ -490,5 +493,29 @@
   },
   "modal": {
     "close": "Fechar"
+  },
+  "library": {
+    "title": "Biblioteca",
+    "shelves": "Secções da biblioteca"
+  },
+  "sayings": {
+    "title": "Ditados",
+    "search": "Procurar",
+    "searchPlaceholder": "Procurar um ditado",
+    "themesLabel": "Temas",
+    "allThemes": "Todos",
+    "count_one": "1 ditado",
+    "count_other": "{{count}} ditados",
+    "none": "Nenhum ditado encontrado.",
+    "today": "Ditado de hoje",
+    "themes": {
+      "tempo": "Tempo",
+      "ceu": "Lua e Sol",
+      "horta": "Horta e lavoura",
+      "searas": "Cereais e pão",
+      "vinha": "Vinha e vinho",
+      "animais": "Animais",
+      "festas": "Santos e festas"
+    }
   }
 }

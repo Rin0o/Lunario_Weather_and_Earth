@@ -61,7 +61,9 @@
     "sea": "Sea",
     "garden": "Garden",
     "crops": "Crops",
-    "about": "About"
+    "about": "About",
+    "library": "Library",
+    "sayings": "Sayings"
   },
   "sky": {
     "title": "Sky",
@@ -479,7 +481,8 @@
   "almanac": {
     "title": "Almanac",
     "saint": "Saint of the day",
-    "sources": "Saints and sayings:"
+    "sources": "Saints and sayings:",
+    "allSayings": "All sayings"
   },
   "language": {
     "label": "Language",
@@ -490,5 +493,29 @@
   },
   "modal": {
     "close": "Close"
+  },
+  "library": {
+    "title": "Library",
+    "shelves": "Library sections"
+  },
+  "sayings": {
+    "title": "Sayings",
+    "search": "Search",
+    "searchPlaceholder": "Search the sayings",
+    "themesLabel": "Themes",
+    "allThemes": "All",
+    "count_one": "1 saying",
+    "count_other": "{{count}} sayings",
+    "none": "No sayings found.",
+    "today": "Today's saying",
+    "themes": {
+      "tempo": "Weather",
+      "ceu": "Moon and Sun",
+      "horta": "Garden and farm work",
+      "searas": "Grain and bread",
+      "vinha": "Vines and wine",
+      "animais": "Animals",
+      "festas": "Saints and feasts"
+    }
   }
 }

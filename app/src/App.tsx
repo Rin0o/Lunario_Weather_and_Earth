@@ -1,7 +1,7 @@
 import {
   Bell,
   CalendarDays,
-  Carrot,
+  LibraryBig,
   MoonStar,
   Waves,
   Settings,
@@ -22,6 +22,7 @@ import { FrostAlertsCard } from './frost/FrostAlertsCard.tsx';
 import { FrostCard } from './frost/FrostCard.tsx';
 import { DEFAULT_LANGUAGE, isSupportedLanguage } from './i18n/language.ts';
 import { GardenPage } from './garden/GardenPage.tsx';
+import { SayingsLibrary } from './library/SayingsLibrary.tsx';
 import { LocationChip } from './location/LocationChip.tsx';
 import { LocationPicker } from './location/LocationPicker.tsx';
 import { DISTRICTS } from './location/locations.ts';
@@ -137,6 +138,7 @@ export function App() {
             {route.name === 'garden' && <GardenPage now={now} district={district} />}
             {route.name === 'crops' && <CropsList />}
             {route.name === 'crop' && <CropSheet cropId={route.id} now={now} district={district} />}
+            {route.name === 'sayings' && <SayingsLibrary now={now} />}
           </div>
         </PreviousRouteContext.Provider>
       </main>
@@ -151,9 +153,9 @@ export function App() {
         {navLink(href.garden, t('nav.garden'), Sprout, route.name === 'garden')}
         {navLink(
           href.crops,
-          t('nav.crops'),
-          Carrot,
-          route.name === 'crops' || route.name === 'crop',
+          t('nav.library'),
+          LibraryBig,
+          route.name === 'crops' || route.name === 'crop' || route.name === 'sayings',
         )}
       </nav>
     </>

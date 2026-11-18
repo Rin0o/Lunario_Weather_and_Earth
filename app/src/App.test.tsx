@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { App } from './App.tsx';
@@ -71,15 +71,27 @@ describe('App', () => {
     );
   });
 
-  it('navigates between Today, the crop list and a crop sheet', async () => {
+  it('navigates between Today, the library and a crop sheet', async () => {
     render(<App />);
     const nav = screen.getByRole('navigation', { name: 'Secções' });
+    const library = within(nav).getByRole('link', { name: 'Biblioteca' });
     expect(screen.getByRole('link', { name: 'Hoje' })).toHaveAttribute('aria-current', 'page');
-    expect(nav).toContainElement(screen.getByRole('link', { name: 'Culturas' }));
+    expect(library).toHaveAttribute('href', '#/culturas');
+
+    goTo('#/biblioteca');
+    expect(screen.getByRole('heading', { level: 2, name: 'Culturas' })).toBeInTheDocument();
+    expect(library).toHaveAttribute('aria-current', 'page');
+    const shelves = screen.getByRole('navigation', { name: 'Secções da biblioteca' });
+    expect(within(shelves).getByRole('link', { name: 'Culturas' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+
+    goTo('#/ditados');
+    expect(screen.getByRole('heading', { level: 2, name: 'Ditados' })).toBeInTheDocument();
+    expect(library).toHaveAttribute('aria-current', 'page');
 
     goTo('#/culturas');
-    expect(screen.getByRole('heading', { level: 2, name: 'Culturas' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Culturas' })).toHaveAttribute('aria-current', 'page');
 
     goTo('#/cultura/tomate');
     expect(screen.getByRole('heading', { level: 2, name: 'Tomate' })).toBeInTheDocument();

@@ -23,6 +23,10 @@ describe('AlmanacCard', () => {
       'pt-PT',
     );
     expect(within(card).getByRole('link', { name: 'CC BY-SA 4.0' })).toBeInTheDocument();
+    expect(within(card).getByRole('link', { name: 'Todos os ditados' })).toHaveAttribute(
+      'href',
+      '#/ditados',
+    );
   });
 
   it('keeps the saying in Portuguese and adds its meaning in English', async () => {
