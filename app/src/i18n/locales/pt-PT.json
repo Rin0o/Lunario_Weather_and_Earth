@@ -65,7 +65,8 @@
     "library": "Biblioteca",
     "sayings": "Ditados",
     "saints": "Santos",
-    "holidays": "Feriados"
+    "holidays": "Feriados",
+    "moon": "Luas"
   },
   "sky": {
     "title": "Céu",
@@ -457,6 +458,23 @@
       "current": "atual",
       "next": "o próximo"
     }
+  },
+  "moonLibrary": {
+    "title": "Fases da Lua",
+    "fulls_one": "1 lua cheia",
+    "fulls_other": "{{count}} luas cheias",
+    "blueMoons_one": "1 lua azul",
+    "blueMoons_other": "{{count}} luas azuis",
+    "eclipses_one": "1 eclipse da Lua",
+    "eclipses_other": "{{count}} eclipses da Lua",
+    "blueMoon": "lua azul",
+    "eclipse": {
+      "total": "eclipse total da Lua",
+      "partial": "eclipse parcial da Lua",
+      "penumbral": "eclipse penumbral da Lua"
+    },
+    "nextMark": "A próxima, {{when}}",
+    "note": "Horas de Portugal continental, já com a hora de verão. A lua azul é a segunda lua cheia no mesmo mês. Os eclipses contam-se onde quer que se vejam na Terra; o penumbral mal escurece a Lua."
   },
   "holidays": {
     "title": "Feriados",

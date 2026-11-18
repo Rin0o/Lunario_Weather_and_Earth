@@ -65,7 +65,8 @@
     "library": "Library",
     "sayings": "Sayings",
     "saints": "Saints",
-    "holidays": "Holidays"
+    "holidays": "Holidays",
+    "moon": "Moons"
   },
   "sky": {
     "title": "Sky",
@@ -457,6 +458,23 @@
       "current": "current",
       "next": "next"
     }
+  },
+  "moonLibrary": {
+    "title": "Moon phases",
+    "fulls_one": "1 full moon",
+    "fulls_other": "{{count}} full moons",
+    "blueMoons_one": "1 blue moon",
+    "blueMoons_other": "{{count}} blue moons",
+    "eclipses_one": "1 lunar eclipse",
+    "eclipses_other": "{{count}} lunar eclipses",
+    "blueMoon": "blue moon",
+    "eclipse": {
+      "total": "total lunar eclipse",
+      "partial": "partial lunar eclipse",
+      "penumbral": "penumbral lunar eclipse"
+    },
+    "nextMark": "The next one, {{when}}",
+    "note": "Times in mainland Portugal time, summer time included. A blue moon is the second full moon in the same month. An eclipse is listed wherever on Earth it is seen; a penumbral one barely dims the Moon."
   },
   "holidays": {
     "title": "Holidays",

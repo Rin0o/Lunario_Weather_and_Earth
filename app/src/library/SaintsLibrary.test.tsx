@@ -30,7 +30,7 @@ describe('SaintsLibrary', () => {
       'aria-current',
       'page',
     );
-    expect(within(shelves).getAllByRole('link')).toHaveLength(4);
+    expect(within(shelves).getAllByRole('link')).toHaveLength(5);
   });
 
   it("marks today's saints, with the day's saying", () => {

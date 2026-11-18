@@ -204,7 +204,7 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | **4** | Estações no ecrã Céu (RF-19). Ecrã **Mar** (RF-18): marés calculadas no dispositivo, ondulação, vento, temperatura da água e avisos, para o porto mais próximo (D-34, D-35). **Biblioteca** com culturas e ditados (RF-20) | Nenhum |
 | Futuro (ideia) | **Alertas de agitação marítima** por Web Push, como os da geada (RF-14): o Worker lê os avisos do IPMA para o distrito do porto de cada utilizador e avisa quando surge um aviso amarelo, laranja ou vermelho, uma vez por aviso. A avaliar: que níveis notificar por omissão, a hora de envio e a relação com o interruptor do ecrã Alertas | Worker agendado + D1 (as subscrições que já existem, com o porto) |
 | Futuro (ideia) | **Contas de utilizador** para guardar a horta e as definições e passá-las entre dispositivos. A avaliar: forma de entrar (e-mail com link, Google), privacidade/RGPD e relação com a cópia por código | Worker + D1 + autenticação |
-| Futuro (ideia) | **Mais listas na Biblioteca** (RF-20): santos e feriados feitos (2026-11-18); falta rever que outras listas merecem uma secção própria (fases da Lua do ano, …). Cada uma é mais uma entrada no seletor | Nenhum |
+| Futuro (ideia) | **Mais listas na Biblioteca** (RF-20): santos, feriados e fases da Lua do ano (com luas azuis e eclipses da Lua) feitos (2026-11-18); falta rever que outras listas merecem uma secção própria. Cada uma é mais uma entrada no seletor | Nenhum |
 | Futuro (ideia) | **Versão desktop/web larga**: a mesma app, mas em ecrã largo mostra o livro aberto em duas páginas lado a lado (p. ex. Hoje à esquerda, detalhe à direita). A rever: aspeto visual para desktop, pontos de quebra, navegação entre páginas | Nenhum |
 
 ## 9. Registo de decisões

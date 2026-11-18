@@ -13,6 +13,7 @@ describe('parseRoute', () => {
     ['#/ditados', { name: 'sayings' }],
     ['#/santos', { name: 'saints' }],
     ['#/feriados', { name: 'holidays' }],
+    ['#/luas', { name: 'moon' }],
     ['#/cultura/alface', { name: 'crop', id: 'alface' }],
     ['#/cultura/couve_flor', { name: 'crop', id: 'couve_flor' }],
     ['#/cultura/../../x', { name: 'today' }],
@@ -27,6 +28,7 @@ describe('parseRoute', () => {
     expect(parseRoute(href.sayings)).toEqual({ name: 'sayings' });
     expect(parseRoute(href.saints)).toEqual({ name: 'saints' });
     expect(parseRoute(href.holidays)).toEqual({ name: 'holidays' });
+    expect(parseRoute(href.moon)).toEqual({ name: 'moon' });
     expect(parseRoute(href.garden)).toEqual({ name: 'garden' });
     expect(parseRoute(href.sky)).toEqual({ name: 'sky' });
     expect(parseRoute(href.alerts)).toEqual({ name: 'alerts' });
