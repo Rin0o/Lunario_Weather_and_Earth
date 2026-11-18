@@ -15,8 +15,15 @@ export type MetaKey =
   | 'moonMode'
   /** 'on' once the user turned frost alerts on (RF-14). */
   | 'frostAlerts'
-  /** The last subscription sent to the alerts Worker, to send it again only when it changes. */
-  | 'frostAlertsSent';
+  /** 'on' once the user turned sea agitation alerts on (RF-21). */
+  | 'seaAlerts'
+  /** 'on' when yellow sea warnings count too (orange and red always do). */
+  | 'seaAlertsYellow'
+  /**
+   * The last subscription sent to the alerts Worker, to send it again only when it changes.
+   * (The key from before the sea alerts, `frostAlertsSent`, is no longer read.)
+   */
+  | 'alertsSent';
 
 interface LunarioDb extends DBSchema {
   plantings: { key: string; value: Planting };

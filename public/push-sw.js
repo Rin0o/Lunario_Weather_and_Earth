@@ -1,5 +1,6 @@
-// Frost alert notifications (RF-14, D-33). Loaded into the generated service worker with
-// importScripts (vite.config.ts). The lunario-alerts Worker sends { title, body, tag, url }.
+// Alert notifications: frost (RF-14, D-33) and sea agitation (RF-21, D-37). Loaded into the
+// generated service worker with importScripts (vite.config.ts). The lunario-alerts Worker
+// sends { title, body, tag, url }; url is a route of the app (`/`, `/#/mar`).
 
 const FALLBACK_TITLE = 'Lunário';
 

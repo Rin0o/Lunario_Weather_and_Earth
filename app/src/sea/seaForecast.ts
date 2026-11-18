@@ -177,9 +177,11 @@ async function getJson(url: string, fetchImpl: typeof fetch): Promise<unknown> {
   return response.json();
 }
 
-const WARNINGS_URL = 'https://api.ipma.pt/open-data/forecast/warnings/warnings_www.json';
+/** All of IPMA's current warnings, every district and kind, in one file. */
+export const WARNINGS_URL = 'https://api.ipma.pt/open-data/forecast/warnings/warnings_www.json';
 const SEA_WARNING = 'Agitação Marítima';
-const LEVELS = ['yellow', 'orange', 'red'] as const;
+/** From the mildest to the most severe. */
+export const LEVELS = ['yellow', 'orange', 'red'] as const;
 export type WarningLevel = (typeof LEVELS)[number];
 
 /** An IPMA sea agitation warning (yellow, orange or red) for the port's district. */

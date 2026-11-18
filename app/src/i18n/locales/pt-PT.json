@@ -45,7 +45,11 @@
   },
   "alerts": {
     "title": "Alertas",
-    "intro": "Avisos que chegam ao telemóvel, mesmo com a app fechada."
+    "intro": "Avisos que chegam ao telemóvel, mesmo com a app fechada.",
+    "details": "Como funciona e o que é enviado",
+    "unsupported": "Este browser não recebe notificações. No iPhone, adicione o Lunário ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e ligue os alertas a partir daí.",
+    "blocked": "As notificações estão bloqueadas para o Lunário. Permita-as nas definições do browser ou do telemóvel e volte a tentar.",
+    "failed": "Não foi possível mudar os alertas. Verifique a ligação à Internet e tente de novo."
   },
   "cover": {
     "open": "Abrir o Lunário",
@@ -374,10 +378,17 @@
     "intro": "Receba uma notificação ao fim da tarde quando houver risco de geada nessa noite, mesmo com a app fechada.",
     "privacy": "Enquanto estiverem ligados, o Lunário envia ao servidor de alertas a sua localização arredondada a cerca de 1 km, os nomes das culturas sensíveis à geada na sua horta e a língua. Mais nada. Ao desligar, estes dados são apagados.",
     "toggle": "Avisar-me de geada",
-    "on": "Ligados para {{place}}. O aviso chega por volta das 18h (19h no verão), só quando houver risco.",
-    "unsupported": "Este browser não recebe notificações. No iPhone, adicione o Lunário ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e ligue os alertas a partir daí.",
-    "blocked": "As notificações estão bloqueadas para o Lunário. Permita-as nas definições do browser ou do telemóvel e volte a tentar.",
-    "failed": "Não foi possível mudar os alertas. Verifique a ligação à Internet e tente de novo."
+    "on": "Ligados para {{place}}.",
+    "when": "O aviso chega por volta das 18h (19h no verão), só quando houver risco."
+  },
+  "seaAlerts": {
+    "title": "Agitação marítima",
+    "intro": "Receba uma notificação quando o IPMA emitir um aviso laranja ou vermelho de agitação marítima para o distrito do seu porto, mesmo com a app fechada.",
+    "privacy": "Enquanto estiverem ligados, o Lunário envia ao servidor de alertas o distrito do porto e a língua. A sua localização não é enviada. Ao desligar, estes dados são apagados.",
+    "toggle": "Avisar-me de agitação marítima",
+    "yellow": "Incluir os avisos amarelos (frequentes no inverno)",
+    "on": "Ligados para {{port}} (distrito de {{district}}).",
+    "when": "Os avisos do IPMA são vistos às 8h, 12h, 16h e 20h, nunca de noite, e cada aviso chega uma só vez. O porto muda-se nas Definições."
   },
   "moon": {
     "title": "Lua",

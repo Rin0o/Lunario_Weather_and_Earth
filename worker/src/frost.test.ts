@@ -5,12 +5,11 @@ import {
   distinctPlaces,
   forecastsFrom,
   forecastUrl,
-  runAlerts,
+  frostJobs,
+  runFrostAlerts,
   tonight,
-  type Sender,
-  type Store,
-} from './alerts.ts';
-import type { Subscription } from './subscription.ts';
+} from './frost.ts';
+import { fakeQueue, frostAt, sub } from './test/fakes.ts';
 
 // 17 November 2026, 18:00 in Lisbon (winter time = UTC).
 const NOW = new Date('2026-11-17T18:00:00Z');
@@ -33,23 +32,9 @@ function forecast(air: number, surface: number) {
   return { hourly: { time, temperature_2m: t2m, soil_temperature_0cm: soil } };
 }
 
-const sub = (
-  n: number,
-  latitude: number,
-  longitude: number,
-  extra: Partial<Subscription> = {},
-) => ({
-  endpoint: `https://push.example/${n}`,
-  p256dh: 'p',
-  auth: 'a',
-  latitude,
-  longitude,
-  crops: [],
-  language: 'pt-PT' as const,
-  ...extra,
-});
+const answer = (json: unknown) => vi.fn(() => Promise.resolve(new Response(JSON.stringify(json))));
 
-describe('alerts', () => {
+describe('frost alerts', () => {
   it('looks at the coming night, 18:00 to 10:00 local time', () => {
     expect(tonight(NOW)).toEqual({
       from: '2026-11-17T18:00',
@@ -62,9 +47,9 @@ describe('alerts', () => {
 
   it('asks Open-Meteo once for each distinct place', () => {
     const places = distinctPlaces([
-      sub(1, 40.54, -7.27),
-      sub(2, 40.54, -7.27),
-      sub(3, 41.74, -7.47),
+      frostAt(40.54, -7.27),
+      frostAt(40.54, -7.27),
+      frostAt(41.74, -7.47),
     ]);
     expect(places).toEqual([
       { latitude: 40.54, longitude: -7.27 },
@@ -90,6 +75,7 @@ describe('alerts', () => {
       title: '❄️ Risco de geada esta noite',
       body: 'Mínimas previstas: ar 1 °C, superfície -2 °C. Proteja: Tomate, Feijão-verde.',
       tag: 'frost-2026-11-17',
+      url: '/',
     });
     expect(
       alertFor(
@@ -97,10 +83,9 @@ describe('alerts', () => {
         { crops: [], language: 'en' },
         '2026-11-17',
       ),
-    ).toEqual({
+    ).toMatchObject({
       title: '❄️ Frost possible tonight',
       body: 'Forecast lows: air 3 °C, ground —.',
-      tag: 'frost-2026-11-17',
     });
     expect(
       alertFor(
@@ -111,77 +96,66 @@ describe('alerts', () => {
     ).toBeNull();
   });
 
-  it('notifies only the subscribers at risk, and deletes those the push service dropped', async () => {
+  it('picks the frost subscribers at risk only, ignoring those with sea alerts only', async () => {
     const subs = [
-      sub(1, 40.54, -7.27, { crops: ['Tomate'] }), // Guarda: frost
-      sub(2, 40.54, -7.27), // Guarda: frost, but gone from the push service
-      sub(3, 38.71, -9.14), // Lisbon: mild
-      sub(4, 41.74, -7.47), // Chaves: frost, push service error
+      sub(1, { frost: frostAt(40.54, -7.27, ['Tomate']) }), // Guarda: frost
+      sub(2, { frost: frostAt(38.71, -9.14) }), // Lisbon: mild
+      sub(3, { frost: frostAt(41.74, -7.47), language: 'en' }), // Chaves: frost
+      sub(4, { sea: { area: 'AVR', yellow: false } }), // no frost alerts
     ];
-    const store: Store = {
-      list: () => Promise.resolve(subs),
-      remove: vi.fn(() => Promise.resolve()),
-    };
-    const fetchImpl = vi.fn(() =>
-      Promise.resolve(
-        new Response(JSON.stringify([forecast(1, -2), forecast(9, 7), forecast(0, -4)])),
-      ),
-    );
-    const sent: string[] = [];
-    const sender: Sender = {
-      send: (s, message) => {
-        sent.push(`${s.endpoint} ${message.body}`);
-        return Promise.resolve({ 1: 201, 2: 410, 4: 500 }[Number(s.endpoint.at(-1))] ?? 201);
-      },
-    };
-
-    const result = await runAlerts(store, sender, NOW, fetchImpl);
-
+    const fetchImpl = answer([forecast(1, -2), forecast(9, 7), forecast(0, -4)]);
+    const { places, jobs } = await frostJobs(subs, NOW, fetchImpl);
     expect(fetchImpl).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({ places: 3, sent: 1, removed: 1, failed: 1 });
-    expect(store.remove).toHaveBeenCalledWith('https://push.example/2');
-    expect(sent).toEqual([
-      'https://push.example/1 Mínimas previstas: ar 1 °C, superfície -2 °C. Proteja: Tomate.',
-      'https://push.example/2 Mínimas previstas: ar 1 °C, superfície -2 °C.',
-      'https://push.example/4 Mínimas previstas: ar 0 °C, superfície -4 °C.',
+    expect(places).toBe(3);
+    expect(jobs.map((j) => [j.endpoint, j.message.body, j.topic, j.ttl])).toEqual([
+      [
+        'https://push.example/1',
+        'Mínimas previstas: ar 1 °C, superfície -2 °C. Proteja: Tomate.',
+        'frost',
+        43200,
+      ],
+      ['https://push.example/3', 'Forecast lows: air 0 °C, ground -4 °C.', 'frost', 43200],
     ]);
   });
 
-  it('counts a send that throws as failed and carries on', async () => {
-    const store: Store = {
-      list: () => Promise.resolve([sub(1, 40.54, -7.27), sub(2, 40.54, -7.27)]),
-      remove: vi.fn(() => Promise.resolve()),
-    };
-    const fetchImpl = vi.fn(() => Promise.resolve(new Response(JSON.stringify(forecast(1, -2)))));
-    let calls = 0;
-    const sender: Sender = {
-      send: () => (++calls === 1 ? Promise.reject(new Error('network')) : Promise.resolve(201)),
-    };
-    expect(await runAlerts(store, sender, NOW, fetchImpl)).toEqual({
-      places: 1,
-      sent: 1,
-      removed: 0,
-      failed: 1,
-    });
+  it('queues the alerts in batches and counts them', async () => {
+    const subs = Array.from({ length: 7 }, (_, i) => sub(i, { frost: frostAt(40.54, -7.27) }));
+    const { queue, batches } = fakeQueue();
+    const result = await runFrostAlerts(
+      { list: () => Promise.resolve(subs) },
+      queue,
+      NOW,
+      answer(forecast(1, -2)),
+    );
+    expect(result).toEqual({ places: 1, alerts: 7, messages: 2 });
+    expect(batches).toHaveLength(1);
+    expect(batches[0]?.map((m) => m.length)).toEqual([5, 2]);
   });
 
   it('fails the run when Open-Meteo fails, so the cron reports it', async () => {
-    const store: Store = { list: () => Promise.resolve([sub(1, 40.54, -7.27)]), remove: vi.fn() };
     const fetchImpl = vi.fn(() => Promise.resolve(new Response('', { status: 503 })));
-    await expect(runAlerts(store, { send: vi.fn() }, NOW, fetchImpl)).rejects.toThrow(
-      'Open-Meteo responded 503',
-    );
+    const { queue } = fakeQueue();
+    await expect(
+      runFrostAlerts(
+        { list: () => Promise.resolve([sub(1, { frost: frostAt(40.54, -7.27) })]) },
+        queue,
+        NOW,
+        fetchImpl,
+      ),
+    ).rejects.toThrow('Open-Meteo responded 503');
+    expect(queue.sendBatch).not.toHaveBeenCalled();
   });
 
-  it('does nothing without subscribers', async () => {
+  it('does nothing without frost subscribers', async () => {
     const fetchImpl = vi.fn();
-    const store: Store = { list: () => Promise.resolve([]), remove: vi.fn() };
-    expect(await runAlerts(store, { send: vi.fn() }, NOW, fetchImpl)).toEqual({
+    const { queue } = fakeQueue();
+    const store = { list: () => Promise.resolve([sub(1, { sea: { area: 'FAR', yellow: true } })]) };
+    expect(await runFrostAlerts(store, queue, NOW, fetchImpl)).toEqual({
       places: 0,
-      sent: 0,
-      removed: 0,
-      failed: 0,
+      alerts: 0,
+      messages: 0,
     });
     expect(fetchImpl).not.toHaveBeenCalled();
+    expect(queue.sendBatch).not.toHaveBeenCalled();
   });
 });

@@ -5,10 +5,14 @@
 import { dateInZone } from '../../app/src/astro/time.ts';
 import { addDays, type IsoDate } from '../../app/src/calendar/dates.ts';
 import { frostBetween, OPEN_METEO_URL, type FrostSpan } from '../../app/src/frost/frost.ts';
-import type { Language, Subscription } from './subscription.ts';
+import { enqueue, pushJob, type AlertMessage, type PushJob, type PushQueue } from './push.ts';
+import type { Store } from './store.ts';
+import type { FrostChoice, Language, Subscription } from './subscription.ts';
 
 /** Open-Meteo accepts many locations in one request; keep each request small. */
 export const PLACES_PER_REQUEST = 50;
+/** Useless after the night. */
+const FROST_TTL = 12 * 60 * 60;
 
 export interface Place {
   latitude: number;
@@ -18,9 +22,9 @@ export interface Place {
 const placeKey = (p: Place) => `${p.latitude.toFixed(2)},${p.longitude.toFixed(2)}`;
 
 /** The distinct (already rounded) locations of the subscribers. */
-export function distinctPlaces(subscriptions: readonly Place[]): Place[] {
+export function distinctPlaces(choices: readonly Place[]): Place[] {
   const places = new Map<string, Place>();
-  for (const s of subscriptions) {
+  for (const s of choices) {
     places.set(placeKey(s), { latitude: s.latitude, longitude: s.longitude });
   }
   return [...places.values()];
@@ -66,49 +70,25 @@ const degrees = (n: number | null, language: Language) =>
         maximumFractionDigits: 0,
       }).format(Math.round(n) || 0)} °C`;
 
-export interface AlertMessage {
-  title: string;
-  body: string;
-  /** Replaces an earlier alert for the same night instead of piling up. */
-  tag: string;
-}
-
 /** The notification for one subscriber, or null when the night has no risk. */
 export function alertFor(
   span: FrostSpan,
-  subscription: Pick<Subscription, 'crops' | 'language'>,
+  choice: { crops: string[]; language: Language },
   date: IsoDate,
 ): AlertMessage | null {
   if (span.risk === 'none') return null;
-  const text = TEXTS[subscription.language];
+  const text = TEXTS[choice.language];
   const temps = text.temps
-    .replace('{air}', degrees(span.minAir, subscription.language))
-    .replace('{surface}', degrees(span.minSurface, subscription.language));
+    .replace('{air}', degrees(span.minAir, choice.language))
+    .replace('{surface}', degrees(span.minSurface, choice.language));
   const protect =
-    subscription.crops.length > 0
-      ? ` ${text.protect.replace('{crops}', subscription.crops.join(', '))}`
-      : '';
+    choice.crops.length > 0 ? ` ${text.protect.replace('{crops}', choice.crops.join(', '))}` : '';
   return {
     title: `❄️ ${span.risk === 'frost' ? text.frost : text.possible}`,
     body: temps + protect,
     tag: `frost-${date}`,
+    url: '/',
   };
-}
-
-const TEST_TEXTS: Record<Language, { title: string; body: string }> = {
-  'pt-PT': {
-    title: '🧪 Teste dos alertas de geada',
-    body: 'Os alertas estão a funcionar. Numa noite com risco de geada, o aviso chega assim, ao fim da tarde.',
-  },
-  en: {
-    title: '🧪 Frost alerts test',
-    body: 'Alerts are working. On a night with frost risk, the warning arrives like this, in the early evening.',
-  },
-};
-
-/** The notification sent when the user asks for a test from the app. */
-export function testAlert(language: Language): AlertMessage {
-  return { ...TEST_TEXTS[language], tag: 'frost-test' };
 }
 
 /** Open-Meteo answers one object for one location and an array for several. */
@@ -138,58 +118,37 @@ export async function nightlyFrost(
   return result;
 }
 
-export interface Sender {
-  /** Sends one notification; returns the push service's HTTP status. */
-  send(subscription: Subscription, message: AlertMessage): Promise<number>;
-}
+type FrostSubscription = Subscription & { frost: FrostChoice };
 
-export interface Store {
-  list(): Promise<Subscription[]>;
-  remove(endpoint: string): Promise<void>;
-}
-
-export interface RunResult {
-  places: number;
-  sent: number;
-  removed: number;
-  failed: number;
-}
-
-/**
- * The cron job: checks tonight's frost at every subscriber's location and notifies those at
- * risk. Subscriptions the push service no longer knows (404, 410) are deleted.
- */
-export async function runAlerts(
-  store: Store,
-  sender: Sender,
+/** The pushes for tonight: one for each frost subscriber whose place is at risk. */
+export async function frostJobs(
+  subscriptions: readonly Subscription[],
   now: Date,
   fetchImpl: typeof fetch,
-): Promise<RunResult> {
-  const subscriptions = await store.list();
-  const places = distinctPlaces(subscriptions);
+): Promise<{ places: number; jobs: PushJob[] }> {
+  const frostSubs = subscriptions.filter((s): s is FrostSubscription => s.frost !== null);
+  const places = distinctPlaces(frostSubs.map((s) => s.frost));
+  if (places.length === 0) return { places: 0, jobs: [] };
   const frost = await nightlyFrost(places, now, fetchImpl);
   const { date } = tonight(now);
-  const result: RunResult = { places: places.length, sent: 0, removed: 0, failed: 0 };
-
-  for (const sub of subscriptions) {
-    const span = frost.get(placeKey(sub));
-    const message = span ? alertFor(span, sub, date) : null;
-    if (!message) continue;
-    let status: number;
-    try {
-      status = await sender.send(sub, message);
-    } catch {
-      result.failed++;
-      continue;
-    }
-    if (status === 404 || status === 410) {
-      await store.remove(sub.endpoint);
-      result.removed++;
-    } else if (status >= 200 && status < 300) {
-      result.sent++;
-    } else {
-      result.failed++;
-    }
+  const jobs: PushJob[] = [];
+  for (const sub of frostSubs) {
+    const span = frost.get(placeKey(sub.frost));
+    const message = span
+      ? alertFor(span, { crops: sub.frost.crops, language: sub.language }, date)
+      : null;
+    if (message) jobs.push(pushJob(sub, message, 'frost', FROST_TTL));
   }
-  return result;
+  return { places: places.length, jobs };
+}
+
+/** The evening cron job: works out tonight's frost alerts and queues them for sending. */
+export async function runFrostAlerts(
+  store: Pick<Store, 'list'>,
+  queue: PushQueue,
+  now: Date,
+  fetchImpl: typeof fetch,
+): Promise<{ places: number; alerts: number; messages: number }> {
+  const { places, jobs } = await frostJobs(await store.list(), now, fetchImpl);
+  return { places, alerts: jobs.length, messages: await enqueue(queue, jobs) };
 }

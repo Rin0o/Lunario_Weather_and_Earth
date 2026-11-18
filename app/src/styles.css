@@ -424,6 +424,43 @@ main {
   accent-color: var(--green-action);
 }
 
+/* Alertas: what each alert does and what it sends, folded at the foot of its card. */
+.alert-details {
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+.alert-details summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+}
+
+.alert-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.alert-details summary > span {
+  flex: 1;
+}
+
+.alert-details-chevron {
+  flex: none;
+  transition: transform 0.2s;
+}
+
+.alert-details[open] .alert-details-chevron {
+  transform: rotate(180deg);
+}
+
+.alert-details p:first-of-type {
+  margin-top: 0;
+}
+
 /* Round icon buttons: compact, but a 40 px target for thumbs. */
 .icon-button {
   display: inline-grid;

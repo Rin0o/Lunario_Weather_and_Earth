@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import type { PushPlatform } from '../frost/alerts.ts';
+import type { PushPlatform } from '../alerts/push.ts';
 
 export const KEYS = {
   p256dh: 'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u',
