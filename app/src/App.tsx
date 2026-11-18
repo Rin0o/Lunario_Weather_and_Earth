@@ -82,10 +82,10 @@ export function App() {
           <img
             src={artwork.logoRound.src}
             srcSet={artwork.logoRound.srcSet}
-            sizes="44px"
+            sizes="56px"
             alt=""
-            width={44}
-            height={44}
+            width={56}
+            height={56}
           />
           <div>
             <h1>{t('app.name')}</h1>
