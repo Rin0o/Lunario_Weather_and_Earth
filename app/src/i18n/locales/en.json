@@ -416,6 +416,44 @@
     "dayLength": "Day length",
     "duration": "{{hours}} h {{minutes}} min"
   },
+  "seasons": {
+    "title": "Seasons",
+    "names": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
+    },
+    "since": "since {{date}}",
+    "progress": "How much of {{season}} has passed",
+    "today": "today",
+    "events": {
+      "march-equinox": "March equinox",
+      "june-solstice": "June solstice",
+      "september-equinox": "September equinox",
+      "december-solstice": "December solstice"
+    },
+    "daylight": {
+      "march-equinox": "Day and night nearly equal: {{length}} of daylight.",
+      "june-solstice": "The longest day of the year: {{length}} of daylight.",
+      "september-equinox": "Day and night nearly equal: {{length}} of daylight.",
+      "december-solstice": "The shortest day of the year: {{length}} of daylight."
+    },
+    "longer": "({{length}} more than today)",
+    "shorter": "({{length}} less than today)",
+    "minutes": "{{minutes}} min",
+    "year": "In {{year}}",
+    "starts": {
+      "spring": "start of spring",
+      "summer": "start of summer",
+      "autumn": "start of autumn",
+      "winter": "start of winter"
+    },
+    "marks": {
+      "current": "current",
+      "next": "next"
+    }
+  },
   "holidays": {
     "title": "Holidays",
     "today": "Today is a holiday: {{name}}",

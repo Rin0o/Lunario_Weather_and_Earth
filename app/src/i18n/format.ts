@@ -99,3 +99,14 @@ export function formatPercent(fraction: number, language: string | undefined): s
     maximumFractionDigits: 0,
   }).format(fraction);
 }
+
+/** Short date with the year, for a date of another year: `segunda, 21/12/2026` / `Mon, 21 Dec 2026`. */
+export function formatShortDateWithYear(moment: Date, language: string | undefined): string {
+  return new Intl.DateTimeFormat(intlLocale(language), {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: TIME_ZONE,
+  }).format(moment);
+}
