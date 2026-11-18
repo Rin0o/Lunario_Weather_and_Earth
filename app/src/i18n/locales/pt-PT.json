@@ -131,6 +131,8 @@
     },
     "warnings": {
       "title": "Aviso de agitação marítima",
+      "summary": "Agitação marítima · aviso {{level}}",
+      "until": "até {{time}} · toque para ver",
       "levels": {
         "yellow": "Amarelo",
         "orange": "Laranja",

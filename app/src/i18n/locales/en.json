@@ -131,6 +131,8 @@
     },
     "warnings": {
       "title": "Rough sea warning",
+      "summary": "Rough sea · {{level}} warning",
+      "until": "until {{time}} · tap to see",
       "levels": {
         "yellow": "Yellow",
         "orange": "Orange",

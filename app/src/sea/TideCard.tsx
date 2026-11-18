@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { nextMoonQuarters } from '../astro/moon.ts';
 import { formatShortDate, formatTime } from '../i18n/format.ts';
+import { moonIcon } from '../weather/icons.ts';
 import { formatDecimal } from './format.ts';
 import { tideDay, tideNow } from './portTides.ts';
 
@@ -113,14 +114,15 @@ export function TideCard({ now, portId, portName }: TideCardProps) {
         ))}
       </ol>
       {quarter && day.strength !== 'spring' && (
-        <p className="hint">
+        <p className="tide-note">
+          <img className="inline-icon moon-disc" src={moonIcon(quarter.phase)} alt="" />
           {t('sea.tides.nextSpring', {
             phase: t(`moon.phases.${quarter.phase}`),
             date: formatShortDate(quarter.time, lang),
           })}
         </p>
       )}
-      <p className="hint">
+      <p className="source-note">
         {t(day.method === 'gauge' ? 'sea.tides.sourceGauge' : 'sea.tides.sourceModel', {
           port: portName,
         })}
