@@ -571,6 +571,8 @@
     "count_other": "{{count}} saints and feasts",
     "none": "No saints found.",
     "today": "Today's saints",
+    "moveable": "Moveable feast",
+    "moveableFilter": "Moveable feasts",
     "origins": {
       "geral": "General calendar",
       "portugal": "Portuguese",

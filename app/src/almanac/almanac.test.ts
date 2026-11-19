@@ -15,6 +15,16 @@ describe('saint of the day', () => {
     expect(names('2026-02-03')).toEqual(['São Brás', 'São Óscar (Ansgário)']);
   });
 
+  it('adds the moveable feasts on their date for each year, after the fixed saints (Q-11)', () => {
+    // Easter is on 5 April 2026 and 28 March 2027.
+    expect(names('2026-02-17')).toContain('Terça-feira de Entrudo (Carnaval)');
+    expect(names('2026-05-14').at(-1)).toBe('Quinta-feira da Ascensão (Dia da Espiga)');
+    expect(names('2027-05-06')).toContain('Quinta-feira da Ascensão (Dia da Espiga)');
+    expect(names('2027-05-14')).not.toContain('Quinta-feira da Ascensão (Dia da Espiga)');
+    expect(names('2026-06-04')).toContain('Corpo de Deus');
+    expect(saintsOn('2026-04-05').find((s) => s.moveable)?.name.en).toBe('Easter Sunday');
+  });
+
   it('has nothing on days without a saint in the calendars used (D-31)', () => {
     expect(saintsOn('2026-01-04')).toEqual([]);
   });
@@ -51,6 +61,15 @@ describe('saying of the day', () => {
       const saying = sayingFor(addDays('2028-01-01', i));
       expect(saying?.meaning, addDays('2028-01-01', i)).toBeTruthy();
     }
+  });
+
+  it("uses a moveable feast's sayings on its date that year (Q-11)", () => {
+    const palmSunday = ['Ramos molhados são louvados.', 'Depois de Ramos, na Páscoa estamos.'];
+    // Easter is on 5 April 2026 and 28 March 2027.
+    expect(palmSunday).toContain(sayingFor('2026-03-29')?.text);
+    expect(palmSunday).toContain(sayingFor('2027-03-21')?.text);
+    expect(palmSunday).not.toContain(sayingFor('2027-03-29')?.text);
+    expect(sayingFor('2026-03-29')?.feast?.pt).toBe('Domingo de Ramos');
   });
 
   it('returns nothing for a month without sayings', () => {

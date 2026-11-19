@@ -2,6 +2,7 @@ import { ChevronDown } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sayingFor } from '../almanac/almanac.ts';
+import { sayingsOfYear } from '../almanac/feasts.ts';
 import { dateInZone } from '../astro/time.ts';
 import type { IsoDate } from '../calendar/dates.ts';
 import { catalog } from '../catalog/catalog.ts';
@@ -30,10 +31,11 @@ export function SayingsLibrary({ now, source = catalog }: SayingsLibraryProps) {
 
   const today = dateInZone(now) as IsoDate;
   const currentMonth = Number(today.slice(5, 7));
+  const currentYear = Number(today.slice(0, 4));
   const todays = useMemo(() => sayingFor(today, source), [today, source]);
   const months = useMemo(
-    () => sayingsByMonth(source.sayings, { query, theme }, currentMonth),
-    [source, query, theme, currentMonth],
+    () => sayingsByMonth(sayingsOfYear(currentYear, source), { query, theme }, currentMonth),
+    [source, query, theme, currentMonth, currentYear],
   );
   const found = months.reduce((n, m) => n + m.sayings.length, 0);
   const filtered = query.trim() !== '' || theme !== null;
@@ -99,8 +101,10 @@ export function SayingsLibrary({ now, source = catalog }: SayingsLibraryProps) {
           </summary>
           <ul className="sayings-list">
             {sayings.map((saying) => {
-              const isToday = saying === todays;
+              // Moveable feasts' sayings are rebuilt for each year, so compare by text.
+              const isToday = saying.text === todays?.text;
               const meta = [
+                saying.feast ? (en ? saying.feast.en : saying.feast.pt) : null,
                 saying.day === null ? null : dayName(saying.month, saying.day),
                 saying.themes.map((th) => t(`sayings.themes.${th}`)).join(' · '),
               ].filter(Boolean);

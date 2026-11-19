@@ -4,19 +4,23 @@ import { useTranslation } from 'react-i18next';
 import { dateInZone } from '../astro/time.ts';
 import type { IsoDate } from '../calendar/dates.ts';
 import { catalog } from '../catalog/catalog.ts';
-import type { Catalog, SaintOrigin } from '../catalog/types.ts';
+import type { Catalog } from '../catalog/types.ts';
 import { AlmanacSources } from '../components/AlmanacSources.tsx';
 import { intlLocale } from '../i18n/format.ts';
 import { LibraryNav } from './LibraryNav.tsx';
-import { saintsByMonth } from './saints.ts';
+import { saintsOfYear, sayingsOfYear } from '../almanac/feasts.ts';
+import { saintsByMonth, type SaintGroup } from './saints.ts';
 
 interface SaintsLibraryProps {
   now: Date;
   source?: Catalog;
 }
 
-/** The origins worth a filter of their own; the rest are the Church's general calendar. */
-const ORIGIN_FILTERS: readonly SaintOrigin[] = ['portugal', 'popular'];
+/**
+ * The groups worth a filter of their own: two origins (the rest are the Church's general
+ * calendar) and the moveable feasts.
+ */
+const ORIGIN_FILTERS: readonly SaintGroup[] = ['portugal', 'popular', 'moveable'];
 
 /**
  * Every saint in the catalogue, by month and day, with a search and a filter for the
@@ -28,20 +32,22 @@ export function SaintsLibrary({ now, source = catalog }: SaintsLibraryProps) {
   const lang = i18n.resolvedLanguage;
   const en = lang === 'en';
   const [query, setQuery] = useState('');
-  const [origin, setOrigin] = useState<SaintOrigin | null>(null);
+  const [origin, setOrigin] = useState<SaintGroup | null>(null);
 
   const today = dateInZone(now) as IsoDate;
   const currentMonth = Number(today.slice(5, 7));
   const currentDay = Number(today.slice(8, 10));
+  const currentYear = Number(today.slice(0, 4));
   const months = useMemo(
-    () => saintsByMonth(source.saints, { query, origin }, currentMonth),
-    [source, query, origin, currentMonth],
+    () => saintsByMonth(saintsOfYear(currentYear, source), { query, origin }, currentMonth),
+    [source, query, origin, currentMonth, currentYear],
   );
+  const sayings = useMemo(() => sayingsOfYear(currentYear, source), [source, currentYear]);
   const found = months.reduce((n, m) => n + m.count, 0);
   const filtered = query.trim() !== '' || origin !== null;
 
   const sayingOf = (month: number, day: number) =>
-    source.sayings.find((s) => s.month === month && s.day === day);
+    sayings.find((s) => s.month === month && s.day === day);
 
   const locale = intlLocale(lang);
   const monthName = (month: number) => {
@@ -51,7 +57,7 @@ export function SaintsLibrary({ now, source = catalog }: SaintsLibraryProps) {
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
 
-  const originButton = (value: SaintOrigin | null, label: string) => (
+  const originButton = (value: SaintGroup | null, label: string) => (
     <button
       key={value ?? 'all'}
       type="button"
@@ -80,7 +86,12 @@ export function SaintsLibrary({ now, source = catalog }: SaintsLibraryProps) {
         />
         <div className="theme-chips" role="group" aria-label={t('saints.originsLabel')}>
           {originButton(null, t('saints.allOrigins'))}
-          {ORIGIN_FILTERS.map((value) => originButton(value, t(`saints.origins.${value}`)))}
+          {ORIGIN_FILTERS.map((value) =>
+            originButton(
+              value,
+              value === 'moveable' ? t('saints.moveableFilter') : t(`saints.origins.${value}`),
+            ),
+          )}
         </div>
       </div>
       <p className="hint sayings-count" aria-live="polite">
@@ -120,6 +131,9 @@ export function SaintsLibrary({ now, source = catalog }: SaintsLibraryProps) {
                       {saints.map((s) => (
                         <p key={s.name.pt} className="saint-name">
                           {en ? s.name.en : s.name.pt}
+                          {s.moveable && (
+                            <span className="saint-origin">{t('saints.moveable')}</span>
+                          )}
                           {s.origin !== 'geral' && (
                             <span className="saint-origin">{t(`saints.origins.${s.origin}`)}</span>
                           )}

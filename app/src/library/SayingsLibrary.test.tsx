@@ -8,6 +8,8 @@ import { SayingsLibrary } from './SayingsLibrary.tsx';
 
 // 11 November 2026, midday in Lisbon: Saint Martin's day.
 const SAINT_MARTIN = new Date('2026-11-11T12:00:00Z');
+// The moveable feasts' sayings are listed on their date of the year too (Q-11).
+const feastSayings = catalog.feasts.reduce((n, f) => n + f.sayings.length, 0);
 
 const months = () =>
   Array.from(document.querySelectorAll<HTMLDetailsElement>('details.sayings-month'));
@@ -24,7 +26,9 @@ describe('SayingsLibrary', () => {
   it('lists every saying by month, open on the current one, with the sources credited', () => {
     render(<SayingsLibrary now={SAINT_MARTIN} />);
     expect(screen.getByRole('heading', { level: 2, name: 'Ditados' })).toBeInTheDocument();
-    expect(screen.getByText(`${String(catalog.sayings.length)} ditados`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`${String(catalog.sayings.length + feastSayings)} ditados`),
+    ).toBeInTheDocument();
     expect(months()).toHaveLength(12);
     expect(openMonths()).toEqual(['Novembro']);
     // From this month round the year: the open month comes first.
@@ -51,7 +55,7 @@ describe('SayingsLibrary', () => {
     const user = userEvent.setup();
     render(<SayingsLibrary now={SAINT_MARTIN} />);
     await user.type(screen.getByRole('searchbox', { name: 'Procurar' }), 'sao joao');
-    expect(openMonths()).toEqual(['Dezembro', 'Março', 'Junho']);
+    expect(openMonths()).toEqual(['Dezembro', 'Março', 'Abril', 'Junho']);
     for (const quote of screen.getAllByRole('blockquote')) {
       expect(quote).toHaveTextContent(/S(ão|\.) João/);
     }

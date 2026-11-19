@@ -107,6 +107,25 @@ export interface Saint {
   day: number;
   name: Text;
   origin: SaintOrigin;
+  /** Set on a moveable feast placed on its date for one year (see almanac/feasts.ts). */
+  moveable?: true;
+}
+
+/** A saying without a date of its own: one tied to a moveable feast. */
+export type FeastSaying = Omit<Saying, 'month' | 'day' | 'feast'>;
+
+/**
+ * A feast counted from Easter (Q-11), so its date changes every year: Carnival, Palm Sunday,
+ * Ascension, Corpus Christi… Shown with the saints on its date, with its own sayings.
+ */
+export interface MoveableFeast {
+  /** Slug, as in the `festa` column of ditados.csv. */
+  id: string;
+  /** Days after Easter Sunday (negative before it). */
+  easterOffset: number;
+  name: Text;
+  origin: SaintOrigin;
+  sayings: FeastSaying[];
 }
 
 /**
@@ -120,6 +139,8 @@ export interface Saying {
   meaning: string;
   /** What the saying is about, for the library's filter: one or two themes. */
   themes: SayingTheme[];
+  /** Set on a moveable feast's saying placed on the feast's date for one year. */
+  feast?: Text;
 }
 
 export const SAYING_THEMES = [
@@ -141,4 +162,5 @@ export interface Catalog {
   lunarRules: LunarRule[];
   saints: Saint[];
   sayings: Saying[];
+  feasts: MoveableFeast[];
 }

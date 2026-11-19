@@ -12,7 +12,9 @@ import {
   type ClimateClass,
   type Crop,
   type DerivationRule,
+  type FeastSaying,
   type LunarRule,
+  type MoveableFeast,
   type Saint,
   type Saying,
   type Text,
@@ -40,6 +42,7 @@ export interface DataFiles {
   regrasLunares: string;
   santos: string;
   ditados: string;
+  festasMoveis: string;
 }
 
 export const DATA_FILE_NAMES: Record<keyof DataFiles, string> = {
@@ -52,6 +55,7 @@ export const DATA_FILE_NAMES: Record<keyof DataFiles, string> = {
   regrasLunares: 'regras-lunares.csv',
   santos: 'santos.csv',
   ditados: 'ditados.csv',
+  festasMoveis: 'festas-moveis.csv',
 };
 
 /** All IPMA mainland districts; every one must belong to exactly one zone. */
@@ -445,15 +449,50 @@ function parseSaints(text: string, problems: string[]): Saint[] {
 /** Each month needs this many sayings without a day, so the daily rotation has variety. */
 export const MIN_SAYINGS_PER_MONTH = 5;
 
-function parseSayings(text: string, problems: string[]): Saying[] {
-  const file = DATA_FILE_NAMES.ditados;
-  const table = readTable(file, text, ['mes', 'dia', 'ditado', 'sentido_en', 'temas']);
+/** Moveable feasts lie between Carnival (Easter − 47) and Corpus Christi (Easter + 60). */
+const FEAST_OFFSETS = { min: -47, max: 60 };
+
+function parseFeasts(text: string, problems: string[]): MoveableFeast[] {
+  const file = DATA_FILE_NAMES.festasMoveis;
+  const table = readTable(file, text, ['id', 'dias_pascoa', 'nome_pt', 'nome_en', 'origem']);
   const c = new Checker(file);
   const seen = new Set<string>();
-  const sayings = table.rows.map((row): Saying => {
-    const month = c.int(row, 'mes');
-    const day = row.values.dia ? c.int(row, 'dia') : null;
-    checkDate(c, row, month, day);
+  const feasts = table.rows.map((row): MoveableFeast => {
+    const id = c.text(row, 'id');
+    if (id && !/^[a-z][a-z_]*$/.test(id))
+      c.fail(row, `"id" is "${id}", expected a lower-case slug`);
+    if (seen.has(id)) c.fail(row, `"${id}" is listed twice`);
+    seen.add(id);
+    const easterOffset = c.int(row, 'dias_pascoa');
+    if (easterOffset < FEAST_OFFSETS.min || easterOffset > FEAST_OFFSETS.max) {
+      c.fail(
+        row,
+        `"dias_pascoa" is ${String(easterOffset)}, expected ${String(FEAST_OFFSETS.min)} to ${String(FEAST_OFFSETS.max)}`,
+      );
+    }
+    return {
+      id,
+      easterOffset,
+      name: c.bilingual(row, 'nome') as Text,
+      origin: c.oneOf(row, 'origem', SAINT_ORIGINS),
+      sayings: [],
+    };
+  });
+  problems.push(...c.problems);
+  return feasts;
+}
+
+/**
+ * Sayings of a month or a day, and those of a moveable feast (`festa`, with `mes` and `dia`
+ * empty), which are added to their feast instead.
+ */
+function parseSayings(text: string, feasts: MoveableFeast[], problems: string[]): Saying[] {
+  const file = DATA_FILE_NAMES.ditados;
+  const table = readTable(file, text, ['mes', 'dia', 'ditado', 'sentido_en', 'temas', 'festa']);
+  const c = new Checker(file);
+  const seen = new Set<string>();
+  const sayings: Saying[] = [];
+  for (const row of table.rows) {
     const saying = c.text(row, 'ditado');
     const meaning = row.values.sentido_en ?? '';
     if (!meaning) c.fail(row, '"sentido_en" is empty (every saying needs its meaning, D-13)');
@@ -463,8 +502,22 @@ function parseSayings(text: string, problems: string[]): Saying[] {
     if (new Set(themes).size !== themes.length || themes.length > 2) {
       c.fail(row, '"temas" needs one or two different themes');
     }
-    return { month, day, text: saying, meaning, themes };
-  });
+    const feastId = row.values.festa ?? '';
+    if (feastId) {
+      if (row.values.mes || row.values.dia) {
+        c.fail(row, `"mes" and "dia" must be empty on a moveable feast's saying`);
+      }
+      const feast = feasts.find((f) => f.id === feastId);
+      if (!feast) c.fail(row, `"festa" is "${feastId}", not in ${DATA_FILE_NAMES.festasMoveis}`);
+      const entry: FeastSaying = { text: saying, meaning, themes };
+      feast?.sayings.push(entry);
+      continue;
+    }
+    const month = c.int(row, 'mes');
+    const day = row.values.dia ? c.int(row, 'dia') : null;
+    checkDate(c, row, month, day);
+    sayings.push({ month, day, text: saying, meaning, themes });
+  }
   for (let month = 1; month <= 12; month++) {
     const n = sayings.filter((s) => s.month === month && s.day === null).length;
     if (n < MIN_SAYINGS_PER_MONTH) {
@@ -639,7 +692,8 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   const zoneNotes = parseZoneNotes(files.avisosZona, crops, problems);
   const lunarRules = parseLunarRules(files.regrasLunares, problems);
   const saints = parseSaints(files.santos, problems);
-  const sayings = parseSayings(files.ditados, problems);
+  const feasts = parseFeasts(files.festasMoveis, problems);
+  const sayings = parseSayings(files.ditados, feasts, problems);
   if (problems.length) throw new DataError(problems);
 
   const established = [...base, ...applyZoneWindows(deriveWindows(base, crops, rules), manual)];
@@ -649,7 +703,7 @@ export function buildCatalog(files: DataFiles): { catalog: Catalog; warnings: st
   });
 
   return {
-    catalog: { zones, crops, windows, rules, lunarRules, saints, sayings },
+    catalog: { zones, crops, windows, rules, lunarRules, saints, sayings, feasts },
     warnings: findWarnings(windows, crops),
   };
 }
