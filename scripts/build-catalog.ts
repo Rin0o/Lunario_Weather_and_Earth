@@ -19,11 +19,13 @@ try {
   writeFileSync(out, `${JSON.stringify(catalog)}\n`);
 
   const count = (origin: string) => catalog.windows.filter((w) => w.origin === origin).length;
+  const feastSayings = catalog.feasts.reduce((n, f) => n + f.sayings.length, 0);
   console.log(
     `catalog.json: ${catalog.crops.length} crops, ${catalog.zones.length} zones, ` +
       `${count('base')} base + ${count('derived')} derived + ${count('manual')} manual + ` +
       `${count('calculated')} harvest windows, ` +
-      `${catalog.saints.length} saints, ${catalog.sayings.length} sayings`,
+      `${catalog.saints.length} saints, ${catalog.sayings.length} sayings, ` +
+      `${catalog.feasts.length} moveable feasts with ${feastSayings} sayings`,
   );
   for (const w of warnings) console.warn(`  warning: ${w}`);
 } catch (e) {

@@ -219,22 +219,49 @@ describe('validation', () => {
   });
 
   it('validates sayings: meaning, duplicates and enough per month (RF-08)', () => {
-    const ditados = `${realFiles.ditados}5,,Um ditado sem sentido.,,tempo\n1,,A água de janeiro vale dinheiro.,Again,tempo\n`;
+    const ditados = `${realFiles.ditados}5,,Um ditado sem sentido.,,tempo,\n1,,A água de janeiro vale dinheiro.,Again,tempo,\n`;
     expect(problems({ ditados })).toEqual([
       expect.stringContaining('"sentido_en" is empty'),
       expect.stringContaining('is listed twice'),
     ]);
-    const onlyJanuaryDay = 'mes,dia,ditado,sentido_en,temas\n1,22,Um.,One.,tempo\n';
+    const onlyJanuaryDay = 'mes,dia,ditado,sentido_en,temas,festa\n1,22,Um.,One.,tempo,\n';
     expect(problems({ ditados: onlyJanuaryDay })).toHaveLength(12);
     expect(problems({ ditados: onlyJanuaryDay })[0]).toContain(
       'month 1 has 0 sayings without a day; at least 5 are needed',
     );
   });
 
+  it('validates moveable feasts and ties their sayings to them (Q-11)', () => {
+    const festasMoveis =
+      `${realFiles.festasMoveis}pascoa,0,Outra,Another,geral\n` +
+      `Natal,0,X,X,geral\nlonge,90,Longe,Far,geral\n`;
+    expect(problems({ festasMoveis })).toEqual([
+      expect.stringContaining('"pascoa" is listed twice'),
+      expect.stringContaining('expected a lower-case slug'),
+      expect.stringContaining('"dias_pascoa" is 90, expected -47 to 60'),
+    ]);
+    const ditados =
+      `${realFiles.ditados},,Sem festa.,None.,festas,natal_movel\n` +
+      `4,,Com mês.,With a month.,festas,pascoa\n`;
+    expect(problems({ ditados })).toEqual([
+      expect.stringContaining('"festa" is "natal_movel"'),
+      expect.stringContaining('"mes" and "dia" must be empty'),
+    ]);
+  });
+
+  it('reads the real moveable feasts with their sayings', () => {
+    expect(catalog.feasts.map((f) => [f.id, f.easterOffset])).toContainEqual(['ascensao', 39]);
+    expect(catalog.feasts.find((f) => f.id === 'ramos')?.sayings.map((s) => s.text)).toEqual([
+      'Ramos molhados são louvados.',
+      'Depois de Ramos, na Páscoa estamos.',
+    ]);
+    expect(catalog.sayings.some((s) => s.text === 'Ramos molhados são louvados.')).toBe(false);
+  });
+
   it('validates the themes of the sayings: known, one or two, not repeated', () => {
     const ditados =
-      `${realFiles.ditados}5,,Um.,One.,\n5,,Dois.,Two.,praia\n` +
-      `5,,Três.,Three.,tempo;tempo\n5,,Quatro.,Four.,tempo;vinha;ceu\n`;
+      `${realFiles.ditados}5,,Um.,One.,,\n5,,Dois.,Two.,praia,\n` +
+      `5,,Três.,Three.,tempo;tempo,\n5,,Quatro.,Four.,tempo;vinha;ceu,\n`;
     expect(problems({ ditados })).toEqual([
       expect.stringContaining('"temas" contains ""'),
       expect.stringContaining('"temas" contains "praia"'),

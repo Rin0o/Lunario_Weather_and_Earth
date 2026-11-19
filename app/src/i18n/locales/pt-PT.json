@@ -571,6 +571,8 @@
     "count_other": "{{count}} santos e festas",
     "none": "Nenhum santo encontrado.",
     "today": "Santos de hoje",
+    "moveable": "Festa móvel",
+    "moveableFilter": "Festas móveis",
     "origins": {
       "geral": "Calendário geral",
       "portugal": "De Portugal",

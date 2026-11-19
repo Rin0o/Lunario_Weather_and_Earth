@@ -22,7 +22,7 @@ describe('SaintsLibrary', () => {
     render(<SaintsLibrary now={SAINT_MARTIN} />);
     expect(screen.getByRole('heading', { level: 2, name: 'Santos' })).toBeInTheDocument();
     expect(
-      screen.getByText(`${String(catalog.saints.length)} santos e festas`),
+      screen.getByText(`${String(catalog.saints.length + catalog.feasts.length)} santos e festas`),
     ).toBeInTheDocument();
     expect(openMonths()).toEqual(['Novembro']);
     const shelves = screen.getByRole('navigation', { name: 'Secções da biblioteca' });
@@ -57,5 +57,19 @@ describe('SaintsLibrary', () => {
 
     await user.type(screen.getByRole('searchbox'), 'xyz');
     expect(screen.getByText('Nenhum santo encontrado.')).toBeInTheDocument();
+  });
+
+  it('filters the moveable feasts, on their dates for this year (Q-11)', async () => {
+    const user = userEvent.setup();
+    render(<SaintsLibrary now={SAINT_MARTIN} />);
+    await user.click(screen.getByRole('button', { name: 'Festas móveis' }));
+    expect(
+      screen.getByText(`${String(catalog.feasts.length)} santos e festas`),
+    ).toBeInTheDocument();
+    // In 2026 they fall between Carnival (17 February) and Corpus Christi (4 June).
+    expect(openMonths()).toEqual(['Fevereiro', 'Março', 'Abril', 'Maio', 'Junho']);
+    for (const name of document.querySelectorAll('.saint-name')) {
+      expect(name).toHaveTextContent(/Festa móvel/);
+    }
   });
 });
