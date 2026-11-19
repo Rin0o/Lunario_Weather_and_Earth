@@ -29,7 +29,6 @@
     "scripts",
     "app/src/catalog/types.ts",
     "app/src/calendar/ics.ts",
-    "app/src/calendar/regionalFeed.ts",
-    "app/teste-calendario/feed.ts"
+    "app/src/calendar/regionalFeed.ts"
   ]
 }
