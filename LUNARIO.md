@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| **Estado** | Rascunho v0.2 |
-| **Data** | 2026-11-15 |
+| **Estado** | Rascunho v0.3 |
+| **Data** | 2026-11-19 |
 | **Autor** | Pedro Rino |
 | **Dataset** | [Almanaque — Dataset do calendário agrícola v0.1](https://claude.ai/artifact/7RuaDnqyVTbFcgYRbBajXj) |
 
@@ -14,9 +14,9 @@
 O Lunário é uma aplicação inspirada no almanaque *Borda d'Água* que junta num só sítio a informação prática do calendário rural português:
 
 - fases da lua, nascer e pôr do sol;
-- meteorologia local;
+- meteorologia local e estado do mar, com as marés;
 - o que semear, transplantar, plantar e colher, por zona;
-- santos do dia, feriados e ditados populares.
+- santos do dia, festas móveis, feriados e ditados populares.
 
 Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuição pública.
 
@@ -62,7 +62,7 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 | RF-17 | Notificações push (opcionais) de risco de geada para as culturas que o utilizador tem na horta (ver D-21) | 3 |
 | RF-18 | Ecrã **Mar**, entre o Céu e a Horta: **marés** do dia (preia-mar e baixa-mar, curva, vivas ou mortas) calculadas no dispositivo; **ondulação**, mar total, ondulação de fundo e **temperatura da água**; **vento** na costa; **próximos dias**; **avisos de agitação marítima** do IPMA. Para o **porto mais próximo** do local do utilizador, ou o escolhido nas Definições (ver D-34, D-35) | 4 |
 | RF-19 | No ecrã **Céu**, as **estações**: a estação atual (desde quando e quanto já passou), o **próximo solstício ou equinócio** (data, hora, dias que faltam e duração do dia nesse dia, comparada com hoje) e os **quatro do ano**. Calculado no dispositivo com o `astronomy-engine` (D-22) | 4 |
-| RF-20 | **Biblioteca**: o último separador (antes Culturas) junta as listas de consulta, com um seletor no topo. Para já tem as **Culturas** e os **Ditados**: todos os ditados por mês, a começar no mês atual (aberto) e a dar a volta ao ano, com o ditado de hoje marcado, com **pesquisa** (sem acentos, "S." lido como "São") e **filtro por tema** (D-36). Os **Santos**: todos por mês e dia, com pesquisa, filtro (de Portugal, populares) e o ditado do dia por baixo. Os **Feriados**: os nacionais do ano, com os móveis marcados, os passados esbatidos e o próximo assinalado, com setas para outros anos. O cartão Almanaque do Hoje liga aos ditados | 4 |
+| RF-20 | **Biblioteca**: o último separador (antes Culturas) junta as listas de consulta, com um seletor no topo. Tem as **Culturas** e os **Ditados**: todos os ditados por mês, a começar no mês atual (aberto) e a dar a volta ao ano, com o ditado de hoje marcado, com **pesquisa** (sem acentos, "S." lido como "São") e **filtro por tema** (D-36). Os **Santos**: todos por mês e dia, com pesquisa, filtro (de Portugal, populares, festas móveis) e o ditado do dia por baixo. Os **Feriados**: os nacionais do ano, com os móveis marcados, os passados esbatidos e o próximo assinalado, com setas para outros anos. As **Luas**: as fases da Lua do ano, com as luas azuis e os eclipses da Lua. O cartão Almanaque do Hoje liga aos ditados | 4 |
 | RF-21 | Alertas de **agitação marítima** com a app fechada, por Web Push: os avisos do IPMA para o **distrito do porto** (o mais próximo ou o escolhido nas Definições), **laranja e vermelho** por omissão e **amarelo** se o utilizador quiser, **uma vez por aviso**, vistos às **8h, 12h, 16h e 20h** e nunca de noite. Liga-se no ecrã Alertas, ao lado da geada, e não envia a localização (ver D-37) | 5 |
 
 ## 4. Requisitos não funcionais
@@ -85,8 +85,8 @@ Destina-se a um **grupo pequeno de pessoas próximas** e não terá distribuiç�
 ### 5.1 Visão geral
 
 Arquitetura **quase sem backend**: uma PWA estática e ficheiros gerados no build. O único
-servidor é um Worker agendado com uma D1 mínima, só para quem liga os alertas de geada
-(D-33); a horta nunca sai do dispositivo.
+servidor é um Worker agendado com uma D1 mínima e uma fila, só para quem liga os alertas
+de geada ou do mar (D-33, D-37); a horta nunca sai do dispositivo.
 
 ```
                 ┌──────────────────────────────┐
@@ -97,9 +97,10 @@ servidor é um Worker agendado com uma D1 mínima, só para quem liga os alertas
                        ▼                ▼
         ┌──────────────────────┐   ┌───────────────────────────┐
         │ Cloudflare Pages     │   │ Cloudflare Worker + D1    │
-        │ PWA + catalog.json   │   │ cron 18:00: Open-Meteo →  │
-        │ + zona-XX.ics        │   │ geada em cada local?      │
-        └──────┬───────────────┘   └─────────────┬─────────────┘
+        │ PWA + catalog.json   │   │ cron 18:00: geada (Open-  │
+        │ + zona-XX.ics        │   │ Meteo); 8/12/16/20h: mar  │
+        └──────┬───────────────┘   │ (avisos IPMA) → fila      │
+               │                   └─────────────┬─────────────┘
                │                                 ▼
      ┌─────────┴─────────┐          ┌───────────────────────────┐
      ▼                   ▼          │ Serviço de push (Web Push)│
@@ -115,23 +116,25 @@ servidor é um Worker agendado com uma D1 mínima, só para quem liga os alertas
 └────────────────────────┘
 ```
 
-Quem liga os alertas, a PWA regista no Worker a subscrição push, o local arredondado, as
-culturas sensíveis e a língua; ao desligar, o registo é apagado.
+Quem liga os alertas, a PWA regista no Worker a subscrição push e a língua, mais o local
+arredondado e as culturas sensíveis (geada) ou o distrito do porto (mar); ao desligar, o
+registo é apagado (RNF-03).
 
 ### 5.2 Componentes
 
 | Componente | Tecnologia | Responsabilidade |
 |---|---|---|
 | PWA | React, TypeScript, Vite, `vite-plugin-pwa` (Workbox) | Interface, cálculos locais, cache offline |
-| Astronomia | `astronomy-engine` (MIT) | Fases da lua, nascer/pôr do sol e da lua, calculados no dispositivo (D-22) |
-| Armazenamento local | IndexedDB | Horta do utilizador e preferências (zona) |
-| Catálogo | JSON gerado de `/data` | Culturas, janelas, zonas, regras lunares, santos, ditados |
+| Astronomia | `astronomy-engine` (MIT) | Fases da lua, nascer/pôr do sol e da lua, estações, calculados no dispositivo (D-22) |
+| Marés | Constantes harmónicas em `app/src/sea/tideConstants.json` (`npm run tides`) | Preia-mar e baixa-mar de cada porto, calculadas no dispositivo (D-34) |
+| Armazenamento local | IndexedDB e `localStorage` | Horta do utilizador e preferências (local, porto, língua, modo Lua) |
+| Catálogo | JSON gerado de `/data` | Culturas, janelas, zonas, regras lunares, santos, festas móveis, ditados |
 | Calendários | `.ics` por zona, gerados no build | Lembretes quinzenais por subscrição |
 | Alojamento | Cloudflare Pages | Entrega estática, HTTPS, cabeçalhos de segurança, pré-visualização por PR |
-| Alertas de geada | Cloudflare Worker (Cron Trigger) + D1 | Guardar as subscrições, ler a previsão do Open-Meteo para o local de cada uma e notificar geada (D-33) |
+| Alertas | Cloudflare Worker (Cron Triggers) + D1 + Queues | Guardar as subscrições, ver a geada no local de cada uma (Open-Meteo) e os avisos de agitação marítima (IPMA), e enviar as notificações por uma fila (D-33, D-37) |
 | Canal de alertas | Web Push (RFC 8291 e VAPID), `public/push-sw.js` | Notificação no telemóvel, mesmo com a app fechada |
-| Meteorologia | API pública do IPMA | Previsão diária mostrada na app |
-| Geada | API do Open-Meteo | Temperatura do ar a 2 m e da superfície, por coordenada |
+| Meteorologia e mar | API pública do IPMA | Previsão diária, previsão do mar e avisos de agitação marítima |
+| Geada e mar | API do Open-Meteo | Temperatura do ar a 2 m e da superfície; ondas, ondulação, água e vento, por coordenada |
 | CI/CD | GitHub Actions | Verificação, deploy (Pages e Worker), versões e changelog |
 
 ### 5.3 Notificações
@@ -141,7 +144,8 @@ culturas sensíveis e a língua; ao desligar, o registo é apagado.
 | Regional (quinzenal) | Subscrição de `zona-XX.ics` no calendário do telemóvel | O Google Calendar só atualiza subscrições de tempos a tempos, o que é aceitável para conteúdo quinzenal. |
 | Pessoal (transplante e colheita) | Evento `.ics` gerado pela PWA com `VALARM` (5 dias antes, 13:00, configurável) | Fica no calendário do utilizador, sem servidor. **A validar no Google Calendar para Android (Q-09).** |
 | Geada na minha horta (ao abrir) | A PWA consulta o Open-Meteo e cruza com as culturas sensíveis da horta (D-32) | Sem servidor; só funciona quando a app é aberta. |
-| Geada no meu local (push) | Cloudflare Worker (cron às 18:00 UTC) → Web Push | Opcional, liga-se no ecrã **Alertas** (sino no topo). O Worker guarda a subscrição, o local arredondado a ~1 km, as culturas sensíveis e a língua (D-33). Os Cron Triggers são gratuitos e não são desativados por inatividade. Testado no Firefox (PC e Android), com a app fechada; falta o iPhone. |
+| Geada no meu local (push) | Cloudflare Worker (cron às 18:00 UTC) → fila → Web Push | Opcional, liga-se no ecrã **Alertas** (sino no topo). O Worker guarda a subscrição, o local arredondado a ~1 km, as culturas sensíveis e a língua (D-33). Os Cron Triggers são gratuitos e não são desativados por inatividade. Testado no Firefox (PC e Android), com a app fechada; falta o iPhone. |
+| Agitação marítima (push) | Cloudflare Worker (8h, 12h, 16h e 20h de Portugal) → fila → Web Push | Opcional, no mesmo ecrã **Alertas**. Avisos do IPMA para o distrito do porto, laranja e vermelho por omissão, uma vez por aviso (D-37). O envio pela fila ainda não foi visto num telemóvel real. |
 
 ## 6. Modelo de dados (catálogo)
 
@@ -158,8 +162,10 @@ Janela        (cultura_id, zona_id, acao, inicio_quinzena, fim_quinzena, origem,
 RegraDerivacao(zona_id, classe_climatica, epoca, acao, ajuste_inicio, ajuste_fim,
                racional: Texto)
 RegraLunar    (parte_comestivel, acao, fase_favoravel, justificacao: Texto)
-Santo         (dia, mes, nome: Texto)
-Ditado        (mes?, texto_pt, sentido_en)        -- o ditado fica em português;
+Santo         (dia, mes, nome: Texto, origem)     -- origem: geral, portugal, popular
+FestaMovel    (id, nome: Texto, dias_pascoa, origem)  -- data contada da Páscoa (D-38)
+Ditado        (mes?, dia?, festa?, texto_pt, sentido_en, temas[])
+                                                  -- o ditado fica em português;
                                                      em inglês mostra-se o sentido
 ```
 
@@ -186,10 +192,11 @@ Preferencias  (zona_id, concelho_id, modo_lua,
 
 ```
 /app        PWA (React + Vite)
-/data       catálogo-fonte (CSV/JSON): culturas, janelas, zonas, regras, santos, ditados
-/scripts    build: catalog.json, derivação de zonas, zona-XX.ics
-/public     ícones, ilustrações, fontes, _headers (Cloudflare Pages)
-/worker     Cloudflare Worker: subscrições, D1 e cron dos alertas de geada (D-33)
+/art        gravuras (culturas, vinhetas) e fundos originais, com as fontes em SOURCES.md
+/data       catálogo-fonte (CSV): culturas, janelas, zonas, regras, santos, festas móveis, ditados
+/scripts    build: catalog.json, derivação de zonas, zona-XX.ics, constantes das marés
+/public     ícones, _headers (Cloudflare Pages), push-sw.js
+/worker     Cloudflare Worker: subscrições, D1, crons e fila dos alertas de geada e do mar (D-33, D-37)
 /.github    workflows: ci, deploy, release; Dependabot; modelos de issue e PR
 CREDITS.md  registo de assets, fontes de dados e licenças
 ```
@@ -202,7 +209,7 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | **2** | A minha horta, modo Lua, calendários `.ics` regionais e pessoais, cópia de segurança (RF-15) | Nenhum |
 | **3** | Aviso de geada ao abrir (RF-16) e alertas Web Push para o local de cada utilizador, com as culturas da horta (RF-14, RF-17, D-33) | Worker agendado + D1 mínima (subscrições push) |
 | Futuro | Cópia da horta por código, se for preciso | Cloudflare Worker + D1 (ver D-16) |
-| **4** | Estações no ecrã Céu (RF-19). Ecrã **Mar** (RF-18): marés calculadas no dispositivo, ondulação, vento, temperatura da água e avisos, para o porto mais próximo (D-34, D-35). **Biblioteca** com culturas e ditados (RF-20) | Nenhum |
+| **4** | Estações no ecrã Céu (RF-19). Ecrã **Mar** (RF-18): marés calculadas no dispositivo, ondulação, vento, temperatura da água e avisos, para o porto mais próximo (D-34, D-35). **Biblioteca** com culturas, ditados, santos, feriados e luas (RF-20), e as festas móveis (D-38) | Nenhum |
 | **5** | **Alertas de agitação marítima** por Web Push (RF-21, D-37), e o envio de todos os alertas (geada também) por uma fila, em lotes pequenos | Worker agendado + D1 + Queue (plano gratuito) |
 | Futuro (ideia) | **Contas de utilizador** para guardar a horta e as definições e passá-las entre dispositivos. A avaliar: forma de entrar (e-mail com link, Google), privacidade/RGPD e relação com a cópia por código | Worker + D1 + autenticação |
 | Futuro (ideia) | **Mais listas na Biblioteca** (RF-20): santos, feriados e fases da Lua do ano (com luas azuis e eclipses da Lua) feitos (2026-11-18); falta rever que outras listas merecem uma secção própria. Cada uma é mais uma entrada no seletor | Nenhum |
@@ -242,8 +249,8 @@ CREDITS.md  registo de assets, fontes de dados e licenças
 | D-27 | Horta em **IndexedDB** através do **`idb`** (base `lunario`, versão 1, `plantings`); pedido de armazenamento persistente no primeiro registo (RF-15) | IndexedDB direto; `localStorage`; Dexie | `idb` tem ~1 KB e só torna a API usável com promessas. Migrações explícitas por versão. A colheita prevista é a data + o ciclo (D-19); o transplante previsto espera pelo campo `dias_ate_transplante` (D-20). |
 | D-38 | Festas móveis (Q-11): **8 festas contadas a partir da Páscoa** em `festas-moveis.csv` (Entrudo, Cinzas, Ramos, Sexta-feira Santa, Páscoa, Ascensão/Dia da Espiga à quinta-feira, Pentecostes, Corpo de Deus), mostradas com os santos do dia na sua data de cada ano, marcadas "Festa móvel". Os seus ditados ficam em `ditados.csv` com a coluna `festa` (sem mês nem dia): 10 ditados do **Wikiquote**, que aparecem no dia da festa como os de um santo e, na Biblioteca, no mês em que a festa cai nesse ano | Datas fixas aproximadas; deixar as festas de fora; ditados escritos de memória | As datas mudam todos os anos, por isso são calculadas (o mesmo cálculo da Páscoa dos feriados). Só entram ditados com fonte; Sexta-feira Santa, Pentecostes e Corpo de Deus ficam sem ditado próprio porque o Wikiquote não os tem. |
 | D-37 | Alertas de agitação marítima (RF-21): o **mesmo Worker e a mesma subscrição** dos da geada, cada tipo ligado à parte. O Worker lê `warnings_www.json` do IPMA (**um só pedido** por verificação, seja qual for o número de subscritores) às **8h, 12h, 16h e 20h** de Portugal (cron nas duas horas UTC possíveis, fica a que é a hora local certa) e **nunca de noite**, nem para o vermelho. Avisa **laranja e vermelho** por omissão, amarelo só se pedido. **Uma vez por aviso**: guarda os avisos já vistos (área, nível, início, fim, sem nada dos subscritores) e um aviso não é novo se um já visto, da mesma área e de nível igual ou maior, se sobrepõe ou toca; um prolongamento ou um amarelo a seguir ao laranja não voltam a avisar, uma subida a vermelho avisa. Cada subscritor recebe só o aviso mais grave. Com só os alertas do mar, o servidor não tem a localização (só o distrito). **Envio por Cloudflare Queues**, também para a geada: no plano gratuito cada invocação tem 10 ms de CPU e 50 pedidos externos, e um push custa ~1,3 ms de CPU (medido), pelo que mais de ~7 alertas na mesma noite já passavam do limite; cada mensagem da fila leva 5 pushes e é enviada por uma invocação própria, sem novas tentativas (para ninguém receber o aviso duas vezes) | Ler os avisos a cada hora, também de noite; notificar o amarelo por omissão; chamar o próprio Worker por *service binding* para dividir os envios; plano pago (5 $/mês) | O amarelo é muito frequente no inverno e cansaria. Os limites de uma chamada ao próprio Worker não estão documentados; as Queues estão no plano gratuito (10 000 operações por dia, 3 por mensagem) e cada invocação tem limites próprios. Com 2000 subscritores (o máximo) são ~400 mensagens por envio, longe do limite. |
-| D-35 | **Portos** comuns a toda a app (`app/src/coast/ports.ts`): **16 pontos costeiros** de Viana do Castelo a Vila Real de Santo António, cada um com o ponto IPMA de mar e a área de aviso do seu distrito. O porto é o **mais próximo** do local do utilizador, **mesmo no interior**; pode escolher-se outro nas **Definições** (só a escolha fica guardada no dispositivo, e "automático" é a ausência dela). O ecrã mostra a distância ao porto | Só os 7 pontos do IPMA; esconder o Mar longe da costa; escolha obrigatória | Os 7 pontos do IPMA são poucos para as marés, que mudam ao longo da costa (a preia-mar em Viana é ~40 min mais tarde do que em Faro). Mostrar sempre o mais próximo é simples e serve quem vai à praia mais perto. |
 | D-36 | Biblioteca (RF-20): o separador **Culturas passa a Biblioteca**, com as secções num seletor no topo (`#/culturas`, `#/ditados`; `#/biblioteca` abre as culturas). Os ditados têm **um ou dois temas** na coluna `temas` de `data/ditados.csv`: tempo, Lua e Sol (`ceu`), horta e lavoura, cereais e pão (`searas`), vinha e vinho, animais, santos e festas | Um sexto separador; a biblioteca só a partir do cartão do Hoje ou das Definições; um tema por ditado; temas tirados de palavras-chave | A barra já tem cinco separadores e não cabe outro no telemóvel; juntar as listas de consulta num só sítio deixa espaço para santos e feriados. Com dois temas, "Em fevereiro chuva, em agosto uva" aparece tanto no tempo como na vinha. Os temas foram atribuídos à mão em 2026-11-18. |
+| D-35 | **Portos** comuns a toda a app (`app/src/coast/ports.ts`): **16 pontos costeiros** de Viana do Castelo a Vila Real de Santo António, cada um com o ponto IPMA de mar e a área de aviso do seu distrito. O porto é o **mais próximo** do local do utilizador, **mesmo no interior**; pode escolher-se outro nas **Definições** (só a escolha fica guardada no dispositivo, e "automático" é a ausência dela). O ecrã mostra a distância ao porto | Só os 7 pontos do IPMA; esconder o Mar longe da costa; escolha obrigatória | Os 7 pontos do IPMA são poucos para as marés, que mudam ao longo da costa (a preia-mar em Viana é ~40 min mais tarde do que em Faro). Mostrar sempre o mais próximo é simples e serve quem vai à praia mais perto. |
 | D-34 | Ecrã Mar (RF-18): **marés por constantes harmónicas** (21 componentes, correções nodais), calculadas no dispositivo e sem rede, com as constantes de cada porto em `app/src/sea/tideConstants.json`, geradas por `npm run tides` e guardadas no repositório. **Cascais e Lagos** usam o seu marégrafo (IOC/VLIZ, 2025). Os **outros portos** usam o nível do mar do **Open-Meteo**, corrigido pelos marégrafos de Vigo, Cascais, Lagos e Huelva (amplitude e fase por componente, interpoladas ao longo da costa). Alturas acima da **maré astronómica mais baixa** em 19 anos, como zero hidrográfico aproximado (1,8–1,95 m abaixo do nível médio). **Vivas e mortas** pela fase da Lua, com 1,5 dias de atraso, e a amplitude do dia ao lado. Previsão do mar do **IPMA** (3 dias, 7 pontos costeiros) e do **Open-Meteo** (ondas, ondulação de fundo, água e vento hora a hora, 7 dias), mais os **avisos de agitação marítima** do IPMA, pedidos pelo browser, guardados para quando não há rede e atualizados no máximo de hora a hora, como em D-24 | Open-Meteo `sea_level_height_msl` direto; tabelas do Instituto Hidrográfico; API paga de marés; só IPMA | Validado em 2026-11-18: o Open-Meteo dá a forma certa da maré mas chega **~30 min adiantado**, com um desvio quase igual em toda a costa (fase semidiurna +15–17°, amplitude ±2%). As constantes do marégrafo de Cascais, testadas fora do ano ajustado (out./nov. 2026), acertam as horas a **3–6 min** e as alturas a **4–6 cm**. Prevendo Cascais e Lagos só com os outros marégrafos, a M2 acerta a ~1 min e ~1 cm. As tabelas do IH não têm dados abertos, e no norte não há marégrafos portugueses com dados abertos. Os dados IOC são só para **uso não comercial**, como o Open-Meteo. O zero calculado fica ~10–20 cm abaixo do das tabelas do IH, o que se aceitou. Não serve para navegação, e a app di-lo. |
 | D-33 | Alertas de geada com a app fechada (RF-14, RF-17): **só Web Push**, para o **local de cada utilizador** arredondado a **0,01° (~1 km)**, em vez de pontos por zona. Um **Cloudflare Worker** guarda as subscrições numa **D1** e, todos os dias às **18:00 UTC**, pede ao Open-Meteo a previsão de cada local distinto (vários num pedido) e avisa quem tem risco **na noite seguinte (18:00–10:00)**, com os limiares de D-32 e as culturas sensíveis da horta. Cifra RFC 8291 (`aes128gcm`) e VAPID RFC 8292, aceites por todos os serviços de push, incluindo a Apple. Subscrições rejeitadas pelo serviço de push (404/410) são apagadas. Na app, liga-se no ecrã **Alertas** (sino no topo, para receber outros alertas no futuro), com o texto do que é enviado; volta a enviar só quando mudam o local, as culturas, a língua ou a subscrição. No iPhone só funciona com a app adicionada ao ecrã principal (iOS 16.4 ou mais recente) | Pontos fixos por zona (3 por zona); ntfy; Telegram; cifra antiga `aesgcm` | O alerta coincide com o cartão da app. Desaparece o problema do Algarve na zona Sul (Q-02) e não há pontos para manter. Para a família são poucas dezenas de pedidos por dia, longe do limite gratuito. Em troca, o Worker guarda um local aproximado (RNF-03). |
 | D-32 | Aviso de geada ao abrir (RF-16): a app pede ao **Open-Meteo** a temperatura **horária do ar a 2 m e da superfície** para o local do utilizador (coordenadas **arredondadas a 0,01°**, ~1 km), para **hoje e os 4 dias seguintes**, e usa o **mínimo de cada dia**. Limiares de Q-07: **superfície ≤ 0 °C → geada**, **ar ≤ 3 °C → geada possível**. O cartão só aparece se houver risco, fica no topo do ecrã Hoje e nomeia as culturas **sensíveis à geada** (`sensivel_geada` em `culturas.csv`) com plantios ativos. Previsão guardada para usar sem rede, renovada no máximo de hora a hora | Aviso só por zona (Worker); previsão diária do IPMA (`tMin`); mostrar o cartão sempre | Não precisa de servidor (D-21). A temperatura da superfície apanha a geada de radiação que a do ar não mostra. Arredondar as coordenadas chega para a previsão e envia menos detalhe a terceiros (RNF-03). Mostra-se como risco e não como certeza. |
@@ -269,7 +276,8 @@ Regras: evitar CC BY-SA em assets centrais e não usar nada marcado "free for pe
 
 ### 10.1 Ideias visuais para rever
 
-Propostas durante o refresh visual (2026-11-17), ainda por decidir:
+Propostas durante o refresh visual (2026-11-17). **Todas feitas (2026-11-18)**; ficam aqui
+como registo do que se pediu:
 
 | Ideia | Notas |
 |---|---|

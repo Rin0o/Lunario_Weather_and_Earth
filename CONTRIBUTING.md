@@ -23,6 +23,7 @@ npm run preview   # serve the production build (test the PWA/offline mode here)
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `app/`     | The PWA (React + TypeScript + Vite). `app/src/i18n` holds UI text; `app/teste-calendario/` is the temporary Q-09 phone test page (Portuguese only, not part of the offline app) |
 | `public/`  | Static assets copied as-is; `icon.svg` is the source of all app icons. `_headers` sets Cloudflare Pages response headers (CSP, caching)                                         |
+| `art/`     | Engravings (crop plates, vignettes) and the original backgrounds; sources in each folder's `SOURCES.md` and in `CREDITS.md`                                                     |
 | `data/`    | Source catalogue (crops, windows, zones…), the single source of truth. Every text field has `pt` and `en`                                                                       |
 | `scripts/` | Build-time scripts (catalog.json, zone derivation, `.ics` files)                                                                                                                |
 | `worker/`  | Cloudflare Worker for frost and sea alerts (D-33, D-37): subscriptions API, D1 migrations, crons, push queue                                                                    |
