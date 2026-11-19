@@ -17,10 +17,6 @@
   Content-Type: application/manifest+json
 
 # Calendar feeds: always revalidate so subscribed calendars see changes.
-/teste-calendario/zona-teste.ics
-  Cache-Control: no-cache
-  Content-Type: text/calendar; charset=utf-8
-
 /calendarios/*
   Cache-Control: no-cache
   Content-Type: text/calendar; charset=utf-8

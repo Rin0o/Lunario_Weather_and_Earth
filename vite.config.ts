@@ -4,9 +4,7 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { toIsoDate } from './app/src/calendar/ics.ts';
 import type { Catalog } from './app/src/catalog/types.ts';
-import { TEST_FEED_PATH, buildTestFeed } from './app/teste-calendario/feed.ts';
 import pkg from './package.json' with { type: 'json' };
 
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
@@ -16,19 +14,6 @@ const fromRoot = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 const base = '/';
 // Production address, linked from the regional calendars.
 const SITE_URL = 'https://lunario-4w2.pages.dev/';
-
-/** Emits the sample regional feed for the Q-09 calendar test page at build time. */
-const calendarTestFeed = (): Plugin => ({
-  name: 'lunario:calendar-test-feed',
-  apply: 'build',
-  generateBundle() {
-    this.emitFile({
-      type: 'asset',
-      fileName: TEST_FEED_PATH,
-      source: buildTestFeed(toIsoDate(new Date())),
-    });
-  },
-});
 
 /**
  * Emits the regional calendars (RF-12): one feed per zone and language, covering the build
@@ -89,17 +74,9 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
     sourcemap: true,
-    rolldownOptions: {
-      input: {
-        main: fromRoot('./app/index.html'),
-        // Temporary Q-09 phone test page, served at /teste-calendario/.
-        calendarTest: fromRoot('./app/teste-calendario/index.html'),
-      },
-    },
   },
   plugins: [
     react(),
-    calendarTestFeed(),
     regionalFeeds(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -117,13 +94,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,json,webp}'],
-        // The test page is not part of the offline app: don't precache it, and don't let the
-        // app shell answer navigations to it. The large artwork (for wide screens), the crop
-        // sheets' plates and the icon generator's source are not precached either; the phone
-        // sizes and the plate thumbnails are.
+        // The large artwork (for wide screens), the crop sheets' plates and the icon
+        // generator's source are not precached; the phone sizes and the plate thumbnails are.
         globIgnores: [
-          'teste-calendario/**',
-          'assets/calendarTest-*',
           'app-icon.png',
           'assets/*-1024-*.webp',
           'assets/*-960-*.webp',
@@ -137,7 +110,6 @@ export default defineConfig({
             options: { cacheName: 'artwork', expiration: { maxEntries: 20 } },
           },
         ],
-        navigateFallbackDenylist: [/^\/teste-calendario/],
         // Frost alert notifications (RF-14), from public/push-sw.js.
         importScripts: ['push-sw.js'],
       },

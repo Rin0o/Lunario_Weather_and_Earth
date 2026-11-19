@@ -28,5 +28,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["app/src", "app/teste-calendario"]
+  "include": ["app/src"]
 }
