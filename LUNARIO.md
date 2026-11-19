@@ -142,7 +142,7 @@ registo é apagado (RNF-03).
 | Tipo | Mecanismo | Observações |
 |---|---|---|
 | Regional (quinzenal) | Subscrição de `zona-XX.ics` no calendário do telemóvel | O Google Calendar só atualiza subscrições de tempos a tempos, o que é aceitável para conteúdo quinzenal. |
-| Pessoal (transplante e colheita) | Evento `.ics` gerado pela PWA com `VALARM` (5 dias antes, 13:00, configurável) | Fica no calendário do utilizador, sem servidor. **A validar no Google Calendar para Android (Q-09).** |
+| Pessoal (transplante e colheita) | Evento `.ics` gerado pela PWA com `VALARM` (5 dias antes, 13:00, configurável) | Fica no calendário do utilizador, sem servidor. Testado em Samsung (Android) e iPhone (Q-09). |
 | Geada na minha horta (ao abrir) | A PWA consulta o Open-Meteo e cruza com as culturas sensíveis da horta (D-32) | Sem servidor; só funciona quando a app é aberta. |
 | Geada no meu local (push) | Cloudflare Worker (cron às 18:00 UTC) → fila → Web Push | Opcional, liga-se no ecrã **Alertas** (sino no topo). O Worker guarda a subscrição, o local arredondado a ~1 km, as culturas sensíveis e a língua (D-33). Os Cron Triggers são gratuitos e não são desativados por inatividade. Testado no Firefox (PC e Android), com a app fechada; falta o iPhone. |
 | Agitação marítima (push) | Cloudflare Worker (8h, 12h, 16h e 20h de Portugal) → fila → Web Push | Opcional, no mesmo ecrã **Alertas**. Avisos do IPMA para o distrito do porto, laranja e vermelho por omissão, uma vez por aviso (D-37). O envio pela fila ainda não foi visto num telemóvel real. |
@@ -303,7 +303,7 @@ como registo do que se pediu:
 | Q-06 | Mapeamento concelho → zona | A app já guarda o local IPMA mais próximo (24 pontos no continente) e o seu distrito (D-23). A tabela distrito → zona está em `data/zonas.csv` e o cartão "Esta quinzena" já a usa. Refinar os casos de fronteira (por exemplo, Aveiro interior). |
 | ~~Q-07~~ | ~~Limiares e pontos da geada~~ | **Resolvida:** limiares de D-32 (superfície ≤ 0 °C → geada; ar a 2 m ≤ 3 °C → geada possível), a validar este inverno. Os pontos por zona deixaram de ser precisos: cada alerta usa o local do utilizador (D-33). A lista `sensivel_geada` foi revista e confirmada em 2026-11-16. |
 | Q-08 | Notificações da horta: o que fazer quando um registo da horta muda depois de exportado para o calendário? | Eventos, antecedência e geada resolvidos por D-20 e D-21. Falta decidir entre aviso manual ("atualiza o calendário") e um **calendário pessoal por subscrição** servido pelo Worker. |
-| Q-09 | Os `.ics` funcionam nos telemóveis do grupo? | A maioria usa Google Calendar em Android, que pode não abrir ficheiros `.ics` nem permitir subscrever na app. Testar antes da fase 2 e rever RF-12/RF-13 conforme o resultado. Página de teste: `/teste-calendario/` (temporária). |
+| ~~Q-09~~ | ~~Os `.ics` funcionam nos telemóveis do grupo?~~ | **Resolvida (2026-11-19):** a subscrição dos calendários regionais (RF-12) e os eventos da horta (RF-13) funcionam sem problemas em telemóveis Samsung (Android) e em iPhones. A página de teste temporária `/teste-calendario/` foi retirada. |
 | ~~Q-10~~ | ~~Regras de derivação que geram janelas incoerentes~~ | **Resolvida (2026-11-16):** janelas escritas à mão em `data/janelas-zona.csv`, que substituem as derivadas dessa cultura, zona e ação. Interior: couve-tronchuda viveiro jun Q1→ago Q1 e transplante jul Q2→set Q2; brócolo viveiro mai Q2→jul Q2 e transplante jul Q1→set Q1. Sul: cebola com um só viveiro, out Q1→jan Q2. O build já não dá avisos. |
 | ~~Q-12~~ | ~~Validar `dias_ate_transplante`~~ | **Resolvida (2026-11-16):** os valores das 18 culturas com viveiro foram revistos e confirmados. |
 | ~~Q-11~~ | ~~Santos do dia e ditados (RF-08)~~ | **Resolvida (2026-11-18):** feito com D-31 (236 santos em 212 dias e 153 ditados, revistos em 2026-11-16; os 154 dias sem santo ficam sem santo) e, para as festas móveis, com D-38. |
@@ -316,6 +316,6 @@ como registo do que se pediu:
 | Alterações na API do IPMA | Médio | Isolar o acesso num módulo; cache da última previsão. |
 | Open-Meteo mudar os termos ou os limites | Baixo | Isolar o acesso num módulo; recurso ao `tMin` do IPMA. |
 | Previsão falhar a geada em vales e baixas | Médio | Limiares conservadores; apresentar como "risco de geada" e não como certeza. |
-| Google Calendar (Android) não importar `.ics` | Alto | Testar cedo (Q-09); alternativa: link "adicionar evento" do Google Calendar ou lembretes por Web Push. |
+| Google Calendar (Android) não importar `.ics` | Baixo | Testado em Samsung e iPhone e funciona (Q-09). Se um telemóvel falhar: link "adicionar evento" do Google Calendar ou lembretes por Web Push. |
 | Perda dos dados da horta no telemóvel | Médio | Armazenamento persistente, lembretes de exportação (RF-15) e, se for preciso, cópia por código (D-16). |
 | Limites dos planos gratuitos mudarem | Baixo | Arquitetura estática quase sem dependências. |
