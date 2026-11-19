@@ -2089,11 +2089,13 @@ a.button.primary {
 
 /*
  * Gone by: faded, and crossed out with one pencil stroke across the whole line, as in the
- * notebook. The stroke is an SVG: a firm, slightly wavering graphite line with a fainter
+ * notebook. The stroke is an SVG: a firm graphite line with an irregular wave and a fainter
  * second pass beside it, roughened by a noise filter like pencil grain on paper, and stretched
- * to the row (non-scaling stroke keeps its weight). Each row tilts
- * a little differently, so the strokes do not look stamped. The library's holidays and Moon
- * phases are crossed out the same way.
+ * to the row (non-scaling stroke keeps its weight). There are eight strokes, each with its own
+ * wave, weight and grain, taken in turn down the list: five gentle ones and three hurried,
+ * deeply wavering ones spread among them; each also tilts, starts and ends a
+ * little differently, so they do not look stamped. The library's holidays and Moon phases are
+ * crossed out the same way.
  */
 .season-year li[data-past],
 .holiday-list li[data-mark='past'] {
@@ -2106,26 +2108,83 @@ a.button.primary {
   opacity: 0.7;
 }
 
+.season-year,
+.holiday-list {
+  --strike-1: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2711%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M1.2%205.0S20.3%205.0%2036.7%205.0S59.2%204.6%2074.1%204.8S89.4%203.7%20105.4%204.2S133.2%204.0%20150.9%203.9S168.5%204.5%20185.5%204.9S213.7%204.8%20234.8%204.4S248.3%203.6%20259.6%204.0S280.0%205.1%20298.3%204.7%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M10.5%204.2S41.4%204.2%2063.8%203.9S81.7%205.3%2091.3%205.2S115.8%205.2%20144.6%205.1S172.9%205.5%20199.6%205.5S217.0%204.2%20235.8%204.2S255.5%204.3%20278.1%203.8S286.8%205.7%20293.4%205.4%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.1%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.29%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-2: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2729%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M2.2%205.4S17.4%205.1%2035.7%205.1S62.3%206.0%2080.4%205.8S92.1%204.0%20105.9%204.5S120.0%204.3%20130.0%204.4S143.9%205.6%20152.1%205.5S171.6%205.1%20186.0%205.2S202.1%204.3%20215.4%204.4S239.9%204.6%20268.3%204.4S283.2%204.5%20296.3%204.8%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.4%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M12.9%206.0S27.7%206.1%2045.4%206.3S72.8%206.2%2097.4%206.3S112.3%206.7%20126.9%206.6S155.4%206.5%20178.5%206.8S198.0%206.3%20214.3%206.5S230.7%205.3%20239.9%205.3S259.6%206.4%20274.0%206.4S286.4%206.1%20294.9%206.1%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.2%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.28%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-3: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2016%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2717%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M4.1%208.3S13.2%2011.0%2019.3%2011.0S27.7%206.2%2035.2%207.2S45.0%2010.0%2050.7%2010.9S63.3%207.1%2072.2%207.1S79.9%206.7%2088.9%206.7S103.1%208.2%20113.2%208.8S124.5%2010.7%20135.2%2010.6S143.9%206.0%20148.9%205.4S161.9%205.7%20175.4%206.5S186.5%209.0%20192.6%208.2S201.9%207.7%20207.5%207.3S223.2%2010.5%20235.1%209.6S248.6%206.1%20262.3%205.1S276.4%208.1%20287.5%207.0S292.5%206.3%20296.1%207.1%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.8%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M9.2%207.8S20.1%205.7%2031.6%205.3S42.8%2010.2%2051.0%209.7S64.0%2011.1%2075.4%2010.8S87.1%208.7%2096.2%208.4S109.7%209.3%20119.1%208.2S130.3%207.2%20141.8%207.9S151.2%207.8%20159.4%206.9S169.2%2011.2%20174.6%2010.2S183.0%206.2%20192.0%205.9S205.3%209.2%20218.2%208.3S225.7%209.3%20233.5%209.2S241.4%208.4%20246.5%207.4S258.9%208.4%20270.1%208.6S272.2%209.4%20274.1%208.7%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.30%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-4: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2747%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M3.2%204.7S22.9%204.1%2034.8%204.0S65.7%205.9%2086.8%205.8S113.3%203.9%20139.5%203.6S157.2%203.5%20175.1%203.7S196.5%204.9%20217.7%204.8S241.4%205.2%20269.3%204.9S281.4%204.1%20294.2%204.2%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M9.2%204.6S34.5%204.4%2050.3%204.0S70.3%204.4%2092.5%204.1S118.2%204.5%20146.3%204.7S167.7%205.2%20188.8%204.9S213.2%205.5%20233.5%205.3S262.7%205.7%20282.5%205.3S284.2%205.0%20285.5%205.2%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.1%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.35%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-5: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2783%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M1.3%205.5S19.3%206.8%2029.0%206.4S49.2%204.9%2062.4%205.1S83.1%206.3%20103.5%206.1S118.8%206.5%20129.2%206.4S160.2%205.1%20179.9%205.1S212.1%205.9%20233.8%205.6S253.7%205.5%20276.8%205.9S287.8%205.2%20295.1%205.2%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M16.9%205.3S48.1%205.3%2071.3%205.3S85.0%203.8%2095.8%204.2S118.6%205.4%20131.9%205.0S152.5%204.6%20174.8%204.6S194.8%205.0%20217.3%205.5S246.5%205.8%20263.5%205.8S270.3%205.1%20276.7%205.5%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.40%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-6: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2016%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2716%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M4.2%207.9S12.5%208.8%2019.7%207.6S29.0%207.5%2038.3%208.3S54.8%208.9%2065.5%209.5S77.5%206.4%2084.9%205.5S96.3%208.4%20106.7%207.5S119.7%203.9%20128.6%205.2S139.1%2010.5%20146.4%209.5S157.2%206.6%20166.8%206.0S178.3%209.8%20192.2%2010.2S203.7%2011.3%20214.5%2010.0S228.4%206.0%20238.8%206.6S253.8%209.3%20262.8%209.7S271.5%207.2%20279.1%208.1S288.5%209.2%20296.8%208.6%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.5%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M18.4%208.7S30.0%2011.0%2041.7%2010.9S57.0%2010.1%2069.2%209.6S82.0%2011.0%2092.6%2011.4S99.3%209.2%20105.7%209.1S115.8%209.7%20127.8%209.4S143.8%208.8%20153.9%208.2S168.9%208.7%20178.4%208.7S186.7%208.1%20192.7%208.9S209.1%207.0%20218.6%208.1S230.9%208.2%20239.4%207.7S246.8%2010.1%20251.8%2010.2S264.0%2010.8%20277.1%2010.8S280.9%207.3%20283.0%207.7%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.0%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.39%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-7: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2734%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M1.3%204.8S21.7%203.7%2045.9%204.0S70.8%206.5%2098.6%206.1S122.3%204.0%20135.3%204.4S147.4%205.9%20158.7%205.9S177.6%203.7%20198.2%204.0S215.0%206.1%20233.1%206.3S246.6%204.6%20255.4%204.6S274.5%206.0%20298.0%205.6%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.5%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M7.3%205.4S35.0%206.2%2051.3%205.8S69.7%205.0%2084.8%205.4S109.2%206.5%20131.4%206.2S158.9%204.7%20177.3%204.5S194.3%205.8%20212.9%205.4S229.5%204.3%20239.8%204.1S252.6%205.8%20263.9%205.9S280.2%205.5%20291.5%205.3%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.31%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+  --strike-8: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2016%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%2731%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M1.7%207.6S13.0%208.8%2025.6%209.0S36.0%207.4%2044.7%208.5S55.0%208.2%2066.9%208.9S81.0%205.7%2089.1%205.6S99.2%207.8%20108.8%207.1S122.9%207.2%20135.9%205.9S144.7%209.1%20151.5%208.7S157.7%209.9%20163.7%2010.5S175.2%208.7%20187.8%209.6S203.6%208.4%20213.4%208.1S228.5%208.2%20238.0%208.1S251.8%207.5%20265.8%206.6S281.4%208.6%20290.6%207.4S293.2%208.3%20295.1%209.4%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.6%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M11.5%208.0S24.4%203.4%2031.8%204.6S38.9%2010.7%2045.6%2010.7S58.4%2011.4%2070.3%2011.1S76.8%209.4%2083.9%2010.6S101.0%207.4%20111.3%208.6S120.8%2011.9%20127.6%2011.3S135.1%209.5%20140.8%209.4S156.4%209.0%20166.5%208.1S176.9%208.6%20188.9%207.6S203.5%209.9%20213.6%209.8S224.9%2010.2%20233.3%2011.0S245.1%207.4%20257.6%206.5S267.3%206.3%20278.5%207.3%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%270.29%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+}
+
 .season-year li[data-past]::after,
 .holiday-list li[data-mark='past']::after {
   content: '';
   position: absolute;
-  inset: calc(50% - 0.35rem) -0.15rem auto;
-  height: 0.7rem;
-  background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20300%2010%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27g%27%20x%3D%270%27%20y%3D%27-1%27%20width%3D%271%27%20height%3D%273%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%271.6%20.9%27%20numOctaves%3D%272%27%20seed%3D%274%27%2F%3E%3CfeDisplacementMap%20in%3D%27SourceGraphic%27%20scale%3D%272.2%27%2F%3E%3C%2Ffilter%3E%3Cg%20filter%3D%27url(%23g)%27%3E%3Cpath%20d%3D%27M2%205.9C60%205.3%20110%205.8%20160%205.0S250%204.5%20298%204.0%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%272.7%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.6%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3Cpath%20d%3D%27M8%206.5C80%205.9%20140%206.1%20200%205.4S270%204.9%20293%204.8%27%20fill%3D%27none%27%20stroke%3D%27%235f564d%27%20stroke-width%3D%271.3%27%20stroke-linecap%3D%27round%27%20stroke-opacity%3D%27.35%27%20vector-effect%3D%27non-scaling-stroke%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E')
-    center / 100% 100% no-repeat;
+  inset: calc(50% - 0.45rem) -0.15rem auto -0.15rem;
+  height: 0.9rem;
+  background: var(--strike-1) center / 100% 100% no-repeat;
   transform: rotate(-0.6deg);
   pointer-events: none;
 }
 
-.season-year li[data-past]:nth-child(2n)::after,
-.holiday-list li[data-mark='past']:nth-child(2n)::after {
+.season-year li[data-past]:nth-child(8n + 2)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 2)::after {
+  inset: calc(50% - 0.4rem) 0.1rem auto -0.25rem;
+  height: 0.8rem;
+  background-image: var(--strike-2);
   transform: rotate(0.4deg) scaleX(-1);
 }
 
-.season-year li[data-past]:nth-child(3n)::after,
-.holiday-list li[data-mark='past']:nth-child(3n)::after {
+.season-year li[data-past]:nth-child(8n + 3)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 3)::after {
+  inset: calc(50% - 0.7rem) -0.2rem auto 0;
+  height: 1.4rem;
+  background-image: var(--strike-3);
+  transform: rotate(-0.4deg);
+}
+
+.season-year li[data-past]:nth-child(8n + 4)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 4)::after {
+  inset: calc(50% - 0.5rem) -0.3rem auto 0.05rem;
+  height: 1rem;
+  background-image: var(--strike-4);
   transform: rotate(-0.2deg) translateY(1px);
+}
+
+.season-year li[data-past]:nth-child(8n + 5)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 5)::after {
+  inset: calc(50% - 0.45rem) 0 auto -0.1rem;
+  height: 0.9rem;
+  background-image: var(--strike-5);
+  transform: rotate(0.7deg) scaleX(-1);
+}
+
+.season-year li[data-past]:nth-child(8n + 6)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 6)::after {
+  inset: calc(50% - 0.65rem) 0.05rem auto -0.2rem;
+  height: 1.3rem;
+  background-image: var(--strike-6);
+  transform: rotate(0.8deg) scaleX(-1);
+}
+
+.season-year li[data-past]:nth-child(8n + 7)::after,
+.holiday-list li[data-mark='past']:nth-child(8n + 7)::after {
+  inset: calc(50% - 0.4rem) -0.2rem auto 0.15rem;
+  height: 0.8rem;
+  background-image: var(--strike-7);
+  transform: rotate(-0.9deg) translateY(-1px);
+}
+
+.season-year li[data-past]:nth-child(8n)::after,
+.holiday-list li[data-mark='past']:nth-child(8n)::after {
+  inset: calc(50% - 0.75rem) -0.25rem auto -0.05rem;
+  height: 1.5rem;
+  background-image: var(--strike-8);
+  transform: rotate(-1.1deg);
 }
 
 .season-mark {
