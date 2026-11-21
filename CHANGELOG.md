@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.5.0](https://github.com/Rin0o/Lunario_Weather_and_Earth/compare/v0.4.0...v0.5.0) (2026-11-21)
+
+
+### Features
+
+* **about:** an About page with the credits, set as an almanac colophon ([7d93916](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/7d939167a4366fdcac622bc7b92fbe59d167597c))
+* **alerts:** sea agitation alerts by push, sent through a queue ([0a2899a](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/0a2899a3af83e582ac31050a0d0eafabff012f85))
+* **almanac:** moveable feasts with their sayings, and a filter for them ([1bbf419](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/1bbf419766091848c1541bed460fb29ea17641be))
+* **catalog:** more sowing and planting options for common crops ([99f66d6](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/99f66d6d709b24f74054b297da4ddd7f21e5f286))
+* **crops:** month names and a wheat-ear needle on the crop calendar ([dfe9c94](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/dfe9c945dbcf90530cf759b572eb94e7c430d890))
+* **garden:** a watering can over the empty garden message ([edefdd2](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/edefdd24ffa2c9def35dd5e506f8c0ce263750d4))
+* **i18n:** Portuguese by default, whatever the browser language ([e170dea](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/e170dea062229dd30f568fef39d5d9a0661889ca))
+* **library:** Luas shelf with the year's Moon phases ([4f29879](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/4f29879a6e3ffa1ba4cd125262498eb3e347474f))
+* **library:** Santos and Feriados shelves ([39b945f](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/39b945f1a162cfee7bfb1ba052081e4f7f211650))
+* **library:** the Biblioteca tab, with crops and every saying ([6742532](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/67425325e48660c46488cd6328b0be294cdeca5b))
+* **nav:** swipe between the tabs, turning the notebook's pages ([4b89deb](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/4b89deb16d160499f91eac04d4eb1bc45b5e37fc))
+* **plates:** whole-plant pea and a Britton & Brown coriander ([34571de](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/34571de8001f46c757673003203211216508dea4))
+* **sea:** a Sea screen between Sky and Garden ([77b20f1](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/77b20f1791783fe4910d2f095a4f464cbeddba10))
+* **sea:** fold the sea warnings and set the tide fine print apart ([34248f4](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/34248f4f1dd131f6864f94bc2d872daa8ce77485))
+* **sea:** tides from harmonic constants for 16 coastal ports ([7e66343](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/7e66343e129a9a8f5eaabc9ec7b5d05c0f9f5ae2))
+* **sky:** Mellan's full Moon printed beside the Céu title ([9d289a0](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/9d289a025b8f40a0d9fce94eeaba2f8c8c1d47a7))
+* **sky:** the seasons, with the year's solstices and equinoxes ([1594de3](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/1594de366dd25d62228ee4eac19487bcb11f806f))
+* **ui:** open "Receber no calendário" and "Adicionar à horta" in a window ([a10c144](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/a10c144d70446690c4a46d4c253ebd8da068b2ed))
+
+
+### Bug Fixes
+
+* **navigation:** coming back to a screen finds it where it was left ([e07b95c](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/e07b95cf7543f57317583c45dd2b8bdd3dcadc4a))
+* **settings:** style the language select like the location and port ones ([0d4ae3e](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/0d4ae3ed6ae0d6eea85df75cfcce3b426ae04c0a))
+* **settings:** style the sea port picker like the location one ([e2ca5d9](https://github.com/Rin0o/Lunario_Weather_and_Earth/commit/e2ca5d9a4bcaf5072eab6dcc8f7ed1b4420f3a26))
+
 ## [0.4.0](https://github.com/Rin0o/Lunario_Weather_and_Earth/compare/v0.3.0...v0.4.0) (2026-11-17)
 
 

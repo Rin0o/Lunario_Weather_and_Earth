@@ -1,6 +1,6 @@
 {
   "name": "lunario",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "license": "MIT",
   "description": "A rural almanac in your pocket: moon phases, local weather and a Portuguese sowing calendar by region.",
